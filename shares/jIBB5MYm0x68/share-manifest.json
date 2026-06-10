@@ -1,0 +1,20 @@
+{
+  "id": "jIBB5MYm0x68",
+  "name": "AMC 4.0 人群机会分析",
+  "defaultPageId": "page_1",
+  "defaultFilePath": "AMC 4.0 人群机会分析.html",
+  "nodes": [
+    {
+      "id": "page_1",
+      "parentId": null,
+      "type": "page",
+      "navTitle": "AMC 4.0 人群机会分析",
+      "filePath": "AMC 4.0 人群机会分析.html",
+      "sortOrder": 1
+    }
+  ],
+  "files": [
+    "AMC 4.0 人群机会分析.html"
+  ],
+  "createdAt": "2026-06-10T12:52:11.606Z"
+}

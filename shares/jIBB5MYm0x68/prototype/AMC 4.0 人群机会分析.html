@@ -1,0 +1,3013 @@
+<!DOCTYPE html>
+<!-- saved from url=(0058)http://127.0.0.1:8765/amc_4_tgi_penetration_wireframe.html -->
+<html lang="zh-CN"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AMC 4.0 人群机会分析</title>
+  <style>
+    :root {
+      --blue: #3f6ff3;
+      --blue-dark: #2f5fe8;
+      --blue-soft: #edf3ff;
+      --cyan: #20b7df;
+      --pink: #e95b9a;
+      --page: #f1f3f7;
+      --surface: #ffffff;
+      --header: #f7f9fc;
+      --border: #e0e6ef;
+      --border-strong: #cbd5e1;
+      --text: #243044;
+      --muted: #7b8799;
+      --placeholder: #a7b0bf;
+      --green: #159b72;
+      --green-soft: #e8f7f0;
+      --amber: #c47a00;
+      --amber-soft: #fff4dc;
+      --red: #d34c72;
+      --red-soft: #fff0f5;
+      --purple: #7357cf;
+      --purple-soft: #f0edff;
+      --table-head: #f6f8fb;
+      --shadow: none;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+      color: var(--text);
+      background: var(--page);
+      font-size: 14px;
+      line-height: 1.45;
+      letter-spacing: 0;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 172px minmax(0, 1fr);
+    }
+
+    .sidebar {
+      background: var(--blue);
+      color: #fff;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: inset -1px 0 rgba(0, 0, 0, .08);
+    }
+
+    .logo {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 16px;
+      background: #fff;
+      color: #263242;
+      font-weight: 800;
+      font-size: 18px;
+    }
+
+    .logo-mark {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 4px solid #33b5de;
+      border-top-color: transparent;
+      transform: rotate(-25deg);
+    }
+
+    .nav {
+      padding: 14px 0 0;
+    }
+
+    .nav-item {
+      height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 16px;
+      color: rgba(255, 255, 255, .94);
+      font-weight: 650;
+      position: relative;
+      white-space: nowrap;
+    }
+
+    .nav-item.active {
+      background: rgba(255, 255, 255, .12);
+    }
+
+    .nav-item .new {
+      position: absolute;
+      right: 8px;
+      top: 7px;
+      color: #ffd84d;
+      font-size: 11px;
+      font-style: italic;
+      font-weight: 800;
+    }
+
+    .nav-icon {
+      width: 19px;
+      height: 19px;
+      flex: none;
+      color: #fff;
+    }
+
+    .collapse {
+      margin-top: auto;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      padding-left: 18px;
+      background: rgba(0, 0, 0, .08);
+      font-size: 22px;
+    }
+
+    .main {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-tabs {
+      height: 48px;
+      background: #f7f8fb;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: stretch;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .tab-strip {
+      display: flex;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .top-tab {
+      min-width: 140px;
+      height: 48px;
+      padding: 0 14px;
+      border-right: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: #3c4658;
+      background: #f7f8fb;
+      white-space: nowrap;
+    }
+
+    .top-tab.active {
+      color: var(--blue);
+      background: #fff;
+      border-bottom: 2px solid var(--blue);
+    }
+
+    .tab-close {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #a8b1c0;
+      background: #d8dde7;
+      font-size: 12px;
+      flex: none;
+    }
+
+    .account {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-right: 18px;
+      color: #364052;
+      white-space: nowrap;
+    }
+
+    .account-select {
+      min-width: 264px;
+      height: 34px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+    }
+
+    .avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #dbe8ff, #3f6ff3);
+      border: 2px solid #fff;
+    }
+
+    .page {
+      padding: 14px 14px 18px;
+      min-width: 0;
+    }
+
+    .report-header {
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: -2px 0 6px;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: #7a8495;
+      font-size: 14px;
+      font-weight: 700;
+      min-width: 0;
+    }
+
+    .breadcrumb svg {
+      width: 16px;
+      height: 16px;
+      color: #8c98aa;
+      flex: none;
+    }
+
+    .breadcrumb-current {
+      color: #273348;
+      font-weight: 800;
+    }
+
+    .report-status {
+      height: 24px;
+      padding: 0 12px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      color: #159264;
+      background: #e7f5ef;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .report-tools {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: none;
+    }
+
+    .report-tool {
+      height: 34px;
+      min-width: 92px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: #f7f9fc;
+      color: #7b8798;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 0 11px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .report-tool.instance {
+      min-width: 170px;
+    }
+
+    .report-tool.date {
+      min-width: 152px;
+      justify-content: space-between;
+      color: #9aa4b3;
+      position: relative;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .report-date-main {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .subscription-mark {
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0 7px;
+      border-radius: 3px;
+      background: #eef4ff;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .subscription-mark svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .report-date-label {
+      color: #7d8899;
+      font-weight: 800;
+    }
+
+    .report-date-range {
+      display: none;
+    }
+
+    .report-date-menu {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      width: 286px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: #fff;
+      box-shadow: 0 8px 20px rgba(31, 45, 68, .16);
+      padding: 6px 0;
+      z-index: 80;
+      display: none;
+    }
+
+    .report-tool.date.open .report-date-menu {
+      display: block;
+    }
+
+    .report-date-option {
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 12px;
+      color: #596579;
+      background: #fff;
+    }
+
+    .report-date-option:hover {
+      background: #f4f7ff;
+      color: var(--blue);
+    }
+
+    .report-date-option.active {
+      color: var(--blue);
+      font-weight: 800;
+    }
+
+    .report-date-month {
+      font-weight: 800;
+    }
+
+    .report-date-days {
+      color: #9aa4b3;
+      font-size: 12px;
+    }
+
+    .icon-btn {
+      width: 34px;
+      min-width: 34px;
+      padding: 0;
+      justify-content: center;
+    }
+
+    .report-nav {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      min-height: 44px;
+      margin: 0 0 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .report-nav-item {
+      height: 44px;
+      padding: 0 18px;
+      display: inline-flex;
+      align-items: center;
+      color: #596579;
+      font-weight: 700;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+    }
+
+    .report-nav-item.active {
+      color: var(--blue);
+      border-bottom-color: var(--blue);
+      background: #fff;
+    }
+
+    .model-tab-strip {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      margin: 0 -14px 10px;
+      padding: 8px 18px 0;
+      min-height: 50px;
+      background: #edf5ff;
+      border-bottom: 1px solid #d8e6f8;
+      overflow-x: auto;
+    }
+
+    .model-tab-card {
+      height: 36px;
+      min-height: 36px;
+      border: 1px solid transparent;
+      border-bottom: 0;
+      border-radius: 4px 4px 0 0;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 8px;
+      padding: 0 13px;
+      box-shadow: none;
+      color: #536174;
+      flex: none;
+    }
+
+    .model-tab-card.active {
+      border-color: #c6d8ff;
+      background: #fff;
+      color: var(--blue);
+      box-shadow: none;
+    }
+
+    .model-tab-main {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .model-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 0;
+      border: 0;
+      background: transparent;
+      display: grid;
+      place-items: center;
+      color: currentColor;
+      flex: none;
+    }
+
+    .model-tab-card.active .model-icon {
+      color: var(--blue);
+    }
+
+    .model-name {
+      color: currentColor;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .model-sub {
+      display: none;
+    }
+
+    .model-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+      color: transparent;
+      font-size: 0;
+      white-space: nowrap;
+      flex: none;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #27b56b;
+      box-shadow: none;
+    }
+
+    .model-hero-card {
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      background: #fff;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .model-hero-head {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .model-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .model-title-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 3px;
+      background: #eef4ff;
+      color: var(--blue);
+      display: grid;
+      place-items: center;
+      flex: none;
+    }
+
+    .model-title-meta h1 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.2;
+      font-weight: 800;
+      color: #1e2b40;
+    }
+
+    .model-title-meta p {
+      margin: 4px 0 0;
+      color: #667286;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .model-hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: none;
+    }
+
+    .model-hero-body {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 10px 12px;
+      background: #fbfcff;
+    }
+
+    .model-filter-area {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 0 0 12px;
+      padding: 0 2px;
+    }
+
+    .title-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .toggle {
+      width: 30px;
+      height: 16px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #123d78 50%, var(--pink) 50%);
+      position: relative;
+      flex: none;
+    }
+
+    .toggle::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 16px;
+      height: 16px;
+      background: #143a6e;
+      border-radius: 50%;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, .25);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.2;
+      font-weight: 800;
+      color: #182235;
+    }
+
+    .help-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #bac3d1;
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .model-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--blue);
+      font-weight: 650;
+    }
+
+    .page-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: flex-end;
+      margin: 8px 0 12px;
+    }
+
+    .btn {
+      height: 32px;
+      border-radius: 4px;
+      border: 1px solid var(--blue);
+      background: var(--blue);
+      color: #fff;
+      padding: 0 14px;
+      font-weight: 650;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .btn.secondary {
+      background: #fff;
+      color: var(--blue);
+    }
+
+    .filters {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 0;
+    }
+
+    .control {
+      height: 32px;
+      min-width: 156px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      background: #fff;
+      color: #263447;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 0 12px;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, .02);
+    }
+
+    .control.with-label {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .control-label {
+      height: 100%;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 12px;
+      border-right: 1px solid var(--border);
+      background: #f8f9fb;
+      color: #6f7a8c;
+      white-space: nowrap;
+    }
+
+    .control-value {
+      min-width: 0;
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 10px;
+      color: #9aa3b2;
+      white-space: nowrap;
+    }
+
+    .control.search {
+      color: #9aa3b2;
+      justify-content: flex-start;
+    }
+
+    .chev {
+      width: 12px;
+      height: 12px;
+      border-right: 2px solid #b2bbc9;
+      border-bottom: 2px solid #b2bbc9;
+      transform: rotate(45deg) translateY(-2px);
+      flex: none;
+    }
+
+    .notice {
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 12px;
+      border: 1px solid #ea6a9d;
+      background: #fff2f7;
+      color: #2f384a;
+      margin-bottom: 10px;
+      border-radius: 2px;
+    }
+
+    .notice.info {
+      border-color: #ccd8eb;
+      background: #fff;
+      min-height: 40px;
+    }
+
+    .notice-icon {
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--pink);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+      flex: none;
+    }
+
+    .notice.info .notice-icon {
+      background: #2181e8;
+    }
+
+    .notice a {
+      color: var(--blue);
+      font-weight: 650;
+      text-decoration: none;
+    }
+
+    .migration-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .migration-card {
+      min-height: 96px;
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 2px;
+      padding: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .migration-card.primary {
+      border-color: #b9ccff;
+      background: linear-gradient(180deg, #ffffff 0%, #f6f9ff 100%);
+    }
+
+    .migration-kicker {
+      color: #798598;
+      font-size: 12px;
+      font-weight: 750;
+      margin-bottom: 5px;
+    }
+
+    .migration-title {
+      font-size: 15px;
+      color: #202d42;
+      font-weight: 850;
+      margin-bottom: 6px;
+    }
+
+    .migration-desc {
+      color: #687488;
+      font-size: 12px;
+    }
+
+    .module-tabs {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .module-tab {
+      height: 40px;
+      padding: 0 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #687386;
+      border: 1px solid var(--border);
+      border-bottom: 0;
+      background: #f7f9fc;
+      border-radius: 4px 4px 0 0;
+      margin-right: 4px;
+      font-weight: 650;
+      text-decoration: none;
+    }
+
+    .module-tab.active {
+      color: var(--blue);
+      background: #fff;
+      position: relative;
+      top: 1px;
+    }
+
+    .tab-count {
+      min-width: 22px;
+      height: 20px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 7px;
+      color: #d34c72;
+      background: #fff0f5;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .overview {
+      background: #fff;
+      border: 1px solid var(--border);
+      padding: 12px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .metric-switch {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .segment-control {
+      height: 34px;
+      border: 1px solid var(--border);
+      background: #f7f9fc;
+      border-radius: 2px;
+      display: inline-flex;
+      align-items: center;
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .seg-btn {
+      height: 28px;
+      padding: 0 12px;
+      border-radius: 3px;
+      display: inline-flex;
+      align-items: center;
+      color: #6d7788;
+      white-space: nowrap;
+      font-weight: 650;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .seg-btn.active {
+      background: var(--blue);
+      color: #fff;
+      box-shadow: 0 1px 2px rgba(63, 111, 243, .25);
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: minmax(420px, .78fr) minmax(620px, 1.22fr);
+      gap: 14px;
+    }
+
+    .decision-brief {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+      border: 1px solid #c9d8ff;
+      background: #f7faff;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .decision-kicker {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .decision-title {
+      color: #17243a;
+      font-size: 16px;
+      font-weight: 850;
+      margin-bottom: 4px;
+    }
+
+    .decision-copy {
+      color: #657388;
+      font-size: 12px;
+    }
+
+    .decision-tags {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+
+    .summary-cards {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .summary-card {
+      border: 1px solid var(--border);
+      background: #fbfcff;
+      border-radius: 4px;
+      padding: 10px 12px;
+      min-height: 78px;
+    }
+
+    .summary-label {
+      color: #778397;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .summary-value {
+      font-size: 22px;
+      line-height: 1;
+      font-weight: 800;
+      color: #1e2b3e;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .summary-note {
+      margin-top: 8px;
+      color: #8c97a8;
+      font-size: 12px;
+    }
+
+    .chart-panel,
+    .action-panel {
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 2px;
+      min-width: 0;
+    }
+
+    .action-panel {
+      order: -1;
+    }
+
+    .panel-title {
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      border-bottom: 1px solid var(--border);
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .panel-sub {
+      color: #7f8b9c;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .quadrant {
+      height: 380px;
+      position: relative;
+      margin: 14px;
+      border: 1px solid #c8d1df;
+      border-radius: 2px;
+      background:
+        linear-gradient(to right, transparent calc(50% - 1px), #9aa8bb calc(50% - 1px), #9aa8bb calc(50% + 1px), transparent calc(50% + 1px)),
+        linear-gradient(to bottom, transparent calc(50% - 1px), #9aa8bb calc(50% - 1px), #9aa8bb calc(50% + 1px), transparent calc(50% + 1px)),
+        linear-gradient(135deg, #fbfdff, #f7faff);
+      overflow: visible;
+    }
+
+    .axis {
+      position: absolute;
+      color: #748197;
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .axis.x {
+      left: 50%;
+      bottom: 8px;
+      transform: translateX(-50%);
+    }
+
+    .axis.y {
+      left: 6px;
+      top: 50%;
+      transform: rotate(-90deg) translateX(-50%);
+      transform-origin: left top;
+    }
+
+    .quad-label {
+      position: absolute;
+      border: 1px solid #d5deeb;
+      background: rgba(255, 255, 255, .92);
+      border-radius: 4px;
+      padding: 7px 9px;
+      max-width: 168px;
+      box-shadow: 0 4px 12px rgba(31, 45, 69, .06);
+    }
+
+    .quad-label strong {
+      display: block;
+      font-size: 13px;
+      color: #1e2b3d;
+      margin-bottom: 2px;
+    }
+
+    .quad-label span {
+      display: block;
+      color: #748197;
+      font-size: 12px;
+    }
+
+    .quad-label.q1 { top: 12px; right: 12px; }
+    .quad-label.q2 { top: 12px; left: 34px; }
+    .quad-label.q3 { bottom: 34px; left: 34px; }
+    .quad-label.q4 { bottom: 34px; right: 12px; }
+
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      border: 2px solid #fff;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      box-shadow: 0 4px 12px rgba(32, 47, 73, .2);
+      cursor: pointer;
+      z-index: 5;
+    }
+
+    .bubble.core { background: var(--green); }
+    .bubble.grow { background: var(--blue); }
+    .bubble.watch { background: var(--amber); }
+    .bubble.low { background: var(--red); }
+    .bubble.mix { background: var(--purple); }
+
+    .bubble::after {
+      content: attr(data-tip);
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 50%;
+      width: 252px;
+      padding: 10px 12px;
+      border: 1px solid #cfd8e8;
+      border-radius: 4px;
+      background: #fff;
+      color: #223047;
+      box-shadow: 0 10px 24px rgba(31, 45, 68, .18);
+      font-size: 12px;
+      font-weight: 650;
+      line-height: 1.55;
+      white-space: pre-line;
+      text-align: left;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 6px);
+      transition: opacity .16s ease, transform .16s ease;
+      z-index: 30;
+    }
+
+    .bubble:hover {
+      z-index: 40;
+    }
+
+    .bubble:hover::after {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .bubble.tip-left::after {
+      left: auto;
+      right: 50%;
+      transform: translate(12px, 6px);
+    }
+
+    .bubble.tip-left:hover::after {
+      transform: translate(12px, 0);
+    }
+
+    .bubble.tip-up::after {
+      top: auto;
+      bottom: calc(100% + 10px);
+      transform: translate(-50%, -6px);
+    }
+
+    .bubble.tip-up:hover::after {
+      transform: translate(-50%, 0);
+    }
+
+    .legend {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 0 14px 14px;
+      color: #748197;
+      font-size: 12px;
+    }
+
+    .legend-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 4px;
+    }
+
+    .action-list {
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .action-card {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: #fbfcff;
+      padding: 10px;
+    }
+
+    .action-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .action-title {
+      font-weight: 800;
+    }
+
+    .badge {
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .badge.blue { color: var(--blue); background: var(--blue-soft); }
+    .badge.green { color: var(--green); background: var(--green-soft); }
+    .badge.amber { color: var(--amber); background: var(--amber-soft); }
+    .badge.red { color: var(--red); background: var(--red-soft); }
+
+    .action-desc {
+      color: #6f7b8f;
+      font-size: 12px;
+      margin-bottom: 9px;
+    }
+
+    .action-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .mini {
+      border: 1px solid #e8edf5;
+      background: #fff;
+      border-radius: 3px;
+      padding: 6px;
+    }
+
+    .mini span {
+      display: block;
+      color: #8d98a9;
+      font-size: 11px;
+    }
+
+    .mini strong {
+      display: block;
+      color: #263448;
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+      margin-top: 2px;
+    }
+
+    .detail-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 10px;
+    }
+
+    .operator-view {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      background: #fbfcff;
+    }
+
+    .operator-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: #243044;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .operator-table {
+      width: 100%;
+      min-width: 980px;
+      table-layout: fixed;
+      font-size: 12px;
+    }
+
+    .operator-table th,
+    .operator-table td {
+      padding: 8px 10px;
+    }
+
+    .detail-head {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .detail-title {
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    .detail-subtitle {
+      color: #748197;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .detail-tools {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .view-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      background: #fbfcff;
+      flex-wrap: wrap;
+    }
+
+    .view-tabs,
+    .column-preset {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: #fff;
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .view-tab,
+    .preset-item {
+      min-height: 28px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 10px;
+      border-radius: 3px;
+      color: #667386;
+      font-size: 12px;
+      font-weight: 750;
+      white-space: nowrap;
+    }
+
+    .view-tab.active,
+    .preset-item.active {
+      color: #fff;
+      background: var(--blue);
+    }
+
+    .field-summary {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .field-group {
+      border: 1px solid #e7ecf4;
+      border-radius: 4px;
+      background: #fbfcff;
+      padding: 9px;
+      min-height: 74px;
+    }
+
+    .field-group strong {
+      display: block;
+      color: #28364a;
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+
+    .field-group span {
+      color: #758195;
+      font-size: 12px;
+    }
+
+    .data-filters {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .small-control {
+      height: 32px;
+      min-width: 150px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      color: #8b95a6;
+      background: #fff;
+    }
+
+    .data-table-wrap {
+      overflow: auto;
+      max-height: 560px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    table {
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 3680px;
+      width: 100%;
+      font-size: 13px;
+      background: #fff;
+    }
+
+    .opportunity-table {
+      min-width: 3120px;
+    }
+
+    th,
+    td {
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 10px;
+      text-align: left;
+      white-space: nowrap;
+      vertical-align: middle;
+      font-variant-numeric: tabular-nums;
+    }
+
+    th {
+      background: var(--table-head);
+      color: #263448;
+      font-weight: 800;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    th.group {
+      text-align: center;
+      background: #f1f4f8;
+      color: #253349;
+    }
+
+    td:first-child,
+    th:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 3;
+      background: #fff;
+      box-shadow: 1px 0 0 var(--border);
+    }
+
+    th:first-child {
+      background: var(--table-head);
+      z-index: 4;
+    }
+
+    .opportunity-table th:first-child,
+    .opportunity-table td:first-child {
+      width: 340px;
+      min-width: 340px;
+      max-width: 340px;
+    }
+
+    .opportunity-table th:nth-child(2),
+    .opportunity-table td:nth-child(2) {
+      width: 96px;
+      min-width: 96px;
+    }
+
+    .opportunity-table th:nth-child(3),
+    .opportunity-table td:nth-child(3) {
+      width: 64px;
+      min-width: 64px;
+    }
+
+    .opportunity-table th:nth-child(4),
+    .opportunity-table td:nth-child(4) {
+      width: 90px;
+      min-width: 90px;
+    }
+
+    .opportunity-table th:nth-child(5),
+    .opportunity-table td:nth-child(5) {
+      width: 104px;
+      min-width: 104px;
+    }
+
+    .opportunity-table th:nth-child(6),
+    .opportunity-table td:nth-child(6) {
+      width: 360px;
+      min-width: 360px;
+    }
+
+    .opportunity-table th:nth-child(7),
+    .opportunity-table td:nth-child(7) {
+      width: 98px;
+      min-width: 98px;
+    }
+
+    .segment-name {
+      display: inline-block;
+      max-width: 318px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: bottom;
+    }
+
+    .tag {
+      height: 22px;
+      border-radius: 999px;
+      padding: 0 8px;
+      display: inline-flex;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .tag.im { background: var(--blue-soft); color: var(--blue); }
+    .tag.ls { background: var(--green-soft); color: var(--green); }
+    .tag.demo { background: #f1f4f8; color: #7b8799; }
+
+    .bar-rate {
+      display: inline-grid;
+      grid-template-columns: 86px 64px;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .bar-bg {
+      height: 8px;
+      background: #e8f0f9;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: #2587eb;
+      border-radius: 999px;
+    }
+
+    .metric-strong {
+      font-weight: 800;
+      color: #1d2b40;
+    }
+
+    .quad-tag {
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0 8px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .quad-tag.core { color: var(--green); background: var(--green-soft); }
+    .quad-tag.grow { color: var(--blue); background: var(--blue-soft); }
+    .quad-tag.low { color: var(--red); background: var(--red-soft); }
+    .quad-tag.watch { color: var(--amber); background: var(--amber-soft); }
+
+    .pager {
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 0 16px;
+      background: #fff;
+    }
+
+    .page-btn {
+      min-width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #36445a;
+    }
+
+    .page-btn.active {
+      color: #fff;
+      background: var(--blue);
+      border-color: var(--blue);
+    }
+
+    .page-size,
+    .goto {
+      height: 36px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: #fff;
+      padding: 0 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .basis-table {
+      width: 2248px;
+      min-width: 2248px;
+      table-layout: fixed;
+    }
+
+    .basis-table th,
+    .basis-table td {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .basis-table th:nth-child(1),
+    .basis-table td:nth-child(1) {
+      width: 320px;
+      min-width: 320px;
+      max-width: 320px;
+    }
+
+    .basis-table th:nth-child(2),
+    .basis-table td:nth-child(2) {
+      width: 110px;
+      min-width: 110px;
+    }
+
+    .basis-table th:nth-child(3),
+    .basis-table td:nth-child(3) {
+      width: 80px;
+      min-width: 80px;
+    }
+
+    .basis-table th:nth-child(4),
+    .basis-table td:nth-child(4) {
+      width: 130px;
+      min-width: 130px;
+    }
+
+    .basis-table th:nth-child(5),
+    .basis-table td:nth-child(5) {
+      width: 420px;
+      min-width: 420px;
+    }
+
+    .basis-table th:nth-child(n+6),
+    .basis-table td:nth-child(n+6) {
+      width: 132px;
+      min-width: 132px;
+    }
+
+    .audit-ok {
+      color: var(--green);
+      font-weight: 800;
+    }
+
+    .audit-warn {
+      color: var(--amber);
+      font-weight: 800;
+    }
+
+    .raw-source {
+      color: #667386;
+      font-size: 12px;
+    }
+
+    .hidden-note {
+      color: #748197;
+      padding: 10px 12px 0;
+      font-size: 12px;
+    }
+
+    .unmatched-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .unmatched-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .unmatched-card {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: #fbfcff;
+      padding: 12px;
+      min-height: 92px;
+    }
+
+    .unmatched-card.warning {
+      border-color: #f4bdd0;
+      background: #fff8fb;
+    }
+
+    .unmatched-label {
+      color: #7b8799;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .unmatched-value {
+      color: #1f2d40;
+      font-size: 24px;
+      line-height: 1;
+      font-weight: 850;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .unmatched-note {
+      margin-top: 8px;
+      color: #7f8b9c;
+      font-size: 12px;
+    }
+
+    .reason-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .reason-row {
+      display: grid;
+      grid-template-columns: 132px minmax(0, 1fr) 64px;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid #e6ecf4;
+      border-radius: 4px;
+      padding: 9px 10px;
+      background: #fff;
+    }
+
+    .reason-name {
+      font-weight: 800;
+      color: #28364a;
+      white-space: nowrap;
+    }
+
+    .reason-bar {
+      height: 8px;
+      border-radius: 999px;
+      background: #eef3fa;
+      overflow: hidden;
+    }
+
+    .reason-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: #d34c72;
+    }
+
+    .reason-count {
+      color: #39475c;
+      text-align: right;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .process-panel {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: #fbfcff;
+      padding: 12px;
+      min-width: 0;
+    }
+
+    .process-title {
+      font-weight: 850;
+      margin-bottom: 10px;
+      color: #253349;
+    }
+
+    .process-steps {
+      display: grid;
+      gap: 10px;
+    }
+
+    .process-step {
+      display: grid;
+      grid-template-columns: 26px minmax(0, 1fr);
+      gap: 9px;
+      align-items: flex-start;
+    }
+
+    .step-index {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: var(--blue);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .step-text strong {
+      display: block;
+      color: #253349;
+      margin-bottom: 2px;
+    }
+
+    .step-text span {
+      display: block;
+      color: #748197;
+      font-size: 12px;
+    }
+
+    .unmatched-table {
+      min-width: 1580px;
+    }
+
+    @media (max-width: 1320px) {
+      .model-tab-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .model-hero-head,
+      .model-hero-body {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .overview-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .migration-strip,
+      .field-summary,
+      .unmatched-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .unmatched-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .account-select {
+        min-width: 180px;
+      }
+
+      .title-row,
+      .detail-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .report-nav {
+        overflow-x: auto;
+      }
+
+      .model-tab-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .model-hero-actions {
+        flex-wrap: wrap;
+      }
+
+      .summary-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .migration-strip,
+      .field-summary,
+      .unmatched-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .quadrant {
+        height: 420px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-mark"></div>
+        <div>4KMILES</div>
+      </div>
+      <nav class="nav">
+        <div class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="5" width="16" height="14" rx="2"></rect><path d="M8 9h8M8 13h5"></path></svg>
+          关于 AMC
+        </div>
+        <div class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4h10l2 2v16H6z"></path><path d="M9 11h6M9 15h6"></path></svg>
+          基础 AMC
+        </div>
+        <div class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5v14"></path></svg>
+          高级 AMC
+        </div>
+        <div class="nav-item active">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"></path></svg>
+          AMC 人群
+        </div>
+        <div class="nav-item">
+      <span class="new">新</span>
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5M4 19h18"></path><path d="M8 16V9M13 16V7M18 16v-4"></path></svg>
+          广告总览
+        </div>
+        <div class="nav-item">
+      <span class="new">新</span>
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 7h10v10H7z"></path><path d="M3 11h4M17 11h4"></path></svg>
+          映射上传
+        </div>
+        <div class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 5h14v16H5z"></path><path d="M9 9h6M9 13h6M9 17h4"></path></svg>
+          报告
+        </div>
+      </nav>
+      <div class="collapse">«</div>
+    </aside>
+
+    <main class="main">
+      <header class="top-tabs">
+        <div class="tab-strip">
+          <div class="top-tab">关于 AMC</div>
+          <div class="top-tab">基础 AMC <span class="tab-close">×</span></div>
+          <div class="top-tab">高级 AMC <span class="tab-close">×</span></div>
+          <div class="top-tab">人群规模 <span class="tab-close">×</span></div>
+          <div class="top-tab active">人群机会分析 <span class="tab-close">×</span></div>
+        </div>
+        <div class="account">
+          <div>简体中文</div>
+          <div class="avatar"></div>
+          <div>3384401385...</div>
+        </div>
+      </header>
+
+      <section class="page">
+        <div class="report-header">
+          <div class="breadcrumb">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11 12 3l9 8"></path><path d="M5 10v10h14V10"></path><path d="M9 20v-6h6v6"></path></svg>
+            <span>AMC报告</span>
+            <span>›</span>
+            <span class="breadcrumb-current">Demo Report</span>
+            <span class="report-status">已完成</span>
+          </div>
+          <div class="report-tools">
+            <div class="report-tool instance">US demoInstance <span class="chev"></span></div>
+            <div class="report-tool">GMT-04</div>
+            <div class="report-tool date" id="report-date-select" role="button" tabindex="0">
+              <span class="report-date-main">
+                <span class="subscription-mark">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12v18l-6-3-6 3V3Z"></path><path d="M9 8h6"></path></svg>
+                  订阅
+                </span>
+                <span class="report-date-label" id="report-date-label">2025/06</span>
+              </span>
+              <span class="chev"></span>
+              <div class="report-date-menu" id="report-date-menu">
+                <div class="report-date-option active" data-month="2025/06" data-range="2024-04-21　至　2025-05-18">
+                  <span class="report-date-month">2025/06</span>
+                  <span class="report-date-days">2024-04-21 至 2025-05-18</span>
+                </div>
+                <div class="report-date-option" data-month="2025/05" data-range="2024-03-24　至　2025-04-20">
+                  <span class="report-date-month">2025/05</span>
+                  <span class="report-date-days">2024-03-24 至 2025-04-20</span>
+                </div>
+              </div>
+            </div>
+            <div class="report-tool icon-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="report-nav">
+          <div class="report-nav-item">广告触达路径分析</div>
+          <div class="report-nav-item active">人群分析</div>
+          <div class="report-nav-item">精选推荐</div>
+          <div class="report-nav-item">媒介触点分析</div>
+        </div>
+
+        <div class="model-tab-strip">
+          <div class="model-tab-card">
+            <div class="model-tab-main">
+              <div class="model-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              </div>
+              <div>
+                <div class="model-name">人群画像模型</div>
+                <div class="model-sub">标签分布、行为画像、购买画像</div>
+              </div>
+            </div>
+            <div class="model-status"><span class="status-dot"></span>已配置</div>
+          </div>
+
+          <div class="model-tab-card">
+            <div class="model-tab-main">
+              <div class="model-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41 12 22l-8.59-8.59A2 2 0 0 1 3 12V4a2 2 0 0 1 2-2h8a2 2 0 0 1 1.41.59l6.18 6.18a2 2 0 0 1 0 2.82Z"></path><path d="M7 7h.01"></path></svg>
+              </div>
+              <div>
+                <div class="model-name">人群标签洞察模型</div>
+                <div class="model-sub">标签规模、标签重合、标签明细</div>
+              </div>
+            </div>
+            <div class="model-status"><span class="status-dot"></span>已配置</div>
+          </div>
+
+          <div class="model-tab-card active">
+            <div class="model-tab-main">
+              <div class="model-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path><path d="M14 9h5v5"></path></svg>
+              </div>
+              <div>
+                <div class="model-name">人群机会</div>
+                <div class="model-sub">TGI、渗透率、品线机会象限</div>
+              </div>
+            </div>
+            <div class="model-status"><span class="status-dot"></span>当前模型</div>
+          </div>
+        </div>
+
+        <div class="model-hero-card">
+          <div class="model-hero-head">
+            <div class="model-title-wrap">
+              <div class="model-title-icon">
+                <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path><path d="M14 9h5v5"></path></svg>
+              </div>
+              <div class="model-title-meta">
+                <h1>人群机会分析</h1>
+                <p>先给出保量、扩量与复盘建议，再用 TGI、渗透率、ROAS 和人群规模解释每个投放动作的依据。</p>
+              </div>
+            </div>
+            <div class="model-hero-actions">
+              <button class="btn secondary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>
+                下载数据
+              </button>
+            </div>
+          </div>
+          <div class="model-hero-body">
+            <div class="model-filter-area">
+              <div class="filters">
+                <div class="control with-label"><span class="control-label">品牌</span><span class="control-value">Ensenior <span class="chev"></span></span></div>
+                <div class="control with-label"><span class="control-label">品线</span><span class="control-value">Recessed Lighting... <span class="chev"></span></span></div>
+                <div class="control with-label"><span class="control-label">广告类型</span><span class="control-value">全部类型 <span class="chev"></span></span></div>
+                <div class="control search">搜索人群名称</div>
+                <div class="control search">搜索人群 ID</div>
+              </div>
+            </div>
+            <button class="btn secondary">搜索类目层级</button>
+          </div>
+        </div>
+
+        <section class="overview">
+          <div class="decision-brief">
+            <div>
+              <div class="decision-kicker">购买口径 · 投放结论</div>
+              <div class="decision-title">Recessed Lighting 相关人群优先保量，Home Improvement 大盘兴趣人群建议扩量测试，低 TGI 广覆盖人群进入控本复盘。</div>
+              <div class="decision-copy">当前判断同时参考购买 TGI、购买渗透率、购买用户数与 ROAS；未匹配人群保留在明细中，但不进入机会象限。</div>
+            </div>
+            <div class="decision-tags">
+              <span class="badge green">保量 1,670</span>
+              <span class="badge blue">扩量 2,307</span>
+              <span class="badge amber">复盘 2,704</span>
+            </div>
+          </div>
+
+          <div class="metric-switch">
+            <div class="segment-control">
+              <span class="seg-btn" data-metric="曝光">曝光</span>
+              <span class="seg-btn" data-metric="点击">点击</span>
+              <span class="seg-btn" data-metric="DPV">DPV</span>
+              <span class="seg-btn" data-metric="ATC">ATC</span>
+              <span class="seg-btn active" data-metric="购买">购买</span>
+              <span class="seg-btn" data-metric="NTB">NTB</span>
+            </div>
+            <div class="panel-sub" id="metric-axis-copy">当前坐标轴：X = 购买渗透率，Y = 购买 TGI。下方明细表保留全部行为指标。</div>
+          </div>
+
+          <div class="summary-cards">
+            <div class="summary-card">
+              <div class="summary-label">已匹配人群</div>
+              <div class="summary-value">7,670</div>
+              <div class="summary-note">有效行占比 98.4%</div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-label">核心人群</div>
+              <div class="summary-value">1,670</div>
+              <div class="summary-note">高 TGI + 高渗透</div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-label">扩量观察人群</div>
+              <div class="summary-value">2,307</div>
+              <div class="summary-note">高 TGI + 低渗透</div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-label">未匹配人群</div>
+              <div class="summary-value">122</div>
+              <div class="summary-note">占全量 1.6%</div>
+            </div>
+          </div>
+
+          <div class="overview-grid">
+            <article class="chart-panel">
+              <div class="panel-title">
+                <span>TGI × 渗透率象限</span>
+                <span class="panel-sub">基准购买渗透率 0.072%，高渗透阈值 0.099%</span>
+              </div>
+              <div class="quadrant">
+                <div class="axis y">TGI</div>
+                <div class="axis x">渗透率</div>
+                <div class="quad-label q1"><strong>核心保量</strong><span>高 TGI + 高渗透</span></div>
+                <div class="quad-label q2"><strong>优先扩量</strong><span>高 TGI + 低渗透</span></div>
+                <div class="quad-label q3"><strong>暂缓投放</strong><span>低 TGI + 低渗透</span></div>
+                <div class="quad-label q4"><strong>控本复盘</strong><span>低 TGI + 高渗透</span></div>
+                <div class="bubble core tip-left" data-tip="IM - Recessed Lighting Housing &amp; Trim Kits
+TGI：4,325
+购买渗透率：3.131%
+购买用户数：21,827
+ROAS：10.05" style="left: 82%; top: 16%; width: 58px; height: 58px;">RH</div>
+                <div class="bubble core tip-left" data-tip="IM - Recessed Light Fixtures
+TGI：3,979
+购买渗透率：2.880%
+购买用户数：22,201
+ROAS：10.00" style="left: 75%; top: 22%; width: 56px; height: 56px;">RF</div>
+                <div class="bubble core tip-left" data-tip="LS - B2B - Business Lookalike - Electricians
+TGI：4,047
+购买渗透率：2.930%
+购买用户数：14,890
+ROAS：14.90" style="left: 67%; top: 18%; width: 50px; height: 50px;">EL</div>
+                <div class="bubble core" data-tip="LS - B2B - Business Lookalike - Plumbers
+TGI：1,714
+购买渗透率：1.241%
+购买用户数：15,797
+ROAS：11.57" style="left: 52%; top: 35%; width: 51px; height: 51px;">PL</div>
+                <div class="bubble core" data-tip="LS - Interested in Home Improvement - Household Hardware
+TGI：202
+购买渗透率：0.146%
+购买用户数：63,135
+ROAS：7.61" style="left: 31%; top: 57%; width: 66px; height: 66px;">HH</div>
+                <div class="bubble grow" data-tip="LS - Interested in Home Improvement
+TGI：103
+购买渗透率：0.074%
+购买用户数：81,102
+ROAS：7.17" style="left: 22%; top: 48%; width: 70px; height: 70px;">HI</div>
+                <div class="bubble low tip-up" data-tip="LS - B2B - Seller Central Lookalikes
+TGI：29
+购买渗透率：0.021%
+购买用户数：80,812
+ROAS：6.87" style="left: 18%; top: 80%; width: 68px; height: 68px;">SC</div>
+              </div>
+              <div class="legend">
+                <span><span class="legend-dot" style="background: var(--green);"></span>核心保量</span>
+                <span><span class="legend-dot" style="background: var(--blue);"></span>优先扩量</span>
+                <span><span class="legend-dot" style="background: var(--amber);"></span>控本复盘</span>
+                <span><span class="legend-dot" style="background: var(--red);"></span>暂缓投放</span>
+              </div>
+            </article>
+
+            <aside class="action-panel">
+              <div class="panel-title">
+                <span>推荐动作</span>
+                <span class="panel-sub" id="action-metric-copy">购买指标</span>
+              </div>
+              <div class="action-list">
+                <div class="action-card">
+                  <div class="action-top"><span class="action-title">保量：保护核心照明相关人群</span><span class="badge green">P0</span></div>
+                  <div class="action-desc">Recessed Lighting、Light Fixtures、Electricians 等标签 TGI 超过 3,900，购买渗透率接近 3%，应优先保障预算和稳定 ROAS。</div>
+                  <div class="action-metrics">
+                    <div class="mini"><span>最高 TGI</span><strong>4,325</strong></div>
+                    <div class="mini"><span>最高渗透率</span><strong>3.131%</strong></div>
+                    <div class="mini"><span>最高 ROAS</span><strong>14.90</strong></div>
+                  </div>
+                </div>
+                <div class="action-card">
+                  <div class="action-top"><span class="action-title">扩量：测试家装硬件兴趣人群</span><span class="badge blue">P1</span></div>
+                  <div class="action-desc">Home Improvement、Household Hardware 等大盘人群购买用户数高，TGI 略高于均值，适合做预算扩展和素材分层验证。</div>
+                  <div class="action-metrics">
+                    <div class="mini"><span>扩量人群</span><strong>2,307</strong></div>
+                    <div class="mini"><span>平均 TGI</span><strong>116</strong></div>
+                    <div class="mini"><span>购买用户</span><strong>1,048万</strong></div>
+                  </div>
+                </div>
+                <div class="action-card">
+                  <div class="action-top"><span class="action-title">控本：复盘低 TGI 广覆盖人群</span><span class="badge amber">P2</span></div>
+                  <div class="action-desc">Seller Central Lookalikes、Home Builders 等购买用户数不低，但 TGI 低于 100，建议只保留绩效达标组合，避免按人群相关性继续扩量。</div>
+                  <div class="action-metrics">
+                    <div class="mini"><span>低 TGI 人群</span><strong>2,704</strong></div>
+                    <div class="mini"><span>平均 TGI</span><strong>75</strong></div>
+                    <div class="mini"><span>花费</span><strong>$2.50亿</strong></div>
+                  </div>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="detail-card">
+          <div class="detail-head">
+            <div>
+              <div class="detail-title">品牌渗透与 TGI 明细</div>
+            </div>
+            <div class="detail-tools">
+              <button class="btn secondary">列配置</button>
+            </div>
+          </div>
+
+          <div class="operator-view">
+            <div class="operator-title">
+              <span>投手操作视图</span>
+              <span class="panel-sub">默认按“动作优先级 + ROAS + 购买用户数”排序</span>
+            </div>
+            <div class="data-table-wrap" style="max-height: 220px;">
+              <table class="operator-table">
+                <thead>
+                  <tr>
+                    <th>建议动作</th>
+                    <th>人群名称</th>
+                    <th>人群规模</th>
+                    <th>购买用户数</th>
+                    <th>购买渗透率</th>
+                    <th>TGI</th>
+                    <th>ROAS</th>
+                    <th>预算处理</th>
+                    <th>验证重点</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="quad-tag core">核心保量</span></td>
+                    <td><span class="segment-name">IM - Recessed Lighting Housing &amp; Trim Kits</span></td>
+                    <td>697,153</td>
+                    <td>21,827</td>
+                    <td>3.131%</td>
+                    <td class="metric-strong">4,325</td>
+                    <td>10.05</td>
+                    <td>保预算，稳定转化</td>
+                    <td>观察 CPC 抬升后 ROAS 是否稳定</td>
+                  </tr>
+                  <tr>
+                    <td><span class="quad-tag core">核心保量</span></td>
+                    <td><span class="segment-name">LS - B2B - Business Lookalike - Electricians</span></td>
+                    <td>508,232</td>
+                    <td>14,890</td>
+                    <td>2.930%</td>
+                    <td class="metric-strong">4,047</td>
+                    <td>14.90</td>
+                    <td>优先保障，允许小幅加价</td>
+                    <td>拆分素材与品线承接页</td>
+                  </tr>
+                  <tr>
+                    <td><span class="quad-tag grow">优先扩量</span></td>
+                    <td><span class="segment-name">LS - Interested in Home Improvement</span></td>
+                    <td>109,254,420</td>
+                    <td>81,102</td>
+                    <td>0.074%</td>
+                    <td class="metric-strong">103</td>
+                    <td>7.17</td>
+                    <td>分层测试预算</td>
+                    <td>按照明/装修场景素材分组验证</td>
+                  </tr>
+                  <tr>
+                    <td><span class="quad-tag watch">控本复盘</span></td>
+                    <td><span class="segment-name">LS - B2B - Seller Central Lookalikes</span></td>
+                    <td>384,487,224</td>
+                    <td>80,812</td>
+                    <td>0.021%</td>
+                    <td class="metric-strong">29</td>
+                    <td>6.87</td>
+                    <td>控预算，只保留达标组合</td>
+                    <td>核对是否由泛流量带来规模</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="data-filters">
+            <div class="small-control">机会象限 <span class="chev"></span></div>
+            <div class="small-control">TGI 范围 <span class="chev"></span></div>
+            <div class="small-control">渗透率范围 <span class="chev"></span></div>
+            <div class="small-control metric-filter">指标 = 购买 <span class="chev"></span></div>
+            <div class="small-control">搜索人群名称</div>
+            <div class="small-control">搜索人群 ID</div>
+          </div>
+
+          <div class="data-table-wrap">
+            <table class="opportunity-table">
+              <thead>
+                <tr>
+                  <th rowspan="2">人群名称</th>
+                  <th rowspan="2">人群 ID</th>
+                  <th rowspan="2">站点</th>
+                  <th rowspan="2">人群类型</th>
+                  <th rowspan="2">品牌</th>
+                  <th rowspan="2">品线</th>
+                  <th rowspan="2">广告类型</th>
+                  <th colspan="1" class="group">人群规模</th>
+                  <th colspan="6" class="group">机会指标</th>
+                  <th colspan="5" class="group">花费与销售</th>
+                  <th colspan="14" class="group">品牌渗透用户数</th>
+                  <th colspan="6" class="group">原始行为次数</th>
+                </tr>
+                <tr>
+                  <th>人群规模</th>
+                  <th>指标</th>
+                  <th>目标用户数</th>
+                  <th>TGI</th>
+                  <th>渗透率</th>
+                  <th>评分</th>
+                  <th>象限</th>
+                  <th>总花费</th>
+                  <th>总销售额</th>
+                  <th>NTB 销售额</th>
+                  <th>总 ROAS</th>
+                  <th>销售件数</th>
+                  <th>曝光用户数</th>
+                  <th>曝光渗透率</th>
+                  <th>点击用户数</th>
+                  <th>点击渗透率</th>
+                  <th>品牌搜索用户数</th>
+                  <th>品牌搜索渗透率</th>
+                  <th>DPV 用户数</th>
+                  <th>DPV 渗透率</th>
+                  <th>ATC 用户数</th>
+                  <th>ATC 渗透率</th>
+                  <th>购买用户数</th>
+                  <th>购买渗透率</th>
+                  <th>NTB 用户数</th>
+                  <th>NTB 渗透率</th>
+                  <th>曝光次数</th>
+                  <th>点击次数</th>
+                  <th>品牌搜索次数</th>
+                  <th>DPV 次数</th>
+                  <th>ATC 次数</th>
+                  <th>购买次数</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="segment-name">IM - Recessed Lighting Housing &amp; Trim Kits</span></td>
+                  <td>920456</td>
+                  <td>US</td>
+                  <td><span class="tag im">IM</span></td>
+                  <td>Ensenior</td>
+                  <td>Recessed Lighting Housing &amp; Trim Kits</td>
+                  <td>default</td>
+                  <td>697,165</td>
+                  <td>购买</td>
+                  <td>21,827</td>
+                  <td class="metric-strong">4,325</td>
+                  <td><span class="bar-rate"><span class="bar-bg"><span class="bar-fill" style="width:88%"></span></span>3.13%</span></td>
+                  <td>96</td>
+                  <td><span class="quad-tag core">核心</span></td>
+                  <td>$393,122.43</td>
+                  <td>$3,951,062.61</td>
+                  <td>$1,617,543.67</td>
+                  <td>10.05</td>
+                  <td>46,829</td>
+                  <td>560,387</td>
+                  <td><span class="bar-rate"><span class="bar-bg"><span class="bar-fill" style="width:96%"></span></span>80.38%</span></td>
+                  <td>60,653</td>
+                  <td>8.70%</td>
+                  <td>134,492</td>
+                  <td>19.29%</td>
+                  <td>88,806</td>
+                  <td>12.74%</td>
+                  <td>29,348</td>
+                  <td>4.21%</td>
+                  <td>21,827</td>
+                  <td>3.13%</td>
+                  <td>15,812</td>
+                  <td>2.27%</td>
+                  <td>23,852,846</td>
+                  <td>102,918</td>
+                  <td>836,775</td>
+                  <td>277,272</td>
+                  <td>74,135</td>
+                  <td>35,944</td>
+                </tr>
+                <tr>
+                  <td><span class="segment-name">LS - B2B - Business Lookalike - Electricians</span></td>
+                  <td>2600978</td>
+                  <td>US</td>
+                  <td><span class="tag ls">LS</span></td>
+                  <td>Ensenior</td>
+                  <td>Recessed Lighting Housing &amp; Trim Kits</td>
+                  <td>default</td>
+                  <td>508,270</td>
+                  <td>购买</td>
+                  <td>14,890</td>
+                  <td class="metric-strong">4,047</td>
+                  <td><span class="bar-rate"><span class="bar-bg"><span class="bar-fill" style="width:82%"></span></span>2.93%</span></td>
+                  <td>94</td>
+                  <td><span class="quad-tag grow">扩量</span></td>
+                  <td>$230,184.39</td>
+                  <td>$3,429,370.05</td>
+                  <td>$1,154,224.21</td>
+                  <td>14.90</td>
+                  <td>40,110</td>
+                  <td>348,578</td>
+                  <td>68.58%</td>
+                  <td>31,530</td>
+                  <td>6.20%</td>
+                  <td>61,649</td>
+                  <td>12.13%</td>
+                  <td>42,517</td>
+                  <td>8.36%</td>
+                  <td>18,507</td>
+                  <td>3.64%</td>
+                  <td>14,890</td>
+                  <td>2.93%</td>
+                  <td>9,604</td>
+                  <td>1.89%</td>
+                  <td>15,177,484</td>
+                  <td>56,670</td>
+                  <td>460,311</td>
+                  <td>153,177</td>
+                  <td>39,300</td>
+                  <td>28,327</td>
+                </tr>
+                <tr>
+                  <td><span class="segment-name">IM - Recessed Light Fixtures</span></td>
+                  <td>453584</td>
+                  <td>US</td>
+                  <td><span class="tag im">IM</span></td>
+                  <td>Ensenior</td>
+                  <td>Recessed Lighting Housing &amp; Trim Kits</td>
+                  <td>default</td>
+                  <td>770,824</td>
+                  <td>购买</td>
+                  <td>22,201</td>
+                  <td class="metric-strong">3,979</td>
+                  <td><span class="bar-rate"><span class="bar-bg"><span class="bar-fill" style="width:80%"></span></span>2.88%</span></td>
+                  <td>91</td>
+                  <td><span class="quad-tag core">核心</span></td>
+                  <td>$401,609.84</td>
+                  <td>$4,017,970.32</td>
+                  <td>$1,646,619.49</td>
+                  <td>10.00</td>
+                  <td>47,628</td>
+                  <td>607,425</td>
+                  <td>78.80%</td>
+                  <td>62,098</td>
+                  <td>8.06%</td>
+                  <td>139,300</td>
+                  <td>18.07%</td>
+                  <td>90,825</td>
+                  <td>11.78%</td>
+                  <td>29,897</td>
+                  <td>3.88%</td>
+                  <td>22,201</td>
+                  <td>2.88%</td>
+                  <td>16,087</td>
+                  <td>2.09%</td>
+                  <td>24,557,877</td>
+                  <td>105,096</td>
+                  <td>854,830</td>
+                  <td>282,253</td>
+                  <td>75,075</td>
+                  <td>36,530</td>
+                </tr>
+                <tr>
+                  <td><span class="segment-name">LS - B2B - Seller Central Lookalikes</span></td>
+                  <td>8578</td>
+                  <td>US</td>
+                  <td><span class="tag ls">LS</span></td>
+                  <td>Ensenior</td>
+                  <td>Recessed Lighting Housing &amp; Trim Kits</td>
+                  <td>default</td>
+                  <td>384,208,912</td>
+                  <td>购买</td>
+                  <td>80,812</td>
+                  <td class="metric-strong">29</td>
+                  <td><span class="bar-rate"><span class="bar-bg"><span class="bar-fill" style="width:8%"></span></span>0.02%</span></td>
+                  <td>18</td>
+                  <td><span class="quad-tag low">低优先级</span></td>
+                  <td>$1,593,785.37</td>
+                  <td>$10,949,849.08</td>
+                  <td>$6,163,367.02</td>
+                  <td>6.87</td>
+                  <td>135,718</td>
+                  <td>14,569,472</td>
+                  <td>3.79%</td>
+                  <td>300,413</td>
+                  <td>0.08%</td>
+                  <td>920,383</td>
+                  <td>0.24%</td>
+                  <td>483,648</td>
+                  <td>0.13%</td>
+                  <td>119,071</td>
+                  <td>0.03%</td>
+                  <td>80,812</td>
+                  <td>0.02%</td>
+                  <td>64,844</td>
+                  <td>0.02%</td>
+                  <td>130,125,389</td>
+                  <td>434,209</td>
+                  <td>3,719,571</td>
+                  <td>1,162,982</td>
+                  <td>201,468</td>
+                  <td>109,447</td>
+                </tr>
+                <tr>
+                  <td><span class="segment-name">Demo - Male</span></td>
+                  <td>21</td>
+                  <td>US</td>
+                  <td><span class="tag demo">Demo</span></td>
+                  <td>Ensenior</td>
+                  <td>Recessed Lighting Housing &amp; Trim Kits</td>
+                  <td>default</td>
+                  <td>--</td>
+                  <td>购买</td>
+                  <td>77,894</td>
+                  <td>不可计算</td>
+                  <td>不可计算</td>
+                  <td>--</td>
+                  <td>未匹配</td>
+                  <td>$1,449,468.88</td>
+                  <td>$10,674,650.33</td>
+                  <td>$5,900,175.92</td>
+                  <td>7.36</td>
+                  <td>132,212</td>
+                  <td>4,868,148</td>
+                  <td>--</td>
+                  <td>262,628</td>
+                  <td>--</td>
+                  <td>579,693</td>
+                  <td>--</td>
+                  <td>401,421</td>
+                  <td>--</td>
+                  <td>110,199</td>
+                  <td>--</td>
+                  <td>77,894</td>
+                  <td>--</td>
+                  <td>61,974</td>
+                  <td>--</td>
+                  <td>97,238,426</td>
+                  <td>387,784</td>
+                  <td>2,962,325</td>
+                  <td>1,027,216</td>
+                  <td>173,486</td>
+                  <td>106,421</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="pager">
+            <span>1 - 50 of 7,693</span>
+            <span class="page-btn">‹</span>
+            <span class="page-btn active">1</span>
+            <span class="page-btn">2</span>
+            <span class="page-btn">3</span>
+            <span class="page-btn">4</span>
+            <span class="page-btn">5</span>
+            <span class="page-btn">6</span>
+            <span class="page-btn">...</span>
+            <span class="page-btn">154</span>
+            <span class="page-btn">›</span>
+            <span class="page-size">50 条/页 <span class="chev"></span></span>
+            <span>跳至</span>
+            <span class="goto">1</span>
+          </div>
+        </section>
+
+        <section class="detail-card">
+          <div class="detail-head">
+            <div>
+              <div class="detail-title">人群规模基表</div>
+            </div>
+            <div class="detail-tools">
+              <button class="btn secondary">搜索类目层级</button>
+              <button class="btn secondary">列配置</button>
+            </div>
+          </div>
+          <div class="data-table-wrap" style="max-height: 360px;">
+            <table class="basis-table">
+              <thead>
+                <tr>
+                  <th title="人群名称">人群名称</th>
+                  <th title="人群 ID">人群 ID</th>
+                  <th title="人群站点">人群站点</th>
+                  <th title="人群用户数">人群用户数</th>
+                  <th title="人群描述">人群描述</th>
+                  <th title="类目层级 1">类目层级 1</th>
+                  <th title="类目层级 2">类目层级 2</th>
+                  <th title="类目层级 3">类目层级 3</th>
+                  <th title="类目层级 4">类目层级 4</th>
+                  <th title="类目层级 5">类目层级 5</th>
+                  <th title="类目层级 6">类目层级 6</th>
+                  <th title="类目层级 7">类目层级 7</th>
+                  <th title="类目层级 8">类目层级 8</th>
+                  <th title="类目层级 9">类目层级 9</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td title="IM - Home and Garden"><span class="segment-name">IM - Home and Garden</span></td>
+                  <td title="26">26</td>
+                  <td title="US">US</td>
+                  <td title="137,292,120">137,292,120</td>
+                  <td title="People whose shopping activities indicate they are likely to purchase Home and Garden">People whose shopping activities indicate they are likely to purchase Home and Garden</td>
+                  <td title="In-market">In-market</td>
+                  <td title="Home &amp; Garden">Home &amp; Garden</td>
+                  <td title="Home &amp; Kitchen">Home &amp; Kitchen</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td title="LS - Home Builders"><span class="segment-name">LS - Home Builders</span></td>
+                  <td title="2104018">2104018</td>
+                  <td title="US">US</td>
+                  <td title="110,883,341">110,883,341</td>
+                  <td title="People whose shopping activities indicate they have an interest in purchasing items that modify and/or add functionalities to their homes. These items include power tools, lighting equipment, DIY tools, outdoor/garden equipment and large appliances.">People whose shopping activities indicate they have an interest in purchasing items that modify and/or add functionalities to their homes. These items include power tools, lighting equipment, DIY tools, outdoor/garden equipment and large appliances.</td>
+                  <td title="Lifestyle">Lifestyle</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td title="IM - Automotive Lights &amp; Lighting Accessories"><span class="segment-name">IM - Automotive Lights &amp; Lighting Accessories</span></td>
+                  <td title="30281">30281</td>
+                  <td title="US">US</td>
+                  <td title="6,950,352">6,950,352</td>
+                  <td title="People whose shopping activities indicate they are likely to purchase Automotive Lights &amp; Lighting Accessories">People whose shopping activities indicate they are likely to purchase Automotive Lights &amp; Lighting Accessories</td>
+                  <td title="In-market">In-market</td>
+                  <td title="Vehicles &amp; Automotive">Vehicles &amp; Automotive</td>
+                  <td title="Automotive Parts &amp; Accessories">Automotive Parts &amp; Accessories</td>
+                  <td title="Automobile Parts &amp; Accessories">Automobile Parts &amp; Accessories</td>
+                  <td title="Automobile Parts">Automobile Parts</td>
+                  <td title="Lights, Bulbs &amp; Indicators">Lights, Bulbs &amp; Indicators</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td title="IM - Novelty Lighting"><span class="segment-name">IM - Novelty Lighting</span></td>
+                  <td title="409580">409580</td>
+                  <td title="US">US</td>
+                  <td title="12,339,937">12,339,937</td>
+                  <td title="People whose shopping activities indicate they are likely to purchase Novelty Lighting">People whose shopping activities indicate they are likely to purchase Novelty Lighting</td>
+                  <td title="In-market">In-market</td>
+                  <td title="Home &amp; Garden">Home &amp; Garden</td>
+                  <td title="DIY &amp; Tools">DIY &amp; Tools</td>
+                  <td title="Lighting Fixtures">Lighting Fixtures</td>
+                  <td title="Indoor Lighting">Indoor Lighting</td>
+                  <td title="Specialty &amp; Decorative Lighting">Specialty &amp; Decorative Lighting</td>
+                  <td title="Novelty Lighting">Novelty Lighting</td>
+                  <td>-</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td title="IM - Wall Light Fixtures"><span class="segment-name">IM - Wall Light Fixtures</span></td>
+                  <td title="409620">409620</td>
+                  <td title="US">US</td>
+                  <td title="11,856,081">11,856,081</td>
+                  <td title="People whose shopping activities indicate they are likely to purchase Wall Light Fixtures">People whose shopping activities indicate they are likely to purchase Wall Light Fixtures</td>
+                  <td title="In-market">In-market</td>
+                  <td title="Home &amp; Garden">Home &amp; Garden</td>
+                  <td title="Home &amp; Kitchen">Home &amp; Kitchen</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td title="IM - Pond Lights"><span class="segment-name">IM - Pond Lights</span></td>
+                  <td title="1328928">1328928</td>
+                  <td title="US">US</td>
+                  <td title="42,821">42,821</td>
+                  <td title="People whose shopping activities indicate they are likely to purchase Pond Lights">People whose shopping activities indicate they are likely to purchase Pond Lights</td>
+                  <td title="In-market">In-market</td>
+                  <td title="Home &amp; Garden">Home &amp; Garden</td>
+                  <td title="DIY &amp; Tools">DIY &amp; Tools</td>
+                  <td title="Lighting Fixtures">Lighting Fixtures</td>
+                  <td title="Outdoor Lighting">Outdoor Lighting</td>
+                  <td title="Landscape Lighting">Landscape Lighting</td>
+                  <td title="Pond Lights">Pond Lights</td>
+                  <td>-</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td title="IM - Patio Umbrella Lights"><span class="segment-name">IM - Patio Umbrella Lights</span></td>
+                  <td title="1329001">1329001</td>
+                  <td title="US">US</td>
+                  <td title="20,022">20,022</td>
+                  <td title="People whose shopping activities indicate they are likely to purchase Patio Umbrella Lights">People whose shopping activities indicate they are likely to purchase Patio Umbrella Lights</td>
+                  <td title="In-market">In-market</td>
+                  <td title="Home &amp; Garden">Home &amp; Garden</td>
+                  <td title="DIY &amp; Tools">DIY &amp; Tools</td>
+                  <td title="Lighting Fixtures">Lighting Fixtures</td>
+                  <td title="Outdoor Lighting">Outdoor Lighting</td>
+                  <td title="Umbrella Lights">Umbrella Lights</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td title="IM - Outdoor Post Light Accessories"><span class="segment-name">IM - Outdoor Post Light Accessories</span></td>
+                  <td title="1329244">1329244</td>
+                  <td title="US">US</td>
+                  <td title="30,660">30,660</td>
+                  <td title="People whose shopping activities indicate they are likely to purchase Outdoor Post Light Accessories">People whose shopping activities indicate they are likely to purchase Outdoor Post Light Accessories</td>
+                  <td title="In-market">In-market</td>
+                  <td title="Home &amp; Garden">Home &amp; Garden</td>
+                  <td title="DIY &amp; Tools">DIY &amp; Tools</td>
+                  <td title="Lighting Fixtures">Lighting Fixtures</td>
+                  <td title="Outdoor Lighting">Outdoor Lighting</td>
+                  <td title="Outdoor Lighting Accessories">Outdoor Lighting Accessories</td>
+                  <td title="Post Light Accessories">Post Light Accessories</td>
+                  <td>-</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td title="IM - Ceiling Fan Wall Controls"><span class="segment-name">IM - Ceiling Fan Wall Controls</span></td>
+                  <td title="1329254">1329254</td>
+                  <td title="US">US</td>
+                  <td title="44,015">44,015</td>
+                  <td title="People whose shopping activities indicate they are likely to purchase Ceiling Fan Wall Controls">People whose shopping activities indicate they are likely to purchase Ceiling Fan Wall Controls</td>
+                  <td title="In-market">In-market</td>
+                  <td title="Home &amp; Garden">Home &amp; Garden</td>
+                  <td title="DIY &amp; Tools">DIY &amp; Tools</td>
+                  <td title="Lighting Fixtures">Lighting Fixtures</td>
+                  <td title="Indoor Lighting">Indoor Lighting</td>
+                  <td title="Ceiling Lighting">Ceiling Lighting</td>
+                  <td title="Ceiling Fan Accessories">Ceiling Fan Accessories</td>
+                  <td title="Wall Controls">Wall Controls</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td title="LS - Similar to Parents with Children in Household"><span class="segment-name">LS - Similar to Parents with Children in Household</span></td>
+                  <td title="1">1</td>
+                  <td title="US">US</td>
+                  <td title="43,112,996">43,112,996</td>
+                  <td title="People whose shopping interests indicate a lifestyle similar to Parents with Children in Household">People whose shopping interests indicate a lifestyle similar to Parents with Children in Household</td>
+                  <td title="Lifestyle">Lifestyle</td>
+                  <td title="Family">Family</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td title="LS - Foodies"><span class="segment-name">LS - Foodies</span></td>
+                  <td title="10">10</td>
+                  <td title="US">US</td>
+                  <td title="62,974,616">62,974,616</td>
+                  <td title="People whose shopping interests indicate a lifestyle similar to Foodies">People whose shopping interests indicate a lifestyle similar to Foodies</td>
+                  <td title="Interest">Interest</td>
+                  <td title="Food &amp; Drinks">Food &amp; Drinks</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                </tr>
+                <tr>
+                  <td title="IM - Women&#39;s TV, Movies and Books"><span class="segment-name">IM - Women's TV, Movies and Books</span></td>
+                  <td title="1002">1002</td>
+                  <td title="US">US</td>
+                  <td title="10,676,523">10,676,523</td>
+                  <td title="People whose shopping activities indicate they are likely to purchase Women&#39;s TV, Movies &amp; Books">People whose shopping activities indicate they are likely to purchase Women's TV, Movies &amp; Books</td>
+                  <td title="In-market">In-market</td>
+                  <td title="Books &amp; Magazines">Books &amp; Magazines</td>
+                  <td title="Physical Books">Physical Books</td>
+                  <td title="Literature &amp; Fiction">Literature &amp; Fiction</td>
+                  <td title="Genre Fiction">Genre Fiction</td>
+                  <td title="Women">Women</td>
+                  <td>-</td>
+                  <td>-</td>
+                  <td>-</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="detail-card" id="unmatched-segments">
+          <div class="detail-head">
+            <div>
+              <div class="detail-title">未匹配人群明细</div>
+            </div>
+          </div>
+
+          <div class="unmatched-layout">
+            <div>
+              <div class="unmatched-grid">
+                <div class="unmatched-card warning">
+                  <div class="unmatched-label">未匹配人群</div>
+                  <div class="unmatched-value">122</div>
+                  <div class="unmatched-note">不参与 TGI / 渗透率计算</div>
+                </div>
+                <div class="unmatched-card">
+                  <div class="unmatched-label">仍保留的行为数据</div>
+                  <div class="unmatched-value">100%</div>
+                  <div class="unmatched-note">曝光、点击、购买等 raw data 不丢失</div>
+                </div>
+              </div>
+
+              <div class="reason-list">
+                <div class="reason-row">
+                  <div class="reason-name">Demo 人群</div>
+                  <div class="reason-bar"><div class="reason-fill" style="width: 46%;"></div></div>
+                  <div class="reason-count">56</div>
+                </div>
+                <div class="reason-row">
+                  <div class="reason-name">Custom 人群</div>
+                  <div class="reason-bar"><div class="reason-fill" style="width: 31%;"></div></div>
+                  <div class="reason-count">38</div>
+                </div>
+                <div class="reason-row">
+                  <div class="reason-name">Lookalike 人群</div>
+                  <div class="reason-bar"><div class="reason-fill" style="width: 18%;"></div></div>
+                  <div class="reason-count">22</div>
+                </div>
+                <div class="reason-row">
+                  <div class="reason-name">其他未映射</div>
+                  <div class="reason-bar"><div class="reason-fill" style="width: 5%;"></div></div>
+                  <div class="reason-count">6</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="data-filters">
+            <div class="small-control">未匹配原因 <span class="chev"></span></div>
+            <div class="small-control">人群类型 <span class="chev"></span></div>
+            <div class="small-control metric-filter">指标 = 购买 <span class="chev"></span></div>
+            <div class="small-control">搜索人群名称</div>
+            <div class="small-control">搜索人群 ID</div>
+          </div>
+
+          <div class="data-table-wrap" style="max-height: 360px;">
+            <table class="unmatched-table">
+              <thead>
+                <tr>
+                  <th>人群名称</th>
+                  <th>人群 ID</th>
+                  <th>站点</th>
+                  <th>人群类型</th>
+                  <th>未匹配原因</th>
+                  <th>曝光用户数</th>
+                  <th>点击用户数</th>
+                  <th>DPV 用户数</th>
+                  <th>ATC 用户数</th>
+                  <th>购买用户数</th>
+                  <th>NTB 用户数</th>
+                  <th>总花费</th>
+                  <th>总销售额</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="segment-name">Demo - Male</span></td>
+                  <td>21</td>
+                  <td>US</td>
+                  <td><span class="tag demo">Demo</span></td>
+                  <td>无 ASI/FSI 人群规模分母</td>
+                  <td>4,868,148</td>
+                  <td>262,628</td>
+                  <td>401,421</td>
+                  <td>110,199</td>
+                  <td>77,894</td>
+                  <td>61,974</td>
+                  <td>$1,449,468.88</td>
+                  <td>$10,674,650.33</td>
+                </tr>
+                <tr>
+                  <td><span class="segment-name">Custom - Existing customer upload</span></td>
+                  <td>900021</td>
+                  <td>US</td>
+                  <td><span class="tag demo">Custom</span></td>
+                  <td>客户自定义人群无平台规模基表</td>
+                  <td>1,204,882</td>
+                  <td>84,216</td>
+                  <td>113,572</td>
+                  <td>31,408</td>
+                  <td>18,276</td>
+                  <td>12,904</td>
+                  <td>$386,240.11</td>
+                  <td>$2,418,906.72</td>
+                </tr>
+                <tr>
+                  <td><span class="segment-name">LS - B2B - Contractor Lookalikes</span></td>
+                  <td>2601450</td>
+                  <td>US</td>
+                  <td><span class="tag ls">LS</span></td>
+                  <td>相似人群未匹配 Segment Size</td>
+                  <td>684,206</td>
+                  <td>42,315</td>
+                  <td>55,902</td>
+                  <td>18,442</td>
+                  <td>12,614</td>
+                  <td>8,935</td>
+                  <td>$214,805.32</td>
+                  <td>$1,338,520.44</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+  <script>
+    const reportDateSelect = document.getElementById('report-date-select');
+    if (reportDateSelect) {
+      const reportDateLabel = document.getElementById('report-date-label');
+
+      reportDateSelect.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const option = event.target.closest('.report-date-option');
+        if (option) {
+          reportDateLabel.textContent = option.dataset.month;
+          reportDateSelect.querySelectorAll('.report-date-option').forEach((item) => item.classList.remove('active'));
+          option.classList.add('active');
+          reportDateSelect.classList.remove('open');
+          return;
+        }
+
+        reportDateSelect.classList.toggle('open');
+      });
+
+      reportDateSelect.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          reportDateSelect.classList.toggle('open');
+        }
+        if (event.key === 'Escape') {
+          reportDateSelect.classList.remove('open');
+        }
+      });
+
+      document.addEventListener('click', () => {
+        reportDateSelect.classList.remove('open');
+      });
+    }
+
+    document.querySelectorAll('.seg-btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        const metric = button.dataset.metric || button.textContent.trim();
+        document.querySelectorAll('.seg-btn').forEach((item) => item.classList.remove('active'));
+        button.classList.add('active');
+
+        const axisCopy = document.getElementById('metric-axis-copy');
+        if (axisCopy) {
+          axisCopy.textContent = `当前坐标轴：X = ${metric}渗透率，Y = ${metric} TGI。下方明细表保留全部行为指标。`;
+        }
+
+        const actionCopy = document.getElementById('action-metric-copy');
+        if (actionCopy) {
+          actionCopy.textContent = `${metric}指标`;
+        }
+
+        document.querySelectorAll('.metric-filter').forEach((filter) => {
+          const chevron = filter.querySelector('.chev');
+          filter.textContent = `指标 = ${metric} `;
+          if (chevron) filter.appendChild(chevron);
+        });
+      });
+    });
+
+    document.querySelectorAll('.basis-table th, .basis-table td').forEach((cell) => {
+      const text = cell.textContent.trim();
+      if (text && text !== '-') cell.title = text;
+    });
+  </script>
+
+
+</body></html>

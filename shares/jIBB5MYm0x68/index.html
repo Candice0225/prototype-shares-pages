@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AMC 4.0 人群机会分析</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Inter, "Microsoft YaHei", Arial, sans-serif; color: #18202f; background: #f5f6f8; }
+    .shell { min-height: 100vh; display: grid; grid-template-columns: 300px 1fr; }
+    aside { min-width: 0; padding: 18px 14px; background: #fff; border-right: 1px solid #dde2ea; overflow: auto; }
+    h1 { margin: 0; overflow: hidden; font-size: 18px; text-overflow: ellipsis; white-space: nowrap; }
+    .meta { margin: 4px 0 14px; color: #667085; font-size: 13px; }
+    .tree { display: grid; gap: 4px; padding-top: 14px; border-top: 1px solid #edf0f5; }
+    button { min-height: 36px; display: grid; grid-template-columns: 18px minmax(0, 1fr); align-items: center; gap: 8px; border: 1px solid transparent; border-radius: 7px; color: #344054; background: transparent; font: inherit; text-align: left; cursor: pointer; }
+    button:disabled { color: #667085; cursor: default; }
+    button.active { border-color: #b9cdfc; color: #1743a8; background: #eef4ff; font-weight: 800; }
+    button span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    main { min-width: 0; min-height: 0; display: grid; grid-template-rows: 66px 1fr; }
+    header { padding: 12px 18px; background: #fff; border-bottom: 1px solid #dde2ea; }
+    h2 { margin: 0; font-size: 18px; }
+    .path { margin-top: 4px; color: #667085; font-size: 13px; }
+    iframe { width: 100%; height: 100%; border: 0; background: #fff; }
+    @media (max-width: 820px) { .shell { grid-template-columns: 1fr; } aside { max-height: 42vh; border-right: 0; border-bottom: 1px solid #dde2ea; } main { min-height: 58vh; } }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside>
+      <h1>AMC 4.0 人群机会分析</h1>
+      <div class="meta">1 个页面</div>
+      <div class="tree" id="tree"></div>
+    </aside>
+    <main>
+      <header>
+        <h2 id="title">AMC 4.0 人群机会分析</h2>
+        <div class="path" id="path">AMC 4.0 人群机会分析.html</div>
+      </header>
+      <iframe id="frame" title="AMC 4.0 人群机会分析"></iframe>
+    </main>
+  </div>
+  <script>
+    const manifest = {"id":"jIBB5MYm0x68","name":"AMC 4.0 人群机会分析","defaultPageId":"page_1","defaultFilePath":"AMC 4.0 人群机会分析.html","nodes":[{"id":"page_1","parentId":null,"type":"page","navTitle":"AMC 4.0 人群机会分析","filePath":"AMC 4.0 人群机会分析.html","sortOrder":1}],"files":["AMC 4.0 人群机会分析.html"],"createdAt":"2026-06-10T12:52:11.606Z"};
+    const nodesById = new Map(manifest.nodes.map((node) => [node.id, node]));
+    let activePageId = manifest.defaultPageId;
+    function depthOf(node) {
+      let depth = 0;
+      let parentId = node.parentId;
+      while (parentId) {
+        const parent = nodesById.get(parentId);
+        if (!parent) break;
+        depth += 1;
+        parentId = parent.parentId;
+      }
+      return depth;
+    }
+    function fileUrl(filePath) {
+      return "prototype/" + filePath.split("/").filter(Boolean).map(encodeURIComponent).join("/");
+    }
+    function render() {
+      const activePage = manifest.nodes.find((node) => node.id === activePageId && node.type === "page") || manifest.nodes.find((node) => node.type === "page");
+      const tree = document.getElementById("tree");
+      tree.innerHTML = "";
+      manifest.nodes.slice().sort((a, b) => a.sortOrder - b.sortOrder).forEach((node) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.disabled = node.type !== "page";
+        button.className = node.id === activePage?.id ? "active" : "";
+        button.style.paddingLeft = (12 + depthOf(node) * 18) + "px";
+        button.innerHTML = "<span>" + (node.type === "page" ? "▣" : "▾") + "</span><span></span>";
+        button.lastElementChild.textContent = node.navTitle;
+        button.addEventListener("click", () => {
+          activePageId = node.id;
+          render();
+        });
+        tree.appendChild(button);
+      });
+      if (activePage?.filePath) {
+        document.getElementById("title").textContent = activePage.navTitle;
+        document.getElementById("path").textContent = activePage.filePath;
+        document.getElementById("frame").src = fileUrl(activePage.filePath);
+      }
+    }
+    render();
+  </script>
+</body>
+</html>
