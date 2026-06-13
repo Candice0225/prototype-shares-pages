@@ -1,0 +1,4762 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AMC 4.0 人群机会分析</title>
+  <style>
+    :root {
+      --blue: #3f6ff3;
+      --blue-dark: #2f5fe8;
+      --blue-soft: #edf3ff;
+      --cyan: #20b7df;
+      --pink: #e95b9a;
+      --page: #f1f3f7;
+      --surface: #ffffff;
+      --header: #f7f9fc;
+      --border: #e0e6ef;
+      --border-strong: #cbd5e1;
+      --text: #243044;
+      --muted: #7b8799;
+      --placeholder: #a7b0bf;
+      --green: #159b72;
+      --green-soft: #e8f7f0;
+      --amber: #c47a00;
+      --amber-soft: #fff4dc;
+      --red: #d34c72;
+      --red-soft: #fff0f5;
+      --purple: #7357cf;
+      --purple-soft: #f0edff;
+      --table-head: #f6f8fb;
+      --shadow: none;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+      color: var(--text);
+      background: var(--page);
+      font-size: 14px;
+      line-height: 1.45;
+      letter-spacing: 0;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 172px minmax(0, 1fr) 360px;
+      transition: grid-template-columns .18s ease;
+    }
+
+    .app.prd-collapsed {
+      grid-template-columns: 172px minmax(0, 1fr) 44px;
+    }
+
+    .sidebar {
+      background: var(--blue);
+      color: #fff;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: inset -1px 0 rgba(0, 0, 0, .08);
+    }
+
+    .logo {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 16px;
+      background: #fff;
+      color: #263242;
+      font-weight: 800;
+      font-size: 18px;
+    }
+
+    .logo-mark {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 4px solid #33b5de;
+      border-top-color: transparent;
+      transform: rotate(-25deg);
+    }
+
+    .nav {
+      padding: 14px 0 0;
+    }
+
+    .nav-item {
+      height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 16px;
+      color: rgba(255, 255, 255, .94);
+      font-weight: 650;
+      position: relative;
+      white-space: nowrap;
+    }
+
+    .nav-item.active {
+      background: rgba(255, 255, 255, .12);
+    }
+
+    .nav-item .new {
+      position: absolute;
+      right: 8px;
+      top: 7px;
+      color: #ffd84d;
+      font-size: 11px;
+      font-style: italic;
+      font-weight: 800;
+    }
+
+    .nav-icon {
+      width: 19px;
+      height: 19px;
+      flex: none;
+      color: #fff;
+    }
+
+    .collapse {
+      margin-top: auto;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      padding-left: 18px;
+      background: rgba(0, 0, 0, .08);
+      font-size: 22px;
+    }
+
+    .main {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-tabs {
+      height: 48px;
+      background: #f7f8fb;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: stretch;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .tab-strip {
+      display: flex;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .top-tab {
+      min-width: 140px;
+      height: 48px;
+      padding: 0 14px;
+      border-right: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: #3c4658;
+      background: #f7f8fb;
+      white-space: nowrap;
+    }
+
+    .top-tab.active {
+      color: var(--blue);
+      background: #fff;
+      border-bottom: 2px solid var(--blue);
+    }
+
+    .tab-close {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #a8b1c0;
+      background: #d8dde7;
+      font-size: 12px;
+      flex: none;
+    }
+
+    .account {
+      height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-right: 18px;
+      color: #364052;
+      white-space: nowrap;
+    }
+
+    .account-select {
+      min-width: 264px;
+      height: 34px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+    }
+
+    .avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #dbe8ff, #3f6ff3);
+      border: 2px solid #fff;
+    }
+
+    .page {
+      padding: 14px 14px 18px;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .report-header {
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: -2px 0 6px;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: #7a8495;
+      font-size: 14px;
+      font-weight: 700;
+      min-width: 0;
+    }
+
+    .breadcrumb svg {
+      width: 16px;
+      height: 16px;
+      color: #8c98aa;
+      flex: none;
+    }
+
+    .breadcrumb-current {
+      color: #273348;
+      font-weight: 800;
+    }
+
+    .report-status {
+      height: 24px;
+      padding: 0 12px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      color: #159264;
+      background: #e7f5ef;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .report-tools {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: none;
+    }
+
+    .report-tool {
+      height: 34px;
+      min-width: 92px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: #f7f9fc;
+      color: #7b8798;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 0 11px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .report-tool.instance {
+      min-width: 170px;
+    }
+
+    .report-tool.date {
+      min-width: 152px;
+      justify-content: space-between;
+      color: #9aa4b3;
+      position: relative;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .report-date-main {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .subscription-mark {
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0 7px;
+      border-radius: 3px;
+      background: #eef4ff;
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .subscription-mark svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    .report-date-label {
+      color: #7d8899;
+      font-weight: 800;
+    }
+
+    .report-date-range {
+      display: none;
+    }
+
+    .report-date-menu {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      width: 286px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: #fff;
+      box-shadow: 0 8px 20px rgba(31, 45, 68, .16);
+      padding: 6px 0;
+      z-index: 80;
+      display: none;
+    }
+
+    .report-tool.date.open .report-date-menu {
+      display: block;
+    }
+
+    .report-date-option {
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 12px;
+      color: #596579;
+      background: #fff;
+    }
+
+    .report-date-option:hover {
+      background: #f4f7ff;
+      color: var(--blue);
+    }
+
+    .report-date-option.active {
+      color: var(--blue);
+      font-weight: 800;
+    }
+
+    .report-date-month {
+      font-weight: 800;
+    }
+
+    .report-date-days {
+      color: #9aa4b3;
+      font-size: 12px;
+    }
+
+    .icon-btn {
+      width: 34px;
+      min-width: 34px;
+      padding: 0;
+      justify-content: center;
+    }
+
+    .report-nav {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      min-height: 44px;
+      margin: 0 0 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .report-nav-item {
+      height: 44px;
+      padding: 0 18px;
+      display: inline-flex;
+      align-items: center;
+      color: #596579;
+      font-weight: 700;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+    }
+
+    .report-nav-item.active {
+      color: var(--blue);
+      border-bottom-color: var(--blue);
+      background: #fff;
+    }
+
+    .model-tab-strip {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      margin: 0 -14px 10px;
+      padding: 8px 18px 0;
+      min-height: 50px;
+      background: #edf5ff;
+      border-bottom: 1px solid #d8e6f8;
+      overflow-x: auto;
+    }
+
+    .model-tab-card {
+      height: 36px;
+      min-height: 36px;
+      border: 1px solid transparent;
+      border-bottom: 0;
+      border-radius: 4px 4px 0 0;
+      background: transparent;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 8px;
+      padding: 0 13px;
+      box-shadow: none;
+      color: #536174;
+      flex: none;
+    }
+
+    .model-tab-card.active {
+      border-color: #c6d8ff;
+      background: #fff;
+      color: var(--blue);
+      box-shadow: none;
+    }
+
+    .model-tab-main {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+    }
+
+    .model-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 0;
+      border: 0;
+      background: transparent;
+      display: grid;
+      place-items: center;
+      color: currentColor;
+      flex: none;
+    }
+
+    .model-tab-card.active .model-icon {
+      color: var(--blue);
+    }
+
+    .model-name {
+      color: currentColor;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.2;
+      white-space: nowrap;
+    }
+
+    .model-sub {
+      display: none;
+    }
+
+    .model-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0;
+      color: transparent;
+      font-size: 0;
+      white-space: nowrap;
+      flex: none;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #27b56b;
+      box-shadow: none;
+    }
+
+    .model-hero-card {
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      background: #fff;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .model-hero-head {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .model-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .model-title-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 3px;
+      background: #eef4ff;
+      color: var(--blue);
+      display: grid;
+      place-items: center;
+      flex: none;
+    }
+
+    .model-title-meta h1 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.2;
+      font-weight: 800;
+      color: #1e2b40;
+    }
+
+    .model-title-meta p {
+      margin: 4px 0 0;
+      color: #667286;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .model-hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: none;
+    }
+
+    .model-hero-body {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 10px 12px;
+      background: #fbfcff;
+    }
+
+    .model-filter-area {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 0 0 12px;
+      padding: 0 2px;
+    }
+
+    .title-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .toggle {
+      width: 30px;
+      height: 16px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #123d78 50%, var(--pink) 50%);
+      position: relative;
+      flex: none;
+    }
+
+    .toggle::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 16px;
+      height: 16px;
+      background: #143a6e;
+      border-radius: 50%;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, .25);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.2;
+      font-weight: 800;
+      color: #182235;
+    }
+
+    .help-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #bac3d1;
+      color: #fff;
+      display: grid;
+      place-items: center;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .model-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--blue);
+      font-weight: 650;
+    }
+
+    .page-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: flex-end;
+      margin: 8px 0 12px;
+    }
+
+    .btn {
+      height: 32px;
+      border-radius: 4px;
+      border: 1px solid var(--blue);
+      background: var(--blue);
+      color: #fff;
+      padding: 0 14px;
+      font-weight: 650;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .btn.secondary {
+      background: #fff;
+      color: var(--blue);
+    }
+
+    .filters {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 0;
+    }
+
+    .control {
+      height: 32px;
+      min-width: 156px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      background: #fff;
+      color: #263447;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 0 12px;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, .02);
+    }
+
+    .control.with-label {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .control-label {
+      height: 100%;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 12px;
+      border-right: 1px solid var(--border);
+      background: #f8f9fb;
+      color: #6f7a8c;
+      white-space: nowrap;
+    }
+
+    .control-value {
+      min-width: 0;
+      flex: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 10px;
+      color: #9aa3b2;
+      white-space: nowrap;
+    }
+
+    .control.search {
+      color: #9aa3b2;
+      justify-content: flex-start;
+    }
+
+    .chev {
+      width: 12px;
+      height: 12px;
+      border-right: 2px solid #b2bbc9;
+      border-bottom: 2px solid #b2bbc9;
+      transform: rotate(45deg) translateY(-2px);
+      flex: none;
+    }
+
+    .notice {
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 12px;
+      border: 1px solid #ea6a9d;
+      background: #fff2f7;
+      color: #2f384a;
+      margin-bottom: 10px;
+      border-radius: 2px;
+    }
+
+    .notice.info {
+      border-color: #ccd8eb;
+      background: #fff;
+      min-height: 40px;
+    }
+
+    .notice-icon {
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--pink);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+      flex: none;
+    }
+
+    .notice.info .notice-icon {
+      background: #2181e8;
+    }
+
+    .notice a {
+      color: var(--blue);
+      font-weight: 650;
+      text-decoration: none;
+    }
+
+    .migration-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .migration-card {
+      min-height: 96px;
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 2px;
+      padding: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .migration-card.primary {
+      border-color: #b9ccff;
+      background: linear-gradient(180deg, #ffffff 0%, #f6f9ff 100%);
+    }
+
+    .migration-kicker {
+      color: #798598;
+      font-size: 12px;
+      font-weight: 750;
+      margin-bottom: 5px;
+    }
+
+    .migration-title {
+      font-size: 15px;
+      color: #202d42;
+      font-weight: 850;
+      margin-bottom: 6px;
+    }
+
+    .migration-desc {
+      color: #687488;
+      font-size: 12px;
+    }
+
+    .module-tabs {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .module-tab {
+      height: 40px;
+      padding: 0 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #687386;
+      border: 1px solid var(--border);
+      border-bottom: 0;
+      background: #f7f9fc;
+      border-radius: 4px 4px 0 0;
+      margin-right: 4px;
+      font-weight: 650;
+      text-decoration: none;
+    }
+
+    .module-tab.active {
+      color: var(--blue);
+      background: #fff;
+      position: relative;
+      top: 1px;
+    }
+
+    .tab-count {
+      min-width: 22px;
+      height: 20px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 7px;
+      color: #d34c72;
+      background: #fff0f5;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .overview {
+      background: #fff;
+      border: 1px solid var(--border);
+      padding: 12px;
+      margin-bottom: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .metric-switch {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .segment-control {
+      height: 34px;
+      border: 1px solid var(--border);
+      background: #f7f9fc;
+      border-radius: 2px;
+      display: inline-flex;
+      align-items: center;
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .seg-btn {
+      height: 28px;
+      padding: 0 12px;
+      border-radius: 3px;
+      display: inline-flex;
+      align-items: center;
+      color: #6d7788;
+      white-space: nowrap;
+      font-weight: 650;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .seg-btn.active {
+      background: var(--blue);
+      color: #fff;
+      box-shadow: 0 1px 2px rgba(63, 111, 243, .25);
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: minmax(420px, .78fr) minmax(620px, 1.22fr);
+      gap: 14px;
+    }
+
+    .decision-brief {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 14px;
+      align-items: center;
+      border: 1px solid #c9d8ff;
+      background: #f7faff;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .decision-kicker {
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .decision-title {
+      color: #17243a;
+      font-size: 16px;
+      font-weight: 850;
+      margin-bottom: 4px;
+    }
+
+    .decision-copy {
+      color: #657388;
+      font-size: 12px;
+    }
+
+    .decision-tags {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+
+    .summary-cards {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .summary-card {
+      border: 1px solid var(--border);
+      background: #fbfcff;
+      border-radius: 4px;
+      padding: 10px 12px;
+      min-height: 78px;
+    }
+
+    .summary-label {
+      color: #778397;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .summary-value {
+      font-size: 22px;
+      line-height: 1;
+      font-weight: 800;
+      color: #1e2b3e;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .summary-note {
+      margin-top: 8px;
+      color: #8c97a8;
+      font-size: 12px;
+    }
+
+    .chart-panel,
+    .action-panel {
+      border: 1px solid var(--border);
+      background: #fff;
+      border-radius: 2px;
+      min-width: 0;
+    }
+
+    .action-panel {
+      order: -1;
+    }
+
+    .panel-title {
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 12px;
+      border-bottom: 1px solid var(--border);
+      font-weight: 800;
+      font-size: 14px;
+    }
+
+    .panel-sub {
+      color: #7f8b9c;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .quadrant {
+      height: 380px;
+      position: relative;
+      margin: 14px;
+      border: 1px solid #c8d1df;
+      border-radius: 2px;
+      background:
+        linear-gradient(to right, transparent calc(50% - 1px), #9aa8bb calc(50% - 1px), #9aa8bb calc(50% + 1px), transparent calc(50% + 1px)),
+        linear-gradient(to bottom, transparent calc(50% - 1px), #9aa8bb calc(50% - 1px), #9aa8bb calc(50% + 1px), transparent calc(50% + 1px)),
+        linear-gradient(135deg, #fbfdff, #f7faff);
+      overflow: visible;
+    }
+
+    .axis {
+      position: absolute;
+      color: #748197;
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .axis.x {
+      left: 50%;
+      bottom: 8px;
+      transform: translateX(-50%);
+    }
+
+    .axis.y {
+      left: 6px;
+      top: 50%;
+      transform: rotate(-90deg) translateX(-50%);
+      transform-origin: left top;
+    }
+
+    .quad-label {
+      position: absolute;
+      border: 1px solid #d5deeb;
+      background: rgba(255, 255, 255, .92);
+      border-radius: 4px;
+      padding: 7px 9px;
+      max-width: 168px;
+      box-shadow: 0 4px 12px rgba(31, 45, 69, .06);
+    }
+
+    .quad-label strong {
+      display: block;
+      font-size: 13px;
+      color: #1e2b3d;
+      margin-bottom: 2px;
+    }
+
+    .quad-label span {
+      display: block;
+      color: #748197;
+      font-size: 12px;
+    }
+
+    .quad-label.q1 { top: 12px; right: 12px; }
+    .quad-label.q2 { top: 12px; left: 34px; }
+    .quad-label.q3 { bottom: 34px; left: 34px; }
+    .quad-label.q4 { bottom: 34px; right: 12px; }
+
+    .bubble {
+      position: absolute;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      border: 2px solid #fff;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      box-shadow: 0 4px 12px rgba(32, 47, 73, .2);
+      cursor: pointer;
+      z-index: 5;
+    }
+
+    .bubble.core { background: var(--green); }
+    .bubble.grow { background: var(--blue); }
+    .bubble.watch { background: var(--amber); }
+    .bubble.low { background: var(--red); }
+    .bubble.mix { background: var(--purple); }
+
+    .bubble.not-running {
+      color: var(--blue);
+      background: rgba(63, 111, 243, .08);
+      border: 2px dashed currentColor;
+      box-shadow: none;
+    }
+
+    .bubble.not-running.core {
+      color: var(--green);
+      background: rgba(18, 128, 92, .08);
+    }
+
+    .bubble.not-running.low {
+      color: var(--red);
+      background: rgba(211, 76, 114, .08);
+    }
+
+    .bubble::after {
+      content: attr(data-tip);
+      position: absolute;
+      top: calc(100% + 10px);
+      left: 50%;
+      width: 252px;
+      padding: 10px 12px;
+      border: 1px solid #cfd8e8;
+      border-radius: 4px;
+      background: #fff;
+      color: #223047;
+      box-shadow: 0 10px 24px rgba(31, 45, 68, .18);
+      font-size: 12px;
+      font-weight: 650;
+      line-height: 1.55;
+      white-space: pre-line;
+      text-align: left;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 6px);
+      transition: opacity .16s ease, transform .16s ease;
+      z-index: 30;
+    }
+
+    .bubble:hover {
+      z-index: 40;
+    }
+
+    .bubble:hover::after {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .bubble.tip-left::after {
+      left: auto;
+      right: 50%;
+      transform: translate(12px, 6px);
+    }
+
+    .bubble.tip-left:hover::after {
+      transform: translate(12px, 0);
+    }
+
+    .bubble.tip-up::after {
+      top: auto;
+      bottom: calc(100% + 10px);
+      transform: translate(-50%, -6px);
+    }
+
+    .bubble.tip-up:hover::after {
+      transform: translate(-50%, 0);
+    }
+
+    .legend {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 0 14px 14px;
+      color: #748197;
+      font-size: 12px;
+    }
+
+    .legend-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 4px;
+    }
+
+    .legend-status {
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 8px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: #fff;
+    }
+
+    .status-dot-solid,
+    .status-dot-dashed {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 4px;
+      vertical-align: -1px;
+    }
+
+    .status-dot-solid {
+      background: var(--blue);
+    }
+
+    .status-dot-dashed {
+      border: 2px dashed var(--blue);
+      background: rgba(63, 111, 243, .08);
+    }
+
+    .action-list {
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .action-card {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: #fbfcff;
+      padding: 10px;
+    }
+
+    .action-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .action-title {
+      font-weight: 800;
+    }
+
+    .badge {
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .badge.blue { color: var(--blue); background: var(--blue-soft); }
+    .badge.green { color: var(--green); background: var(--green-soft); }
+    .badge.amber { color: var(--amber); background: var(--amber-soft); }
+    .badge.red { color: var(--red); background: var(--red-soft); }
+
+    .action-desc {
+      color: #6f7b8f;
+      font-size: 12px;
+      margin-bottom: 9px;
+    }
+
+    .action-metrics {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+    }
+
+    .mini {
+      border: 1px solid #e8edf5;
+      background: #fff;
+      border-radius: 3px;
+      padding: 6px;
+    }
+
+    .mini span {
+      display: block;
+      color: #8d98a9;
+      font-size: 11px;
+    }
+
+    .mini strong {
+      display: block;
+      color: #263448;
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+      margin-top: 2px;
+    }
+
+    .detail-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      margin-bottom: 10px;
+    }
+
+    .opportunity-table-wrap {
+      max-height: 540px;
+      min-height: 520px;
+    }
+
+    .opportunity-wide-card {
+      order: 99;
+    }
+
+    .action-detail-card {
+      order: 97;
+      margin-top: 10px;
+    }
+
+    .category-drill-card {
+      order: 98;
+      margin-top: 10px;
+    }
+
+    .operator-view {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      background: #fbfcff;
+    }
+
+    .wide-table-head {
+      margin: 18px 12px 0;
+      padding: 16px 0 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    .operator-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: #243044;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .operator-table {
+      width: 1180px;
+      min-width: 1180px;
+      table-layout: fixed;
+      font-size: 12px;
+    }
+
+    .operator-table th,
+    .operator-table td {
+      padding: 8px 10px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .operator-table .segment-name {
+      display: block;
+      max-width: 100%;
+    }
+
+    .operator-table th:nth-child(1),
+    .operator-table td:nth-child(1) { width: 108px; }
+    .operator-table th:nth-child(2),
+    .operator-table td:nth-child(2) { width: 250px; }
+    .operator-table th:nth-child(3),
+    .operator-table td:nth-child(3) { width: 116px; }
+    .operator-table th:nth-child(4),
+    .operator-table td:nth-child(4) { width: 110px; }
+    .operator-table th:nth-child(5),
+    .operator-table td:nth-child(5) { width: 116px; }
+    .operator-table th:nth-child(6),
+    .operator-table td:nth-child(6) { width: 84px; }
+    .operator-table th:nth-child(7),
+    .operator-table td:nth-child(7) { width: 82px; }
+    .operator-table th:nth-child(8),
+    .operator-table td:nth-child(8) { width: 112px; }
+    .operator-table th:nth-child(9),
+    .operator-table td:nth-child(9) { width: 76px; }
+    .operator-table th:nth-child(10),
+    .operator-table td:nth-child(10) { width: 76px; }
+
+    .detail-head {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .detail-title {
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    .detail-subtitle {
+      color: #748197;
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .detail-desc {
+      color: #748197;
+      font-size: 12px;
+      line-height: 1.45;
+      margin-top: 4px;
+      max-width: 980px;
+    }
+
+    .detail-tools {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .view-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--border);
+      background: #fbfcff;
+      flex-wrap: wrap;
+    }
+
+    .view-tabs,
+    .column-preset {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: #fff;
+      padding: 3px;
+      gap: 2px;
+    }
+
+    .view-tab,
+    .preset-item {
+      min-height: 28px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 10px;
+      border-radius: 3px;
+      color: #667386;
+      font-size: 12px;
+      font-weight: 750;
+      white-space: nowrap;
+    }
+
+    .view-tab.active,
+    .preset-item.active {
+      color: #fff;
+      background: var(--blue);
+    }
+
+    .field-summary {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 8px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .field-group {
+      border: 1px solid #e7ecf4;
+      border-radius: 4px;
+      background: #fbfcff;
+      padding: 9px;
+      min-height: 74px;
+    }
+
+    .field-group strong {
+      display: block;
+      color: #28364a;
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+
+    .field-group span {
+      color: #758195;
+      font-size: 12px;
+    }
+
+    .data-filters {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .data-filters .filter-spacer {
+      flex: 1;
+      min-width: 12px;
+    }
+
+    .wide-category-cascade {
+      width: 200px;
+      position: relative;
+      flex: 0 0 200px;
+    }
+
+    .wide-category-cascade .demo-cascade-trigger {
+      height: 32px;
+      border-color: var(--border);
+      color: #8b95a6;
+    }
+
+    .wide-category-cascade .demo-cascade-panel {
+      left: 0;
+      right: auto;
+    }
+
+    .small-control {
+      height: 32px;
+      min-width: 150px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      color: #8b95a6;
+      background: #fff;
+    }
+
+    .metric-config-popover {
+      position: fixed;
+      right: 28px;
+      top: 112px;
+      width: 760px;
+      max-width: calc(100vw - 48px);
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      box-shadow: 0 12px 32px rgba(31, 45, 61, .18);
+      z-index: 50;
+      display: none;
+      overflow: hidden;
+    }
+
+    .metric-config-popover.open {
+      display: block;
+    }
+
+    .metric-config-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 420px;
+    }
+
+    .metric-config-col {
+      padding: 18px 20px;
+    }
+
+    .metric-config-col + .metric-config-col {
+      border-left: 1px solid var(--border);
+    }
+
+    .metric-config-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #344055;
+      font-size: 15px;
+      margin-bottom: 12px;
+    }
+
+    .metric-check-list,
+    .metric-selected-list {
+      display: grid;
+      gap: 10px;
+      max-height: 360px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .metric-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--blue);
+      font-size: 15px;
+    }
+
+    .metric-option.disabled {
+      color: #b8c0cc;
+    }
+
+    .metric-option input {
+      accent-color: var(--blue);
+    }
+
+    .metric-item {
+      height: 30px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 8px;
+      border-radius: 3px;
+      background: #eef1f5;
+      color: #516071;
+      font-size: 15px;
+    }
+
+    .metric-item.locked {
+      font-weight: 750;
+    }
+
+    .metric-handle {
+      color: #9aa5b5;
+      font-weight: 900;
+      cursor: grab;
+    }
+
+    .metric-item-actions {
+      margin-left: auto;
+      display: inline-flex;
+      gap: 4px;
+    }
+
+    .metric-icon-btn {
+      width: 20px;
+      height: 20px;
+      border: 0;
+      background: transparent;
+      color: #8b96a6;
+      cursor: pointer;
+      border-radius: 2px;
+    }
+
+    .metric-icon-btn:hover {
+      background: #dfe6f0;
+      color: var(--blue);
+    }
+
+    .metric-config-footer {
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      border-top: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .metric-clear {
+      color: #627083;
+      cursor: pointer;
+    }
+
+    .metric-config-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .data-table-wrap {
+      overflow: auto;
+      max-height: 560px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    table {
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 3680px;
+      width: 100%;
+      font-size: 13px;
+      background: #fff;
+    }
+
+    .opportunity-table {
+      min-width: 3180px;
+    }
+
+    th,
+    td {
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 10px;
+      text-align: left;
+      white-space: nowrap;
+      vertical-align: middle;
+      font-variant-numeric: tabular-nums;
+    }
+
+    th {
+      background: var(--table-head);
+      color: #263448;
+      font-weight: 800;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    th.group {
+      text-align: center;
+      background: #f1f4f8;
+      color: #253349;
+    }
+
+    td:first-child,
+    th:first-child {
+      position: sticky;
+      left: 0;
+      z-index: 3;
+      background: #fff;
+      box-shadow: 1px 0 0 var(--border);
+    }
+
+    th:first-child {
+      background: var(--table-head);
+      z-index: 4;
+    }
+
+    .opportunity-table .pin-col,
+    .opportunity-table .pin-cell {
+      width: 50px !important;
+      min-width: 50px !important;
+      max-width: 50px !important;
+      padding: 0 !important;
+      text-align: center;
+    }
+
+    .opportunity-table .pin-col {
+      left: 0;
+      z-index: 8;
+      background: var(--table-head);
+    }
+
+    .opportunity-table .pin-cell {
+      position: sticky;
+      left: 0;
+      z-index: 7;
+      background: #fff;
+      box-shadow: 1px 0 0 var(--border);
+    }
+
+    .opportunity-table th:nth-child(2),
+    .opportunity-table td:nth-child(2) {
+      position: sticky;
+      left: 50px;
+      z-index: 6;
+      width: 360px;
+      min-width: 360px;
+      max-width: 360px;
+      background: #fff;
+      box-shadow: 1px 0 0 var(--border);
+      overflow: hidden;
+      padding-left: 18px;
+    }
+
+    .opportunity-table th:nth-child(2) {
+      background: var(--table-head);
+      z-index: 7;
+    }
+
+    .opportunity-table th:nth-child(3),
+    .opportunity-table td:nth-child(3) {
+      width: 96px;
+      min-width: 96px;
+    }
+
+    .opportunity-table th:nth-child(4),
+    .opportunity-table td:nth-child(4) {
+      width: 64px;
+      min-width: 64px;
+    }
+
+    .opportunity-table th:nth-child(5),
+    .opportunity-table td:nth-child(5) {
+      width: 104px;
+      min-width: 104px;
+    }
+
+    .opportunity-table th:nth-child(6),
+    .opportunity-table td:nth-child(6) {
+      width: 150px;
+      min-width: 150px;
+      max-width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .opportunity-table th:nth-child(7),
+    .opportunity-table td:nth-child(7) {
+      width: 98px;
+      min-width: 98px;
+    }
+
+    .opportunity-table th:nth-child(8),
+    .opportunity-table td:nth-child(8) {
+      width: 140px;
+      min-width: 140px;
+    }
+
+    .opportunity-table tr.is-pinned td {
+      background: #fff4e4;
+    }
+
+    .opportunity-table tr.is-pinned .pin-cell,
+    .opportunity-table tr.is-pinned td:nth-child(2) {
+      background: #fff4e4;
+    }
+
+    .pin-btn {
+      width: 28px;
+      height: 28px;
+      border: 0;
+      background: transparent;
+      color: #aab3c1;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 3px;
+    }
+
+    .pin-btn:hover {
+      background: #eef4ff;
+      color: var(--blue);
+    }
+
+    .pin-btn.active {
+      color: #c77a12;
+    }
+
+    .pin-btn svg {
+      width: 16px;
+      height: 16px;
+      display: block;
+    }
+
+    .segment-name {
+      display: inline-block;
+      max-width: 286px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: bottom;
+    }
+
+    .segment-name-cell {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    .tag {
+      height: 22px;
+      border-radius: 999px;
+      padding: 0 8px;
+      display: inline-flex;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .tag.im { background: var(--blue-soft); color: var(--blue); }
+    .tag.ls { background: var(--green-soft); color: var(--green); }
+    .tag.demo { background: #f1f4f8; color: #7b8799; }
+
+    .bar-rate {
+      display: inline-grid;
+      grid-template-columns: 86px 64px;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .bar-bg {
+      height: 8px;
+      background: #e8f0f9;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: #2587eb;
+      border-radius: 999px;
+    }
+
+    .metric-strong {
+      font-weight: 800;
+      color: #1d2b40;
+    }
+
+    .quad-tag {
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 0 8px;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .quad-tag.core { color: var(--green); background: var(--green-soft); }
+    .quad-tag.grow { color: var(--blue); background: var(--blue-soft); }
+    .quad-tag.low { color: var(--red); background: var(--red-soft); }
+    .quad-tag.watch { color: var(--amber); background: var(--amber-soft); }
+
+    .pager {
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      padding: 0 16px;
+      background: #fff;
+    }
+
+    .page-btn {
+      min-width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #36445a;
+    }
+
+    .page-btn.active {
+      color: #fff;
+      background: var(--blue);
+      border-color: var(--blue);
+    }
+
+    .page-size,
+    .goto {
+      height: 36px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: #fff;
+      padding: 0 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .audit-ok {
+      color: var(--green);
+      font-weight: 800;
+    }
+
+    .audit-warn {
+      color: var(--amber);
+      font-weight: 800;
+    }
+
+    .raw-source {
+      color: #667386;
+      font-size: 12px;
+    }
+
+    .hidden-note {
+      color: #748197;
+      padding: 10px 12px 0;
+      font-size: 12px;
+    }
+
+    .unmatched-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .unmatched-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .unmatched-card {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: #fbfcff;
+      padding: 12px;
+      min-height: 92px;
+    }
+
+    .unmatched-card.warning {
+      border-color: #f4bdd0;
+      background: #fff8fb;
+    }
+
+    .unmatched-label {
+      color: #7b8799;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .unmatched-value {
+      color: #1f2d40;
+      font-size: 24px;
+      line-height: 1;
+      font-weight: 850;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .unmatched-note {
+      margin-top: 8px;
+      color: #7f8b9c;
+      font-size: 12px;
+    }
+
+    .reason-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .reason-row {
+      display: grid;
+      grid-template-columns: 132px minmax(0, 1fr) 64px;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid #e6ecf4;
+      border-radius: 4px;
+      padding: 9px 10px;
+      background: #fff;
+    }
+
+    .reason-name {
+      font-weight: 800;
+      color: #28364a;
+      white-space: nowrap;
+    }
+
+    .reason-bar {
+      height: 8px;
+      border-radius: 999px;
+      background: #eef3fa;
+      overflow: hidden;
+    }
+
+    .reason-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: #d34c72;
+    }
+
+    .reason-count {
+      color: #39475c;
+      text-align: right;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .process-panel {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: #fbfcff;
+      padding: 12px;
+      min-width: 0;
+    }
+
+    .process-title {
+      font-weight: 850;
+      margin-bottom: 10px;
+      color: #253349;
+    }
+
+    .process-steps {
+      display: grid;
+      gap: 10px;
+    }
+
+    .process-step {
+      display: grid;
+      grid-template-columns: 26px minmax(0, 1fr);
+      gap: 9px;
+      align-items: flex-start;
+    }
+
+    .step-index {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: var(--blue);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .step-text strong {
+      display: block;
+      color: #253349;
+      margin-bottom: 2px;
+    }
+
+    .step-text span {
+      display: block;
+      color: #748197;
+      font-size: 12px;
+    }
+
+    .unmatched-table {
+      min-width: 1580px;
+    }
+
+    .demo-insight-grid {
+      display: grid;
+      grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+      gap: 12px;
+      padding: 0 12px 12px;
+    }
+
+    .demo-panel {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: #fff;
+      padding: 12px;
+      min-width: 0;
+    }
+
+    .demo-panel-title {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+      color: #263448;
+      font-weight: 850;
+    }
+
+    .demo-panel-title span {
+      color: #7b8799;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .category-control {
+      margin: 0 12px 12px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: #fbfcff;
+      padding: 12px;
+    }
+
+    .drill-shell {
+      padding: 12px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .drill-filter-panel {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: #fbfcff;
+      overflow: hidden;
+    }
+
+    .drill-filter-toggle {
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 12px;
+      cursor: pointer;
+      color: #263448;
+      font-weight: 850;
+    }
+
+    .drill-filter-toggle span {
+      color: var(--blue);
+      font-size: 12px;
+    }
+
+    .drill-filter-body {
+      display: none;
+      padding: 12px;
+      border-top: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .drill-filter-panel.open .drill-filter-body {
+      display: block;
+    }
+
+    .drill-filter-grid {
+      display: grid;
+      grid-template-columns: 1.15fr auto minmax(360px, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .category-header-select {
+      width: min(560px, 42vw);
+      flex: 0 0 auto;
+    }
+
+    .demo-category-cascade {
+      width: 200px;
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .demo-cascade-trigger {
+      width: 100%;
+      height: 38px;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      padding: 0 12px;
+      border: 1px solid #bcd0f8;
+      border-radius: 3px;
+      background: #fff;
+      color: #253349;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .demo-category-cascade.open .demo-cascade-trigger,
+    .wide-category-cascade.open .demo-cascade-trigger {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 2px rgba(63, 111, 243, .12);
+    }
+
+    .demo-cascade-trigger .category-cascade-label {
+      color: #253349;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .demo-cascade-value {
+      min-width: 0;
+      color: #314159;
+      font-weight: 650;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .demo-cascade-panel {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: auto;
+      right: 0;
+      width: min(720px, calc(100vw - 220px));
+      z-index: 40;
+      display: none;
+      grid-template-columns: 1fr 1.25fr 1fr;
+      min-height: 260px;
+      max-height: 340px;
+      border: 1px solid #d8e1f1;
+      border-radius: 4px;
+      background: #fff;
+      box-shadow: 0 12px 28px rgba(24, 39, 75, .14);
+      overflow: hidden;
+    }
+
+    .demo-category-cascade.open .demo-cascade-panel,
+    .wide-category-cascade.open .demo-cascade-panel {
+      display: grid;
+    }
+
+    .demo-cascade-col {
+      min-width: 0;
+      border-right: 1px solid #edf1f7;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .demo-cascade-col:last-child {
+      border-right: 0;
+    }
+
+    .demo-cascade-title {
+      height: 34px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      border-bottom: 1px solid #edf1f7;
+      background: #f7f9fc;
+      color: #66738a;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .demo-cascade-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 4px;
+    }
+
+    .demo-cascade-item {
+      min-height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 6px 8px;
+      border-radius: 3px;
+      color: #405069;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .demo-cascade-item:hover,
+    .demo-cascade-item.active {
+      background: #f0f5ff;
+      color: var(--blue);
+      font-weight: 800;
+    }
+
+    .demo-cascade-item .count {
+      color: #8a96a8;
+      font-weight: 650;
+    }
+
+    .demo-cascade-empty {
+      padding: 12px;
+      color: #9aa3b2;
+      font-size: 12px;
+    }
+
+    .category-header-select.dropdown {
+      position: relative;
+      height: 38px;
+      border-color: #bcd0f8;
+      cursor: pointer;
+    }
+
+    .category-header-select.dropdown.open {
+      border-color: #3f6ff3;
+      box-shadow: 0 0 0 2px rgba(63, 111, 243, .12);
+    }
+
+    .category-header-select .select-value {
+      color: #253349;
+      font-weight: 650;
+    }
+
+    .category-menu {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      z-index: 30;
+      display: none;
+      max-height: 320px;
+      overflow-y: auto;
+      border: 1px solid #d8e1f1;
+      border-radius: 4px;
+      background: #fff;
+      box-shadow: 0 10px 24px rgba(24, 39, 75, .12);
+    }
+
+    .category-header-select.open .category-menu {
+      display: block;
+    }
+
+    .category-option {
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 11px;
+      color: #405069;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .category-option:hover,
+    .category-option.active {
+      background: #f4f7ff;
+      color: #2f5fe8;
+      font-weight: 800;
+    }
+
+    .category-option small {
+      color: #8a96a8;
+      font-size: 11px;
+      font-weight: 650;
+    }
+
+    .date-control {
+      height: 34px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      color: #405069;
+      font-size: 12px;
+    }
+
+    .quick-range {
+      display: inline-flex;
+      gap: 6px;
+    }
+
+    .quick-chip {
+      height: 30px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 9px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: #fff;
+      color: #5a6880;
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    .metric-checks {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #43536b;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .metric-checks label {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .filter-actions {
+      display: inline-flex;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+
+    .drill-charts {
+      display: grid;
+      grid-template-columns: minmax(520px, 1.25fr) minmax(420px, .95fr);
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .drill-charts.demo-only {
+      grid-template-columns: 1fr;
+    }
+
+    .drill-charts .demo-panel {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .drill-charts .combo-chart,
+    .drill-charts .heatmap {
+      flex: 1;
+    }
+
+    .drill-path-bar {
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 4px;
+      color: #53627a;
+      font-size: 12px;
+    }
+
+    .drill-path-bar strong {
+      color: #27354a;
+    }
+
+    .category-control-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #2b3a50;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .breadcrumb span {
+      color: #7f8b9c;
+      font-weight: 650;
+    }
+
+    .category-mode {
+      display: inline-flex;
+      align-items: center;
+      height: 24px;
+      padding: 0 8px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .category-cascade {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(180px, 1fr)) auto;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .cascade-select {
+      height: 34px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: #fff;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #405069;
+      font-size: 12px;
+      min-width: 0;
+    }
+
+    .cascade-select strong {
+      color: #253349;
+      font-weight: 800;
+      margin-right: 8px;
+    }
+
+    .category-row {
+      cursor: pointer;
+      border-radius: 3px;
+      padding: 2px 4px;
+      margin: 0 -4px;
+    }
+
+    .category-row.active {
+      background: #f4f7ff;
+      box-shadow: inset 3px 0 0 var(--blue);
+    }
+
+    .category-row:hover {
+      background: #f8fbff;
+    }
+
+    .category-bars,
+    .top-bars {
+      display: grid;
+      gap: 9px;
+    }
+
+    .category-row,
+    .top-row {
+      display: grid;
+      grid-template-columns: 116px minmax(0, 1fr) 82px;
+      align-items: center;
+      gap: 10px;
+      min-height: 26px;
+      color: #2a384d;
+      font-size: 12px;
+    }
+
+    .category-row strong,
+    .top-row strong {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 800;
+    }
+
+    .chart-track {
+      height: 10px;
+      border-radius: 999px;
+      background: #eef3fa;
+      overflow: hidden;
+    }
+
+    .chart-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: #3f6ff0;
+    }
+
+    .chart-fill.pink { background: #d34c72; }
+    .chart-fill.green { background: #25a06b; }
+    .chart-fill.amber { background: #d58a17; }
+
+    .chart-value {
+      text-align: right;
+      color: #39475c;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .funnel-chart {
+      display: grid;
+      gap: 8px;
+    }
+
+    .funnel-row {
+      display: grid;
+      grid-template-columns: 84px minmax(0, 1fr) 96px 70px;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+    }
+
+    .funnel-stage {
+      color: #27354a;
+      font-weight: 800;
+    }
+
+    .funnel-bar {
+      height: 18px;
+      border-radius: 3px;
+      background: #edf3fb;
+      overflow: hidden;
+    }
+
+    .funnel-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3f6ff0, #6aa1ff);
+    }
+
+    .funnel-count,
+    .funnel-rate {
+      color: #405069;
+      text-align: right;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .demo-rank-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      padding: 0 12px 12px;
+    }
+
+    .heatmap {
+      display: grid;
+      grid-template-columns: minmax(108px, 1.15fr) repeat(4, minmax(70px, 1fr));
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      font-size: 12px;
+    }
+
+    .heat-cell {
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 7px 8px;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      color: #223148;
+      font-weight: 750;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .heat-cell.head,
+    .heat-cell.row-head {
+      background: var(--table-head);
+      color: #263448;
+      justify-content: flex-start;
+      font-weight: 850;
+    }
+
+    .heat-cell.good { background: #e9f8f1; color: #15734b; }
+    .heat-cell.mid { background: #eef5ff; color: #2860c7; }
+    .heat-cell.warn { background: #fff6e5; color: #9a5b00; }
+
+    .heat-cell.row-head.drillable {
+      cursor: pointer;
+    }
+
+    .heat-cell.row-head.drillable.active {
+      color: var(--blue);
+      box-shadow: inset 3px 0 0 var(--blue);
+      background: #f4f7ff;
+    }
+
+    .combo-chart {
+      position: relative;
+      min-height: 260px;
+      padding: 12px 10px 0;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: linear-gradient(#fff, #fff) padding-box;
+      overflow: hidden;
+    }
+
+    .combo-legend {
+      display: flex;
+      justify-content: flex-end;
+      gap: 14px;
+      margin-bottom: 12px;
+      color: #6f7d91;
+      font-size: 12px;
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      display: inline-block;
+      border-radius: 50%;
+      margin-right: 5px;
+      vertical-align: middle;
+    }
+
+    .legend-dot.bar { background: #3f6ff0; }
+    .legend-dot.line { background: #d58a17; }
+
+    .combo-plot {
+      position: relative;
+      height: 196px;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      align-items: end;
+      gap: 14px;
+      padding: 10px 14px 36px;
+      background:
+        linear-gradient(to bottom, transparent 0, transparent 23%, #eef3fa 23.5%, transparent 24%),
+        linear-gradient(to bottom, transparent 0, transparent 48%, #eef3fa 48.5%, transparent 49%),
+        linear-gradient(to bottom, transparent 0, transparent 73%, #eef3fa 73.5%, transparent 74%);
+    }
+
+    .combo-col {
+      position: relative;
+      height: 100%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .combo-bar {
+      width: min(38px, 70%);
+      border-radius: 4px 4px 0 0;
+      background: linear-gradient(180deg, #6aa1ff, #3f6ff0);
+      box-shadow: inset 0 -1px 0 rgba(0,0,0,.06);
+    }
+
+    .combo-label {
+      position: absolute;
+      left: 50%;
+      bottom: -30px;
+      width: 88px;
+      transform: translateX(-50%);
+      color: #5d6b80;
+      font-size: 11px;
+      text-align: center;
+      white-space: normal;
+      line-height: 1.15;
+    }
+
+    .combo-line {
+      position: absolute;
+      inset: 26px 28px 44px 28px;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    .combo-note {
+      color: #7b8799;
+      font-size: 12px;
+      line-height: 1.45;
+      margin-top: 10px;
+    }
+
+    .demo-trend-chart {
+      position: relative;
+      min-height: 360px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: #fff;
+      overflow: hidden;
+      padding: 14px 18px 12px;
+    }
+
+    .demo-trend-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .trend-picker {
+      height: 34px;
+      min-width: 210px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 0 12px;
+      border-radius: 4px;
+      background: #f7f9fc;
+      color: #4d5b70;
+      font-weight: 750;
+    }
+
+    .trend-marker {
+      width: 10px;
+      height: 10px;
+      display: inline-block;
+      margin-right: 8px;
+      vertical-align: -1px;
+    }
+
+    .trend-marker.bar { background: #5e86f6; }
+    .trend-marker.dpv {
+      border: 2px solid #42d5be;
+      border-radius: 50%;
+      background: #fff;
+    }
+    .trend-marker.buy {
+      border: 2px solid #ff6f8d;
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .demo-trend-plot {
+      position: relative;
+      height: 260px;
+      margin: 0 82px 0 76px;
+      border-left: 1px solid #d9e0ea;
+      border-bottom: 1px solid #d9e0ea;
+      background:
+        linear-gradient(to right, transparent 0, transparent 9.8%, #e3e9f2 10%, transparent 10.2%),
+        linear-gradient(to right, transparent 0, transparent 19.8%, #e3e9f2 20%, transparent 20.2%),
+        linear-gradient(to right, transparent 0, transparent 29.8%, #e3e9f2 30%, transparent 30.2%),
+        linear-gradient(to right, transparent 0, transparent 39.8%, #e3e9f2 40%, transparent 40.2%),
+        linear-gradient(to right, transparent 0, transparent 49.8%, #e3e9f2 50%, transparent 50.2%),
+        linear-gradient(to right, transparent 0, transparent 59.8%, #e3e9f2 60%, transparent 60.2%),
+        linear-gradient(to right, transparent 0, transparent 69.8%, #e3e9f2 70%, transparent 70.2%),
+        linear-gradient(to right, transparent 0, transparent 79.8%, #e3e9f2 80%, transparent 80.2%),
+        linear-gradient(to right, transparent 0, transparent 89.8%, #e3e9f2 90%, transparent 90.2%),
+        repeating-linear-gradient(to bottom, transparent 0, transparent 19.5%, #e4eaf2 20%);
+    }
+
+    .trend-y-left,
+    .trend-y-right,
+    .trend-y-right-alt {
+      position: absolute;
+      top: 62px;
+      bottom: 56px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: #5b6678;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .trend-y-left { left: 28px; text-align: right; color: #6b7789; }
+    .trend-y-right { right: 70px; color: #4fbfac; }
+    .trend-y-right-alt { right: 8px; color: #ff6f8d; }
+
+    .trend-bars {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      align-items: end;
+      gap: 38px;
+      padding: 0 42px;
+      pointer-events: none;
+    }
+
+    .trend-bar {
+      width: 34px;
+      justify-self: center;
+      border-radius: 2px 2px 0 0;
+      background: rgba(94, 134, 246, .52);
+    }
+
+    .trend-lines {
+      position: absolute;
+      inset: 0 42px;
+      overflow: visible;
+      pointer-events: none;
+    }
+
+    .trend-x-labels {
+      display: grid;
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      gap: 26px;
+      margin: 10px 82px 0 76px;
+      color: #7b8799;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.18;
+      text-align: center;
+    }
+
+    .trend-x-labels span {
+      min-width: 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      word-break: break-word;
+    }
+
+    .trend-mini-scroll {
+      height: 24px;
+      margin: 12px 82px 0 76px;
+      background: #e5ebf3;
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .trend-mini-scroll::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 2px;
+      width: 32%;
+      height: 20px;
+      border: 1px solid #8fb2ee;
+      background: linear-gradient(8deg, rgba(95, 140, 240, .28), rgba(95, 140, 240, .12));
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.45);
+    }
+
+    .drill-hint {
+      margin-top: 10px;
+      color: #7b8799;
+      font-size: 12px;
+    }
+
+    .demo-detail-note {
+      padding: 0 12px 10px;
+      color: #748197;
+      font-size: 12px;
+    }
+
+    .prd-toggle {
+      display: none;
+    }
+
+    .prd-drawer {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      width: auto;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      border-left: 1px solid #c9d7ff;
+      background: #fff;
+      box-shadow: -6px 0 18px rgba(24, 39, 75, .06);
+      overflow: hidden;
+    }
+
+    .prd-drawer.open {
+      transform: none;
+    }
+
+    .prd-drawer.collapsed {
+      align-items: stretch;
+    }
+
+    .prd-drawer-head {
+      padding: 14px 14px 12px;
+      border-bottom: 1px solid var(--border);
+      background: #f7f9ff;
+    }
+
+    .prd-drawer-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: #1f2b3d;
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .prd-close {
+      width: 26px;
+      height: 26px;
+      border: 1px solid #d8e1f1;
+      border-radius: 4px;
+      background: #fff;
+      color: #657086;
+      cursor: pointer;
+    }
+
+    .prd-drawer.collapsed .prd-drawer-head {
+      height: 100%;
+      padding: 12px 8px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      background: #f7f9ff;
+    }
+
+    .prd-drawer.collapsed .prd-drawer-title {
+      width: 100%;
+      flex-direction: column-reverse;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .prd-drawer.collapsed .prd-title-text {
+      writing-mode: vertical-rl;
+      letter-spacing: 1px;
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .prd-drawer.collapsed .prd-close {
+      width: 28px;
+      height: 28px;
+      font-size: 0;
+    }
+
+    .prd-drawer.collapsed .prd-close::before {
+      content: "‹";
+      font-size: 18px;
+      line-height: 1;
+    }
+
+    .prd-drawer.collapsed .prd-drawer-sub,
+    .prd-drawer.collapsed .prd-body {
+      display: none;
+    }
+
+    .prd-drawer-sub {
+      margin-top: 7px;
+      color: #6f7b90;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .prd-body {
+      padding: 12px;
+      overflow: auto;
+    }
+
+    .prd-section-title {
+      margin: 2px 0 8px;
+      color: #5f6c82;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .prd-note-list {
+      display: grid;
+      gap: 9px;
+    }
+
+    .prd-note {
+      border: 1px solid #e0e7f2;
+      border-radius: 6px;
+      background: #fff;
+      padding: 10px;
+      cursor: pointer;
+      transition: border-color .16s ease, background .16s ease;
+    }
+
+    .prd-note:hover,
+    .prd-note.active {
+      border-color: #3f6ff3;
+      background: #f6f9ff;
+    }
+
+    .prd-note-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      color: #202b3d;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .prd-index {
+      flex: none;
+      min-width: 30px;
+      height: 20px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 10px;
+      background: #edf3ff;
+      color: #2f5fe8;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .prd-note-copy {
+      margin-top: 7px;
+      color: #5f6c82;
+      font-size: 12px;
+      line-height: 1.58;
+    }
+
+    .prd-note-meta {
+      margin-top: 8px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .prd-chip {
+      height: 20px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 7px;
+      border-radius: 3px;
+      background: #f1f4f8;
+      color: #657086;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .prd-inline-index {
+      position: absolute;
+      top: -12px;
+      left: 12px;
+      z-index: 12;
+      width: fit-content;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      padding: 0 8px;
+      border: 1px solid #b9c9fb;
+      border-radius: 11px;
+      background: #fff;
+      color: #2f5fe8;
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1;
+      box-shadow: 0 2px 6px rgba(37, 56, 112, .1);
+      cursor: pointer;
+    }
+
+    .prd-inline-index.is-compact {
+      top: -13px;
+      left: auto;
+      right: 6px;
+      margin: 0;
+      height: 20px;
+      padding: 0 7px;
+      font-size: 10px;
+    }
+
+    .prd-annotated {
+      position: relative;
+      outline: 1px dashed rgba(63, 111, 243, .32);
+      outline-offset: 2px;
+    }
+
+    .prd-anchor {
+      display: none;
+    }
+
+    .prd-annotated.prd-focus {
+      outline-color: #3f6ff3;
+      box-shadow: 0 0 0 3px rgba(63, 111, 243, .12);
+    }
+
+    .legend-status.prd-annotated {
+      padding: 4px 10px;
+      border-radius: 4px;
+      outline-offset: 1px;
+    }
+
+    .legend-status .prd-anchor {
+      display: none;
+    }
+
+    .prd-foot {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 6px;
+      background: #f7f9fc;
+      color: #6f7b90;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1320px) {
+      .model-tab-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .model-hero-head,
+      .model-hero-body {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .overview-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .drill-charts {
+        grid-template-columns: 1fr;
+      }
+
+      .migration-strip,
+      .field-summary,
+      .unmatched-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .demo-insight-grid,
+      .demo-rank-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .unmatched-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .account-select {
+        min-width: 180px;
+      }
+
+      .title-row,
+      .detail-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .report-nav {
+        overflow-x: auto;
+      }
+
+      .model-tab-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .model-hero-actions {
+        flex-wrap: wrap;
+      }
+
+      .summary-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .migration-strip,
+      .field-summary,
+      .unmatched-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .quadrant {
+        height: 420px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-mark"></div>
+        <div>4KMILES</div>
+      </div>
+      <nav class="nav">
+        <div class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 9h8M8 13h5"/></svg>
+          关于 AMC
+        </div>
+        <div class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4h10l2 2v16H6z"/><path d="M9 11h6M9 15h6"/></svg>
+          基础 AMC
+        </div>
+        <div class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5v14"/></svg>
+          高级 AMC
+        </div>
+        <div class="nav-item active">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+          AMC 人群
+        </div>
+        <div class="nav-item">
+      <span class="new">新</span>
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5M4 19h18"/><path d="M8 16V9M13 16V7M18 16v-4"/></svg>
+          广告总览
+        </div>
+        <div class="nav-item">
+      <span class="new">新</span>
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 7h10v10H7z"/><path d="M3 11h4M17 11h4"/></svg>
+          映射上传
+        </div>
+        <div class="nav-item">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 5h14v16H5z"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>
+          报告
+        </div>
+      </nav>
+      <div class="collapse">«</div>
+    </aside>
+
+    <main class="main">
+      <header class="top-tabs">
+        <div class="tab-strip">
+          <div class="top-tab">关于 AMC</div>
+          <div class="top-tab">基础 AMC <span class="tab-close">×</span></div>
+          <div class="top-tab">高级 AMC <span class="tab-close">×</span></div>
+          <div class="top-tab">人群规模 <span class="tab-close">×</span></div>
+          <div class="top-tab active">人群机会分析 <span class="tab-close">×</span></div>
+        </div>
+        <div class="account">
+          <div>简体中文</div>
+          <div class="avatar"></div>
+          <div>3384401385...</div>
+        </div>
+      </header>
+
+      <section class="page">
+        <div class="report-header">
+          <div class="breadcrumb">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11 12 3l9 8"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg>
+            <span>AMC报告</span>
+            <span>›</span>
+            <span class="breadcrumb-current">Demo Report</span>
+            <span class="report-status">已完成</span>
+          </div>
+          <div class="report-tools">
+            <div class="report-tool instance">US demoInstance <span class="chev"></span></div>
+            <div class="report-tool">GMT-04</div>
+            <div class="report-tool date" id="report-date-select" role="button" tabindex="0">
+              <span class="report-date-main">
+                <span class="subscription-mark">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12v18l-6-3-6 3V3Z"/><path d="M9 8h6"/></svg>
+                  订阅
+                </span>
+                <span class="report-date-label" id="report-date-label">2025/06</span>
+              </span>
+              <span class="chev"></span>
+              <div class="report-date-menu" id="report-date-menu">
+                <div class="report-date-option active" data-month="2025/06" data-range="2024-04-21　至　2025-05-18">
+                  <span class="report-date-month">2025/06</span>
+                  <span class="report-date-days">2024-04-21 至 2025-05-18</span>
+                </div>
+                <div class="report-date-option" data-month="2025/05" data-range="2024-03-24　至　2025-04-20">
+                  <span class="report-date-month">2025/05</span>
+                  <span class="report-date-days">2024-03-24 至 2025-04-20</span>
+                </div>
+              </div>
+            </div>
+            <div class="report-tool icon-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="report-nav">
+          <div class="report-nav-item">广告触达路径分析</div>
+          <div class="report-nav-item active">人群分析</div>
+          <div class="report-nav-item">精选推荐</div>
+          <div class="report-nav-item">媒介触点分析</div>
+        </div>
+
+        <div class="model-tab-strip">
+          <div class="model-tab-card">
+            <div class="model-tab-main">
+              <div class="model-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <div>
+                <div class="model-name">人群画像模型</div>
+                <div class="model-sub">标签分布、行为画像、购买画像</div>
+              </div>
+            </div>
+            <div class="model-status"><span class="status-dot"></span>已配置</div>
+          </div>
+
+          <div class="model-tab-card">
+            <div class="model-tab-main">
+              <div class="model-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41 12 22l-8.59-8.59A2 2 0 0 1 3 12V4a2 2 0 0 1 2-2h8a2 2 0 0 1 1.41.59l6.18 6.18a2 2 0 0 1 0 2.82Z"/><path d="M7 7h.01"/></svg>
+              </div>
+              <div>
+                <div class="model-name">人群标签洞察模型</div>
+                <div class="model-sub">标签规模、标签重合、标签明细</div>
+              </div>
+            </div>
+            <div class="model-status"><span class="status-dot"></span>已配置</div>
+          </div>
+
+          <div class="model-tab-card active">
+            <div class="model-tab-main">
+              <div class="model-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/><path d="M14 9h5v5"/></svg>
+              </div>
+              <div>
+                <div class="model-name">人群机会</div>
+                <div class="model-sub">TGI、渗透率、品线机会象限</div>
+              </div>
+            </div>
+            <div class="model-status"><span class="status-dot"></span>当前模型</div>
+          </div>
+        </div>
+
+        <div class="model-hero-card">
+          <div class="model-hero-head">
+            <div class="model-title-wrap">
+              <div class="model-title-icon">
+                <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/><path d="M14 9h5v5"/></svg>
+              </div>
+              <div class="model-title-meta">
+                <h1>人群机会分析</h1>
+                <p>先给出保量、扩量与复盘建议，再用 TGI、渗透率、ROAS 和人群规模解释每个投放动作的依据。</p>
+              </div>
+            </div>
+            <div class="model-hero-actions">
+              <button class="btn secondary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+                下载数据
+              </button>
+            </div>
+          </div>
+          <div class="model-hero-body">
+            <div class="model-filter-area">
+              <div class="filters">
+                <div class="control with-label"><span class="control-label">品牌</span><span class="control-value">Ensenior <span class="chev"></span></span></div>
+                <div class="control with-label"><span class="control-label">品线</span><span class="control-value">Recessed Lighting... <span class="chev"></span></span></div>
+                <div class="control with-label"><span class="control-label">广告类型</span><span class="control-value">全部类型 <span class="chev"></span></span></div>
+                <div class="control search">搜索人群名称</div>
+                <div class="control search">搜索人群 ID</div>
+                <button class="btn secondary" id="advanced-filter-trigger" type="button">高级筛选</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <section class="overview">
+          <div class="decision-brief">
+            <div>
+              <div class="decision-kicker">购买口径 · 投放结论生成</div>
+              <div class="decision-title">Recessed Lighting 相关人群优先保量，Home Improvement 大盘兴趣人群建议扩量测试，低 TGI 广覆盖人群进入控本复盘。</div>
+              <div class="decision-copy">结论由当前指标口径下的人群 TGI、渗透率、目标用户数与 ROAS 综合生成；未匹配人群仅保留在明细中，不进入机会象限。</div>
+            </div>
+            <div class="decision-tags">
+              <span class="badge green">保量 1,670</span>
+              <span class="badge blue">扩量 2,307</span>
+              <span class="badge amber">复盘 2,704</span>
+            </div>
+          </div>
+
+          <div class="metric-switch">
+            <div class="segment-control">
+              <span class="seg-btn" data-metric="曝光">曝光</span>
+              <span class="seg-btn" data-metric="点击">点击</span>
+              <span class="seg-btn" data-metric="DPV">DPV</span>
+              <span class="seg-btn" data-metric="ATC">ATC</span>
+              <span class="seg-btn active" data-metric="购买">购买</span>
+              <span class="seg-btn" data-metric="NTB">NTB</span>
+            </div>
+            <div class="panel-sub" id="metric-axis-copy">当前坐标轴：X = 购买渗透率，Y = 购买 TGI。下方明细表保留全部行为指标。</div>
+          </div>
+
+          <div class="summary-cards">
+            <div class="summary-card">
+              <div class="summary-label">已匹配人群</div>
+              <div class="summary-value">7,670</div>
+              <div class="summary-note">已匹配 ASI/FSI Segment Size 分母，可参与 TGI 与渗透率计算</div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-label">核心人群</div>
+              <div class="summary-value">1,670</div>
+              <div class="summary-note">高 TGI + 高渗透</div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-label">扩量观察人群</div>
+              <div class="summary-value">2,307</div>
+              <div class="summary-note">高 TGI + 低渗透</div>
+            </div>
+            <div class="summary-card">
+              <div class="summary-label">未匹配人群</div>
+              <div class="summary-value">122</div>
+              <div class="summary-note">占全量 1.6%</div>
+            </div>
+          </div>
+
+          <div class="overview-grid">
+            <article class="chart-panel">
+              <div class="panel-title">
+                <span>TGI × 渗透率象限</span>
+                <span class="panel-sub">基准购买渗透率 0.072%，高渗透阈值 0.099%</span>
+              </div>
+              <div class="quadrant">
+                <div class="axis y">TGI</div>
+                <div class="axis x">渗透率</div>
+                <div class="quad-label q1"><strong>核心保量</strong><span>高 TGI + 高渗透</span></div>
+                <div class="quad-label q2"><strong>优先扩量</strong><span>高 TGI + 低渗透</span></div>
+                <div class="quad-label q3"><strong>暂缓投放</strong><span>低 TGI + 低渗透</span></div>
+                <div class="quad-label q4"><strong>控本复盘</strong><span>低 TGI + 高渗透</span></div>
+                <div class="bubble core tip-left" data-tip="IM - Recessed Lighting Housing &amp; Trim Kits&#10;TGI：4,325&#10;购买渗透率：3.131%&#10;购买用户数：21,827&#10;ROAS：10.05" style="left: 82%; top: 16%; width: 58px; height: 58px;">RH</div>
+                <div class="bubble core tip-left" data-tip="IM - Recessed Light Fixtures&#10;TGI：3,979&#10;购买渗透率：2.880%&#10;购买用户数：22,201&#10;ROAS：10.00" style="left: 75%; top: 22%; width: 56px; height: 56px;">RF</div>
+                <div class="bubble core tip-left" data-tip="LS - B2B - Business Lookalike - Electricians&#10;TGI：4,047&#10;购买渗透率：2.930%&#10;购买用户数：14,890&#10;ROAS：14.90" style="left: 67%; top: 18%; width: 50px; height: 50px;">EL</div>
+                <div class="bubble core" data-tip="LS - B2B - Business Lookalike - Plumbers&#10;TGI：1,714&#10;购买渗透率：1.241%&#10;购买用户数：15,797&#10;ROAS：11.57" style="left: 52%; top: 35%; width: 51px; height: 51px;">PL</div>
+                <div class="bubble core not-running" data-tip="LS - Interested in Home Improvement - Household Hardware&#10;TGI：202&#10;购买渗透率：0.146%&#10;购买用户数：63,135&#10;ROAS：7.61&#10;状态：未投放" style="left: 31%; top: 57%; width: 66px; height: 66px;">HH</div>
+                <div class="bubble grow not-running" data-tip="LS - Interested in Home Improvement&#10;TGI：103&#10;购买渗透率：0.074%&#10;购买用户数：81,102&#10;ROAS：7.17&#10;状态：未投放" style="left: 22%; top: 48%; width: 70px; height: 70px;">HI</div>
+                <div class="bubble low tip-up not-running" data-tip="LS - B2B - Seller Central Lookalikes&#10;TGI：29&#10;购买渗透率：0.021%&#10;购买用户数：80,812&#10;ROAS：6.87&#10;状态：未投放" style="left: 18%; top: 80%; width: 68px; height: 68px;">SC</div>
+              </div>
+              <div class="legend">
+                <span><span class="legend-dot" style="background: var(--green);"></span>核心保量</span>
+                <span><span class="legend-dot" style="background: var(--blue);"></span>优先扩量</span>
+                <span><span class="legend-dot" style="background: var(--amber);"></span>控本复盘</span>
+                <span><span class="legend-dot" style="background: var(--red);"></span>暂缓投放</span>
+                <span class="legend-status"><span><span class="status-dot-solid"></span>投放中</span><span><span class="status-dot-dashed"></span>未投放</span></span>
+              </div>
+            </article>
+
+            <aside class="action-panel">
+              <div class="panel-title">
+                <span>推荐动作</span>
+                <span class="panel-sub" id="action-metric-copy">购买指标</span>
+              </div>
+              <div class="action-list">
+                <div class="action-card">
+                  <div class="action-top"><span class="action-title">保量：保护核心照明相关人群</span><span class="badge green">P0</span></div>
+                  <div class="action-desc">Recessed Lighting、Light Fixtures、Electricians 等标签 TGI 超过 3,900，购买渗透率接近 3%，应优先保障预算和稳定 ROAS。</div>
+                  <div class="action-metrics">
+                    <div class="mini"><span>最高 TGI</span><strong>4,325</strong></div>
+                    <div class="mini"><span>最高渗透率</span><strong>3.131%</strong></div>
+                    <div class="mini"><span>最高 ROAS</span><strong>14.90</strong></div>
+                  </div>
+                </div>
+                <div class="action-card">
+                  <div class="action-top"><span class="action-title">扩量：测试家装硬件兴趣人群</span><span class="badge blue">P1</span></div>
+                  <div class="action-desc">Home Improvement、Household Hardware 等大盘人群购买用户数高，TGI 略高于均值，适合做预算扩展和素材分层验证。</div>
+                  <div class="action-metrics">
+                    <div class="mini"><span>扩量人群</span><strong>2,307</strong></div>
+                    <div class="mini"><span>平均 TGI</span><strong>116</strong></div>
+                    <div class="mini"><span>购买用户</span><strong>1,048万</strong></div>
+                  </div>
+                </div>
+                <div class="action-card">
+                  <div class="action-top"><span class="action-title">控本：复盘低 TGI 广覆盖人群</span><span class="badge amber">P2</span></div>
+                  <div class="action-desc">Seller Central Lookalikes、Home Builders 等购买用户数不低，但 TGI 低于 100，建议只保留绩效达标组合，避免按人群相关性继续扩量。</div>
+                  <div class="action-metrics">
+                    <div class="mini"><span>低 TGI 人群</span><strong>2,704</strong></div>
+                    <div class="mini"><span>平均 TGI</span><strong>75</strong></div>
+                    <div class="mini"><span>花费</span><strong>$2.50亿</strong></div>
+                  </div>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="detail-card action-detail-card">
+          <div class="detail-head">
+            <div>
+              <div class="detail-title">人群机会清单</div>
+              <div class="detail-desc">基于 TGI、渗透率、ROAS 和人群规模，输出各人群的投放优先级与建议动作。</div>
+            </div>
+            <div class="detail-tools">
+              <button class="btn secondary">指标配置</button>
+            </div>
+          </div>
+
+          <div class="operator-view">
+            <div class="data-table-wrap" style="max-height: 220px;">
+              <table class="operator-table">
+                <thead>
+                  <tr>
+                    <th>建议动作</th>
+                    <th>人群名称</th>
+                    <th>人群规模</th>
+                    <th>购买用户数</th>
+                    <th>购买渗透率</th>
+                    <th>TGI</th>
+                    <th>ROAS</th>
+                    <th>广告花费</th>
+                    <th>CTR</th>
+                    <th>CVR</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="quad-tag core">核心保量</span></td>
+                    <td><span class="segment-name">IM - Recessed Lighting Housing & Trim Kits</span></td>
+                    <td>697,153</td>
+                    <td>21,827</td>
+                    <td>3.131%</td>
+                    <td class="metric-strong">4,325</td>
+                    <td>10.05</td>
+                    <td>$456,790</td>
+                    <td>14.7%</td>
+                    <td>11.6%</td>
+                  </tr>
+                  <tr>
+                    <td><span class="quad-tag core">核心保量</span></td>
+                    <td><span class="segment-name">LS - B2B - Business Lookalike - Electricians</span></td>
+                    <td>508,232</td>
+                    <td>14,890</td>
+                    <td>2.930%</td>
+                    <td class="metric-strong">4,047</td>
+                    <td>14.90</td>
+                    <td>$382,705</td>
+                    <td>13.9%</td>
+                    <td>12.4%</td>
+                  </tr>
+                  <tr>
+                    <td><span class="quad-tag grow">优先扩量</span></td>
+                    <td><span class="segment-name">LS - Interested in Home Improvement</span></td>
+                    <td>109,254,420</td>
+                    <td>81,102</td>
+                    <td>0.074%</td>
+                    <td class="metric-strong">103</td>
+                    <td>7.17</td>
+                    <td>$1,472,903</td>
+                    <td>2.8%</td>
+                    <td>3.8%</td>
+                  </tr>
+                  <tr>
+                    <td><span class="quad-tag watch">控本复盘</span></td>
+                    <td><span class="segment-name">LS - B2B - Seller Central Lookalikes</span></td>
+                    <td>384,487,224</td>
+                    <td>80,812</td>
+                    <td>0.021%</td>
+                    <td class="metric-strong">29</td>
+                    <td>6.87</td>
+                    <td>$2,701,852</td>
+                    <td>2.5%</td>
+                    <td>0.4%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="detail-card opportunity-wide-card">
+          <div class="wide-table-head">
+            <div class="detail-title">人群机会分析宽表</div>
+          </div>
+
+          <div class="data-filters">
+            <div class="wide-category-cascade" id="wide-category-cascade" aria-label="宽表类目三级联动筛选">
+              <button class="demo-cascade-trigger" id="wide-cascade-trigger" type="button" aria-expanded="false">
+                <span class="category-cascade-label">类目</span>
+                <span class="demo-cascade-value" id="wide-cascade-value">全部类目</span>
+                <span class="chev"></span>
+              </button>
+              <div class="demo-cascade-panel" id="wide-cascade-panel">
+                <div class="demo-cascade-col">
+                  <div class="demo-cascade-title">一级类目</div>
+                  <div class="demo-cascade-list" id="wide-cascade-l1"></div>
+                </div>
+                <div class="demo-cascade-col">
+                  <div class="demo-cascade-title">二级类目</div>
+                  <div class="demo-cascade-list" id="wide-cascade-l2"></div>
+                </div>
+                <div class="demo-cascade-col">
+                  <div class="demo-cascade-title">三级类目</div>
+                  <div class="demo-cascade-list" id="wide-cascade-l3"></div>
+                </div>
+              </div>
+            </div>
+            <div class="filter-spacer"></div>
+            <button class="btn secondary" id="metric-config-trigger" type="button">指标配置</button>
+          </div>
+
+          <div class="metric-config-popover" id="metric-config-popover">
+            <div class="metric-config-body">
+              <div class="metric-config-col">
+                <div class="metric-config-title">可选字段</div>
+                <div class="metric-check-list">
+                  <label class="metric-option"><input type="checkbox" checked> 人群名称</label>
+                  <label class="metric-option"><input type="checkbox" checked> 人群 ID</label>
+                  <label class="metric-option"><input type="checkbox" checked> 站点</label>
+                  <label class="metric-option"><input type="checkbox" checked> 品牌</label>
+                  <label class="metric-option"><input type="checkbox" checked> 品线</label>
+                  <label class="metric-option"><input type="checkbox" checked> 广告类型</label>
+                  <label class="metric-option"><input type="checkbox" checked> 人群规模</label>
+                  <label class="metric-option"><input type="checkbox" checked> 类目路径</label>
+                  <label class="metric-option"><input type="checkbox" checked> 标签描述</label>
+                  <label class="metric-option"><input type="checkbox" checked> 指标</label>
+                  <label class="metric-option"><input type="checkbox" checked> 目标用户数</label>
+                  <label class="metric-option"><input type="checkbox" checked> TGI</label>
+                  <label class="metric-option"><input type="checkbox" checked> 渗透率</label>
+                  <label class="metric-option"><input type="checkbox" checked> 评分</label>
+                  <label class="metric-option"><input type="checkbox" checked> 象限</label>
+                  <label class="metric-option"><input type="checkbox" checked> 总花费</label>
+                  <label class="metric-option"><input type="checkbox" checked> 总销售额</label>
+                  <label class="metric-option"><input type="checkbox" checked> NTB 销售额</label>
+                  <label class="metric-option"><input type="checkbox" checked> 总 ROAS</label>
+                  <label class="metric-option"><input type="checkbox" checked> 销售件数</label>
+                  <label class="metric-option"><input type="checkbox" checked> 曝光用户数</label>
+                  <label class="metric-option"><input type="checkbox" checked> 曝光渗透率</label>
+                  <label class="metric-option"><input type="checkbox" checked> 点击用户数</label>
+                  <label class="metric-option"><input type="checkbox" checked> 点击渗透率</label>
+                  <label class="metric-option"><input type="checkbox" checked> 品牌搜索用户数</label>
+                  <label class="metric-option"><input type="checkbox" checked> 品牌搜索渗透率</label>
+                  <label class="metric-option"><input type="checkbox" checked> DPV 用户数</label>
+                  <label class="metric-option"><input type="checkbox" checked> DPV 渗透率</label>
+                  <label class="metric-option"><input type="checkbox" checked> ATC 用户数</label>
+                  <label class="metric-option"><input type="checkbox" checked> ATC 渗透率</label>
+                  <label class="metric-option"><input type="checkbox" checked> 购买用户数</label>
+                  <label class="metric-option"><input type="checkbox" checked> 购买渗透率</label>
+                  <label class="metric-option"><input type="checkbox" checked> NTB 用户数</label>
+                  <label class="metric-option"><input type="checkbox" checked> NTB 渗透率</label>
+                  <label class="metric-option"><input type="checkbox" checked> 曝光次数</label>
+                  <label class="metric-option"><input type="checkbox" checked> 点击次数</label>
+                  <label class="metric-option"><input type="checkbox" checked> 品牌搜索次数</label>
+                  <label class="metric-option"><input type="checkbox" checked> DPV 次数</label>
+                  <label class="metric-option"><input type="checkbox" checked> ATC 次数</label>
+                  <label class="metric-option"><input type="checkbox" checked> 购买次数</label>
+                </div>
+              </div>
+              <div class="metric-config-col">
+                <div class="metric-config-title"><span>已选字段顺序</span><span id="metric-selected-count">40/40</span></div>
+                <div class="metric-selected-list" id="metric-selected-list">
+                  <div class="metric-item" data-field="人群名称"><span class="metric-handle">⋮⋮</span><span>人群名称</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="人群 ID"><span class="metric-handle">⋮⋮</span><span>人群 ID</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="站点"><span class="metric-handle">⋮⋮</span><span>站点</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="品牌"><span class="metric-handle">⋮⋮</span><span>品牌</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="品线"><span class="metric-handle">⋮⋮</span><span>品线</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="广告类型"><span class="metric-handle">⋮⋮</span><span>广告类型</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="人群规模"><span class="metric-handle">⋮⋮</span><span>人群规模</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="类目路径"><span class="metric-handle">⋮⋮</span><span>类目路径</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="标签描述"><span class="metric-handle">⋮⋮</span><span>标签描述</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="指标"><span class="metric-handle">⋮⋮</span><span>指标</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="目标用户数"><span class="metric-handle">⋮⋮</span><span>目标用户数</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="TGI"><span class="metric-handle">⋮⋮</span><span>TGI</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="渗透率"><span class="metric-handle">⋮⋮</span><span>渗透率</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="评分"><span class="metric-handle">⋮⋮</span><span>评分</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="象限"><span class="metric-handle">⋮⋮</span><span>象限</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="总花费"><span class="metric-handle">⋮⋮</span><span>总花费</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="总销售额"><span class="metric-handle">⋮⋮</span><span>总销售额</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="NTB 销售额"><span class="metric-handle">⋮⋮</span><span>NTB 销售额</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="总 ROAS"><span class="metric-handle">⋮⋮</span><span>总 ROAS</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="销售件数"><span class="metric-handle">⋮⋮</span><span>销售件数</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="曝光用户数"><span class="metric-handle">⋮⋮</span><span>曝光用户数</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="曝光渗透率"><span class="metric-handle">⋮⋮</span><span>曝光渗透率</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="点击用户数"><span class="metric-handle">⋮⋮</span><span>点击用户数</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="点击渗透率"><span class="metric-handle">⋮⋮</span><span>点击渗透率</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="品牌搜索用户数"><span class="metric-handle">⋮⋮</span><span>品牌搜索用户数</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="品牌搜索渗透率"><span class="metric-handle">⋮⋮</span><span>品牌搜索渗透率</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="DPV 用户数"><span class="metric-handle">⋮⋮</span><span>DPV 用户数</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="DPV 渗透率"><span class="metric-handle">⋮⋮</span><span>DPV 渗透率</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="ATC 用户数"><span class="metric-handle">⋮⋮</span><span>ATC 用户数</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="ATC 渗透率"><span class="metric-handle">⋮⋮</span><span>ATC 渗透率</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="购买用户数"><span class="metric-handle">⋮⋮</span><span>购买用户数</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="购买渗透率"><span class="metric-handle">⋮⋮</span><span>购买渗透率</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="NTB 用户数"><span class="metric-handle">⋮⋮</span><span>NTB 用户数</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="NTB 渗透率"><span class="metric-handle">⋮⋮</span><span>NTB 渗透率</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="曝光次数"><span class="metric-handle">⋮⋮</span><span>曝光次数</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="点击次数"><span class="metric-handle">⋮⋮</span><span>点击次数</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="品牌搜索次数"><span class="metric-handle">⋮⋮</span><span>品牌搜索次数</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="DPV 次数"><span class="metric-handle">⋮⋮</span><span>DPV 次数</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="ATC 次数"><span class="metric-handle">⋮⋮</span><span>ATC 次数</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="购买次数"><span class="metric-handle">⋮⋮</span><span>购买次数</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                </div>
+              </div>
+            </div>
+            <div class="metric-config-footer">
+              <span class="metric-clear" id="metric-clear">清除筛选</span>
+              <div class="metric-config-actions">
+                <button class="btn secondary" id="metric-reset" type="button">重置</button>
+                <button class="btn primary" id="metric-confirm" type="button">确认</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="data-table-wrap opportunity-table-wrap">
+            <table class="opportunity-table">
+              <thead>
+                <tr>
+                  <th class="pin-col"></th>
+                  <th>人群名称</th>
+                  <th>人群 ID</th>
+                  <th>站点</th>
+                  <th>品牌</th>
+                  <th>品线</th>
+                  <th>广告类型</th>
+                  <th>人群规模</th>
+                  <th>类目路径</th>
+                  <th>标签描述</th>
+                  <th>指标</th>
+                  <th>目标用户数</th>
+                  <th>TGI</th>
+                  <th>渗透率</th>
+                  <th>评分</th>
+                  <th>象限</th>
+                  <th>总花费</th>
+                  <th>总销售额</th>
+                  <th>NTB 销售额</th>
+                  <th>总 ROAS</th>
+                  <th>销售件数</th>
+                  <th>曝光用户数</th>
+                  <th>曝光渗透率</th>
+                  <th>点击用户数</th>
+                  <th>点击渗透率</th>
+                  <th>品牌搜索用户数</th>
+                  <th>品牌搜索渗透率</th>
+                  <th>DPV 用户数</th>
+                  <th>DPV 渗透率</th>
+                  <th>ATC 用户数</th>
+                  <th>ATC 渗透率</th>
+                  <th>购买用户数</th>
+                  <th>购买渗透率</th>
+                  <th>NTB 用户数</th>
+                  <th>NTB 渗透率</th>
+                  <th>曝光次数</th>
+                  <th>点击次数</th>
+                  <th>品牌搜索次数</th>
+                  <th>DPV 次数</th>
+                  <th>ATC 次数</th>
+                  <th>购买次数</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="segment-name-cell"><span class="tag ls">LS</span><span class="segment-name">LS - Seller Central Lookalikes</span></span></td>
+                  <td>8578</td>
+                  <td>US</td>
+                  <td>Ensenior</td>
+                  <td>Ceiling Light</td>
+                  <td>All types</td>
+                  <td>365,822,366</td>
+                  <td>Lifestyle | Business &amp; Industry</td>
+                  <td>People who are Seller Central Lookalikes</td>
+                  <td>购买</td>
+                  <td>33,070</td>
+                  <td class="metric-strong">78</td>
+                  <td>0.009%</td>
+                  <td>47</td>
+                  <td><span class="quad-tag watch">控本复盘</span></td>
+                  <td>$2,701,851.78</td>
+                  <td>$11,614,384.59</td>
+                  <td>$9,954,609.25</td>
+                  <td>4.30</td>
+                  <td>--</td>
+                  <td>10,476,042</td>
+                  <td>2.864%</td>
+                  <td>265,718</td>
+                  <td>0.073%</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>278,751</td>
+                  <td>0.076%</td>
+                  <td>24,724</td>
+                  <td>0.007%</td>
+                  <td>33,070</td>
+                  <td>0.009%</td>
+                  <td>30,159</td>
+                  <td>0.008%</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><span class="segment-name-cell"><span class="tag ls">LS</span><span class="segment-name">LS - Home Builders</span></span></td>
+                  <td>2104018</td>
+                  <td>US</td>
+                  <td>200,238</td>
+                  <td>--</td>
+                  <td>All types</td>
+                  <td>119,359,901</td>
+                  <td>Lifestyle</td>
+                  <td>People whose shopping activities indicate they have an interest in purchasing items that modify and/or add functionalities to their homes.</td>
+                  <td>购买</td>
+                  <td>32,981</td>
+                  <td class="metric-strong">待接入</td>
+                  <td>0.028%</td>
+                  <td>--</td>
+                  <td><span class="quad-tag watch">待 TGI</span></td>
+                  <td>$2,611,620.27</td>
+                  <td>$11,589,888.09</td>
+                  <td>$9,932,289.68</td>
+                  <td>4.44</td>
+                  <td>--</td>
+                  <td>9,368,683</td>
+                  <td>7.849%</td>
+                  <td>252,019</td>
+                  <td>0.211%</td>
+                  <td>58,458</td>
+                  <td>0.016%</td>
+                  <td>269,213</td>
+                  <td>0.226%</td>
+                  <td>24,468</td>
+                  <td>0.021%</td>
+                  <td>32,981</td>
+                  <td>0.028%</td>
+                  <td>30,075</td>
+                  <td>0.025%</td>
+                  <td>29,332,918</td>
+                  <td>358,719</td>
+                  <td>83,346</td>
+                  <td>432,064</td>
+                  <td>29,175</td>
+                  <td>35,716</td>
+                </tr>
+                <tr>
+                  <td><span class="segment-name-cell"><span class="tag ls">LS</span><span class="segment-name">LS - House Keeper</span></span></td>
+                  <td>964</td>
+                  <td>US</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>All types</td>
+                  <td>156,582,632</td>
+                  <td>Interest | Home &amp; Garden</td>
+                  <td>People whose shopping interests indicate a lifestyle similar to Home Makers</td>
+                  <td>购买</td>
+                  <td>32,944</td>
+                  <td class="metric-strong">待接入</td>
+                  <td>0.021%</td>
+                  <td>--</td>
+                  <td><span class="quad-tag watch">待 TGI</span></td>
+                  <td>$2,634,833.10</td>
+                  <td>$11,576,928.11</td>
+                  <td>$9,918,991.69</td>
+                  <td>4.39</td>
+                  <td>--</td>
+                  <td>9,760,197</td>
+                  <td>6.233%</td>
+                  <td>255,802</td>
+                  <td>0.163%</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>271,948</td>
+                  <td>0.174%</td>
+                  <td>24,549</td>
+                  <td>0.016%</td>
+                  <td>32,944</td>
+                  <td>0.021%</td>
+                  <td>30,038</td>
+                  <td>0.019%</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><span class="segment-name-cell"><span class="tag im">IM</span><span class="segment-name">IM - Home and Garden</span></span></td>
+                  <td>26</td>
+                  <td>US</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>All types</td>
+                  <td>131,958,465</td>
+                  <td>In-market | Home &amp; Garden | Home &amp; Kitchen</td>
+                  <td>People whose shopping activities indicate they are likely to purchase Home and Garden</td>
+                  <td>购买</td>
+                  <td>32,689</td>
+                  <td class="metric-strong">待接入</td>
+                  <td>0.025%</td>
+                  <td>--</td>
+                  <td><span class="quad-tag watch">待 TGI</span></td>
+                  <td>$2,662,158.56</td>
+                  <td>$11,459,456.99</td>
+                  <td>$9,812,588.82</td>
+                  <td>4.30</td>
+                  <td>--</td>
+                  <td>9,537,317</td>
+                  <td>7.228%</td>
+                  <td>258,932</td>
+                  <td>0.196%</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>276,769</td>
+                  <td>0.210%</td>
+                  <td>24,635</td>
+                  <td>0.019%</td>
+                  <td>32,689</td>
+                  <td>0.025%</td>
+                  <td>29,805</td>
+                  <td>0.023%</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><span class="segment-name-cell"><span class="tag ls">LS</span><span class="segment-name">LS - Recent Shoppers</span></span></td>
+                  <td>121</td>
+                  <td>US</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>All types</td>
+                  <td>119,963,188</td>
+                  <td>Lifestyle | Shoppers | Shopping behaviours</td>
+                  <td>People who are Recent Shoppers</td>
+                  <td>购买</td>
+                  <td>32,684</td>
+                  <td class="metric-strong">待接入</td>
+                  <td>0.027%</td>
+                  <td>--</td>
+                  <td><span class="quad-tag watch">待 TGI</span></td>
+                  <td>$2,560,207.02</td>
+                  <td>$11,482,580.52</td>
+                  <td>$9,838,726.77</td>
+                  <td>4.49</td>
+                  <td>--</td>
+                  <td>9,245,568</td>
+                  <td>7.707%</td>
+                  <td>246,315</td>
+                  <td>0.205%</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>264,098</td>
+                  <td>0.220%</td>
+                  <td>24,152</td>
+                  <td>0.020%</td>
+                  <td>32,684</td>
+                  <td>0.027%</td>
+                  <td>29,799</td>
+                  <td>0.025%</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                  <td>--</td>
+                </tr>              </tbody>
+            </table>
+          </div>
+
+          <div class="pager">
+            <span>1 - 50 of 7,693</span>
+            <span class="page-btn">‹</span>
+            <span class="page-btn active">1</span>
+            <span class="page-btn">2</span>
+            <span class="page-btn">3</span>
+            <span class="page-btn">4</span>
+            <span class="page-btn">5</span>
+            <span class="page-btn">6</span>
+            <span class="page-btn">...</span>
+            <span class="page-btn">154</span>
+            <span class="page-btn">›</span>
+            <span class="page-size">50 条/页 <span class="chev"></span></span>
+            <span>跳至</span>
+            <span class="goto">1</span>
+          </div>
+        </section>
+
+        <section class="detail-card category-drill-card" id="unmatched-segments">
+          <div class="detail-head">
+            <div>
+              <div class="detail-title">Demo 标签趋势表现分析</div>
+              <div class="detail-desc">基于 Demo 标签数据，展示各 Demo 标签的曝光人数、商品详情页浏览率和购买率变化，用于判断 Demo 标签机会。</div>
+            </div>
+            <div class="demo-category-cascade" id="demo-category-cascade" aria-label="Demo 类目三级联动筛选">
+              <button class="demo-cascade-trigger" id="demo-cascade-trigger" type="button" aria-expanded="false">
+                <span class="category-cascade-label">类目</span>
+                <span class="demo-cascade-value" id="demo-cascade-value">全部类目</span>
+                <span class="chev"></span>
+              </button>
+              <div class="demo-cascade-panel" id="demo-cascade-panel">
+                <div class="demo-cascade-col">
+                  <div class="demo-cascade-title">一级类目</div>
+                  <div class="demo-cascade-list" id="demo-cascade-l1"></div>
+                </div>
+                <div class="demo-cascade-col">
+                  <div class="demo-cascade-title">二级类目</div>
+                  <div class="demo-cascade-list" id="demo-cascade-l2"></div>
+                </div>
+                <div class="demo-cascade-col">
+                  <div class="demo-cascade-title">三级类目</div>
+                  <div class="demo-cascade-list" id="demo-cascade-l3"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="drill-shell">
+            <div class="drill-charts demo-only">
+              <div class="demo-panel drill-panel-combo">
+                <div class="demo-trend-chart">
+                  <div class="demo-trend-toolbar">
+                    <div class="trend-picker"><span><i class="trend-marker bar"></i>曝光人数</span><span class="chev"></span></div>
+                    <div class="trend-picker"><span><i class="trend-marker dpv"></i>商品详情页浏览率</span><span class="chev"></span></div>
+                    <div class="trend-picker"><span><i class="trend-marker buy"></i>购买率</span><span class="chev"></span></div>
+                  </div>
+                  <div class="trend-y-left"><span>9.62M</span><span>7.70M</span><span>5.77M</span><span>3.85M</span><span>1.92M</span><span>0.00</span></div>
+                  <div class="trend-y-right"><span>1.9000%</span><span>1.5200%</span><span>1.1400%</span><span>0.7600%</span><span>0.3800%</span><span>0.0000%</span></div>
+                  <div class="trend-y-right-alt"><span>2.1000%</span><span>1.6800%</span><span>1.2600%</span><span>0.8400%</span><span>0.4200%</span><span>0.0000%</span></div>
+                  <div class="demo-trend-plot">
+                    <div class="trend-bars">
+                      <div class="trend-bar" style="height:100%"></div>
+                      <div class="trend-bar" style="height:67%"></div>
+                      <div class="trend-bar" style="height:66%"></div>
+                      <div class="trend-bar" style="height:48%"></div>
+                      <div class="trend-bar" style="height:52%"></div>
+                      <div class="trend-bar" style="height:50%"></div>
+                      <div class="trend-bar" style="height:55%"></div>
+                      <div class="trend-bar" style="height:51%"></div>
+                      <div class="trend-bar" style="height:54%"></div>
+                      <div class="trend-bar" style="height:53%"></div>
+                    </div>
+                    <svg class="trend-lines" viewBox="0 0 1000 260" preserveAspectRatio="none" aria-hidden="true">
+                      <polyline points="25,108 132,92 240,140 347,91 455,106 563,94 670,86 778,94 886,88 975,90" fill="none" stroke="#42d5be" stroke-width="3"/>
+                      <polyline points="25,165 132,150 240,184 347,148 455,154 563,149 670,137 778,150 886,146 975,146" fill="none" stroke="#ff6f8d" stroke-width="3"/>
+                      <g fill="#fff" stroke="#42d5be" stroke-width="3">
+                        <circle cx="25" cy="108" r="4"/><circle cx="132" cy="92" r="4"/><circle cx="240" cy="140" r="4"/><circle cx="347" cy="91" r="4"/><circle cx="455" cy="106" r="4"/><circle cx="563" cy="94" r="4"/><circle cx="670" cy="86" r="4"/><circle cx="778" cy="94" r="4"/><circle cx="886" cy="88" r="4"/><circle cx="975" cy="90" r="4"/>
+                      </g>
+                      <g fill="#fff" stroke="#ff6f8d" stroke-width="3">
+                        <circle cx="25" cy="165" r="4"/><circle cx="132" cy="150" r="4"/><circle cx="240" cy="184" r="4"/><circle cx="347" cy="148" r="4"/><circle cx="455" cy="154" r="4"/><circle cx="563" cy="149" r="4"/><circle cx="670" cy="137" r="4"/><circle cx="778" cy="150" r="4"/><circle cx="886" cy="146" r="4"/><circle cx="975" cy="146" r="4"/>
+                      </g>
+                    </svg>
+                  </div>
+                  <div class="trend-x-labels">
+                    <span>Demo - Amazon Reach Segment</span>
+                    <span>Demographics - Gender - Female</span>
+                    <span>Demo - Female</span>
+                    <span>Demo - Occupation - Professional</span>
+                    <span>Demo - Home Owners</span>
+                    <span>Demo - Occupation - Service</span>
+                    <span>Demo - Presence of Children</span>
+                    <span>Demo - Occupation - Management</span>
+                    <span>Demo - Occupation - Technical</span>
+                    <span>Demo - Occupation - Education</span>
+                  </div>
+                  <div class="trend-mini-scroll"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+  <aside class="prd-drawer open" id="prd-drawer" aria-label="PRD 标注说明">
+    <div class="prd-drawer-head">
+      <div class="prd-drawer-title">
+        <span class="prd-title-text">PRD 标注说明</span>
+        <button class="prd-close" id="prd-close" type="button" aria-label="收起 PRD 标注">›</button>
+      </div>
+      <div class="prd-drawer-sub">基于《AMC4.0_人群机会_TGI与渗透率_PRD_v2》，把页面模块、核心口径和交互验收点映射到当前原型。</div>
+    </div>
+    <div class="prd-body">
+      <div class="prd-section-title">页面故事线</div>
+      <div class="prd-note-list" id="prd-note-list">
+        <div class="prd-note" data-target=".report-header">
+          <div class="prd-note-top"><span class="prd-index">P1</span><span>报告上下文</span></div>
+          <div class="prd-note-copy">展示报告状态、时区、订阅月份与下载入口；月份下拉用于切换历史订阅报告。</div>
+          <div class="prd-note-meta"><span class="prd-chip">PRD 7.1</span><span class="prd-chip">全局上下文</span></div>
+        </div>
+        <div class="prd-note" data-target=".model-hero-card">
+          <div class="prd-note-top"><span class="prd-index">P2</span><span>模型入口与主筛选</span></div>
+          <div class="prd-note-copy">明确当前模型为“人群机会分析”，筛选支持品牌、品线、广告类型、人群名称和人群 ID。</div>
+          <div class="prd-note-meta"><span class="prd-chip">PRD 7.2</span><span class="prd-chip">账号到品线下钻</span></div>
+        </div>
+        <div class="prd-note" data-target="#advanced-filter-trigger">
+          <div class="prd-note-top"><span class="prd-index">P2-1</span><span>高级筛选</span></div>
+          <div class="prd-note-copy">点击后打开高级筛选面板，支持按数值型指标配置最小值/最大值区间；筛选范围应用于当前模型全部分析模块与明细表。</div>
+          <div class="prd-note-meta"><span class="prd-chip">PRD 7.2</span><span class="prd-chip">区间筛选</span></div>
+        </div>
+        <div class="prd-note" data-target=".decision-brief">
+          <div class="prd-note-top"><span class="prd-index">P3</span><span>一句话投放结论</span></div>
+          <div class="prd-note-copy">先给投手保量、扩量、控本复盘的方向，再说明结论来自 TGI、渗透率、ROAS 与目标用户规模。</div>
+          <div class="prd-note-meta"><span class="prd-chip">PRD 7.3</span><span class="prd-chip">决策摘要</span></div>
+        </div>
+        <div class="prd-note" data-target=".metric-switch">
+          <div class="prd-note-top"><span class="prd-index">P4</span><span>指标口径切换</span></div>
+          <div class="prd-note-copy">曝光、点击、DPV、ATC、购买、NTB 会影响象限坐标与明细口径；当前默认购买口径。</div>
+          <div class="prd-note-meta"><span class="prd-chip">PRD 7.4</span><span class="prd-chip">口径联动</span></div>
+        </div>
+        <div class="prd-note" data-target=".summary-cards">
+          <div class="prd-note-top"><span class="prd-index">P5</span><span>机会概览指标卡</span></div>
+          <div class="prd-note-copy">解释已匹配、核心、扩量观察、未匹配人群的数量结构，让客户先理解可计算范围。</div>
+          <div class="prd-note-meta"><span class="prd-chip">PRD 7.5</span><span class="prd-chip">模型边界</span></div>
+        </div>
+        <div class="prd-note" data-target=".chart-panel">
+          <div class="prd-note-top"><span class="prd-index">P6</span><span>TGI × 渗透率象限</span></div>
+          <div class="prd-note-copy">四象限默认展示 Top 50；X 为渗透率，Y 为 TGI，实心气泡为投放中，虚线气泡为未投放。</div>
+          <div class="prd-note-meta"><span class="prd-chip">PRD 6.1</span><span class="prd-chip">PRD 7.6</span></div>
+        </div>
+        <div class="prd-note" data-target=".legend-status">
+          <div class="prd-note-top"><span class="prd-index">P6-1</span><span>投放状态图例</span></div>
+          <div class="prd-note-copy">用于说明气泡样式：实心表示该标签当前投放中，虚线表示该标签未投放但具备机会识别价值。</div>
+          <div class="prd-note-meta"><span class="prd-chip">PRD 6.2</span><span class="prd-chip">气泡样式</span></div>
+        </div>
+        <div class="prd-note" data-target=".action-panel">
+          <div class="prd-note-top"><span class="prd-index">P7</span><span>推荐动作解释</span></div>
+          <div class="prd-note-copy">把象限结论翻译成投放动作：核心保量、优先扩量、控本复盘、暂缓投放。</div>
+          <div class="prd-note-meta"><span class="prd-chip">PRD 6.1</span><span class="prd-chip">投手动作</span></div>
+        </div>
+        <div class="prd-note" data-target=".action-detail-card">
+          <div class="prd-note-top"><span class="prd-index">P8</span><span>人群机会清单</span></div>
+          <div class="prd-note-copy">面向投手的操作清单，字段包含人群规模、购买用户数、渗透率、TGI、ROAS、广告花费、CTR、CVR。</div>
+          <div class="prd-note-meta"><span class="prd-chip">PRD 7.7</span><span class="prd-chip">投放优先级</span></div>
+        </div>
+        <div class="prd-note" data-target=".opportunity-wide-card">
+          <div class="prd-note-top"><span class="prd-index">P9</span><span>人群机会分析宽表</span></div>
+          <div class="prd-note-copy">用于客户核数和下载，支持最多 Pin 3 行、指标配置、字段顺序调整、横向滚动和分页。</div>
+          <div class="prd-note-meta"><span class="prd-chip">PRD 7.8</span><span class="prd-chip">明细核数</span></div>
+        </div>
+        <div class="prd-note" data-target=".category-drill-card">
+          <div class="prd-note-top"><span class="prd-index">P10</span><span>Demo 标签趋势表现</span></div>
+          <div class="prd-note-copy">Demo 标签类目体系独立，不进入主四象限；仅用折线柱状复合图解释曝光人数、DPV 率和购买率趋势。</div>
+          <div class="prd-note-meta"><span class="prd-chip">PRD 4.2</span><span class="prd-chip">PRD 7.9</span></div>
+        </div>
+      </div>
+      <div class="prd-foot">说明：标注用于需求评审和研发对齐，不改变当前页面业务数据。完整 PRD 已写入 02_PRD&设计 目录。</div>
+    </div>
+  </aside>
+  </div>
+
+  <script>
+    const opportunityTable = document.querySelector('.opportunity-table');
+    if (opportunityTable) {
+      const tbody = opportunityTable.querySelector('tbody');
+      const baseRows = Array.from(tbody.querySelectorAll('tr'));
+      const extraSegments = [
+        ['IM - Kitchen & Dining', '157', 'IM', '87,693,218', 'In-market | Home & Garden | Kitchen & Dining', 'People likely to purchase kitchen and dining products', '29,842', '0.034%', '$2,318,224.40', '$10,875,291.72', '4.69', '7,954,220', '221,604', '238,911', '22,536', '29,842', '27,384'],
+        ['LS - Home Improvement Enthusiasts', '2105321', 'LS', '109,254,420', 'Lifestyle | Home Improvement', 'People with shopping behaviors related to home improvement projects', '81,102', '0.074%', '$1,472,903.18', '$10,561,072.35', '7.17', '5,203,118', '148,202', '166,491', '13,205', '81,102', '73,418'],
+        ['IM - Patio, Lawn & Garden', '297', 'IM', '74,283,551', 'In-market | Home & Garden | Patio, Lawn & Garden', 'People likely to purchase patio, lawn and garden products', '68,284', '0.092%', '$1,297,822.06', '$5,410,884.66', '4.17', '4,621,504', '126,388', '138,722', '10,812', '68,284', '62,021'],
+        ['LS - Recent Shoppers', '121', 'LS', '119,963,188', 'Lifestyle | Shoppers | Shopping behaviours', 'People who are Recent Shoppers', '31,590', '0.026%', '$2,428,112.42', '$10,902,524.91', '4.49', '8,911,740', '242,088', '261,345', '23,904', '31,590', '28,794'],
+        ['IM - Household Supplies', '301', 'IM', '92,114,003', 'In-market | Home & Garden | Household Supplies', 'People likely to buy household supply products', '30,876', '0.034%', '$2,204,618.70', '$9,732,512.30', '4.42', '7,802,412', '218,530', '236,719', '20,113', '30,876', '28,005'],
+        ['IM - Lighting Fixtures', '108996', 'IM', '697,153', 'In-market | Home & Garden | Lighting', 'People likely to purchase recessed lighting housing and trim', '21,827', '3.131%', '$456,790.24', '$4,592,118.10', '10.05', '136,000', '20,000', '15,000', '1,104', '21,827', '19,751'],
+        ['LS - B2B Business Lookalike', '5244', 'LS', '508,232', 'Lifestyle | Business & Industry', 'People similar to business buyers and electrical supply shoppers', '14,890', '2.930%', '$382,704.56', '$5,703,315.22', '14.90', '859,000', '20,000', '15,000', '1,028', '14,890', '13,571'],
+        ['IM - Home Decor', '332224', 'IM', '52,011,970', 'In-market | Home & Garden | Home Decor', 'People likely to purchase home decor products', '30,214', '0.058%', '$1,864,295.44', '$7,731,305.81', '4.15', '5,201,197', '449,331', '319,929', '17,291', '30,214', '27,618'],
+        ['IM - Musical Instruments', '239', 'IM', '26,669,850', 'In-market | Hobbies | Musical Instruments', 'People likely to purchase musical instruments and accessories', '18,407', '0.069%', '$936,214.87', '$3,822,406.11', '4.08', '2,666,985', '395,142', '289,621', '17,156', '18,407', '16,921'],
+        ['LS - DIY Project Starters', '2106118', 'LS', '64,218,390', 'Lifestyle | DIY & Tools', 'People whose activities indicate DIY project intent', '27,533', '0.043%', '$1,506,882.09', '$6,708,631.54', '4.45', '4,928,440', '152,841', '168,904', '12,114', '27,533', '25,092'],
+        ['IM - Electrical Supplies', '812', 'IM', '18,941,228', 'In-market | Tools & Home Improvement | Electrical', 'People likely to purchase electrical fixtures and supplies', '16,328', '0.086%', '$798,402.64', '$4,336,604.29', '5.43', '1,902,114', '76,902', '82,618', '6,830', '16,328', '14,910'],
+        ['LS - Home Organization', '2106984', 'LS', '78,332,410', 'Lifestyle | Home & Kitchen | Storage & Organization', 'People interested in storage and home organization products', '25,932', '0.033%', '$1,411,682.83', '$5,918,423.66', '4.19', '6,404,318', '178,220', '192,348', '14,734', '25,932', '23,745'],
+        ['IM - Tools & Hardware', '418', 'IM', '44,506,873', 'In-market | DIY & Tools | Hardware', 'People likely to purchase tools and hardware products', '23,418', '0.053%', '$1,208,422.03', '$5,322,146.80', '4.40', '3,926,218', '132,674', '143,290', '11,572', '23,418', '21,208'],
+        ['LS - Household Decision Makers', '2107772', 'LS', '98,702,314', 'Lifestyle | Household', 'People likely to make household purchase decisions', '28,764', '0.029%', '$1,862,394.77', '$7,982,331.48', '4.29', '7,180,556', '209,381', '224,537', '18,204', '28,764', '26,120'],
+        ['IM - Smart Home Devices', '728', 'IM', '31,904,875', 'In-market | Consumer Electronics | Smart Home', 'People likely to purchase smart home devices', '20,956', '0.066%', '$1,078,943.55', '$4,996,510.41', '4.63', '3,284,915', '116,044', '124,812', '9,826', '20,956', '19,304']
+      ];
+
+      const toNumber = (value) => Number(String(value || '0').replace(/[$,%\s]/g, '').replace(/,/g, '')) || 0;
+      const formatInt = (value) => Math.max(1, Math.round(value)).toLocaleString('en-US');
+      const formatRate = (value) => `${Math.max(0.001, value).toFixed(3)}%`;
+      const formatMoney = (value) => `$${Math.max(0, value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      const getTgi = (rateValue, rowIndex) => {
+        if (rateValue >= 2) return 240 - rowIndex * 3;
+        if (rateValue >= 0.08) return 168 - rowIndex;
+        if (rateValue >= 0.05) return 132 + rowIndex;
+        if (rateValue >= 0.03) return 116 + rowIndex;
+        if (rateValue >= 0.02) return 96 + rowIndex;
+        return 78 + rowIndex;
+      };
+      const getQuadrant = (tgi, rateValue, roas) => {
+        if (tgi >= 120 && rateValue >= 0.05 && roas >= 5) return ['core', '核心保量'];
+        if (tgi >= 120 && rateValue < 0.05) return ['grow', '优先扩量'];
+        if (tgi < 100 && roas >= 4.2) return ['watch', '控本复盘'];
+        return ['low', '暂缓投放'];
+      };
+      const enrichRow = (row, rowIndex = 0) => {
+        const cells = row.children;
+        if (cells.length < 40) return;
+        const rateValue = toNumber(cells[12].textContent);
+        const roas = toNumber(cells[18].textContent);
+        const target = toNumber(cells[10].textContent);
+        const purchaseUsers = toNumber(cells[30].textContent || cells[10].textContent);
+        const ntbUsers = toNumber(cells[32].textContent || purchaseUsers * 0.9);
+        const impUsers = toNumber(cells[20].textContent);
+        const clickUsers = toNumber(cells[22].textContent);
+        const dpvUsers = toNumber(cells[26].textContent);
+        const atcUsers = toNumber(cells[28].textContent);
+        const cost = toNumber(cells[15].textContent);
+        const sales = toNumber(cells[16].textContent);
+        const tgi = getTgi(rateValue, rowIndex);
+        const score = Math.min(99, Math.round(tgi * 0.32 + roas * 4.2 + rateValue * 9 + (target > 30000 ? 8 : 4)));
+        const [quadClass, quadLabel] = getQuadrant(tgi, rateValue, roas);
+
+        cells[2].textContent = cells[2].textContent.trim() || 'US';
+        cells[3].textContent = 'Ensenior';
+        cells[4].textContent = rateValue >= 2 ? 'Recessed Lighting' : (rowIndex % 3 === 0 ? 'Ceiling Light' : rowIndex % 3 === 1 ? 'Recessed Lighting' : 'Lighting Accessories');
+        cells[5].textContent = cells[5].textContent.trim() === '--' ? 'SP / SD' : cells[5].textContent;
+        cells[11].textContent = String(tgi);
+        cells[13].textContent = String(score);
+        cells[14].innerHTML = `<span class="quad-tag ${quadClass}">${quadLabel}</span>`;
+        cells[17].textContent = formatMoney(sales * 0.86);
+        cells[19].textContent = formatInt(sales / 58);
+        cells[21].textContent = formatRate((impUsers / Math.max(toNumber(cells[6].textContent), 1)) * 100);
+        cells[23].textContent = formatRate((clickUsers / Math.max(toNumber(cells[6].textContent), 1)) * 100);
+        cells[24].textContent = formatInt(Math.max(980, clickUsers * 0.22));
+        cells[25].textContent = formatRate((toNumber(cells[24].textContent) / Math.max(toNumber(cells[6].textContent), 1)) * 100);
+        cells[27].textContent = formatRate((dpvUsers / Math.max(toNumber(cells[6].textContent), 1)) * 100);
+        cells[29].textContent = formatRate((atcUsers / Math.max(toNumber(cells[6].textContent), 1)) * 100);
+        cells[31].textContent = formatRate((purchaseUsers / Math.max(toNumber(cells[6].textContent), 1)) * 100);
+        cells[33].textContent = formatRate((ntbUsers / Math.max(toNumber(cells[6].textContent), 1)) * 100);
+        cells[34].textContent = formatInt(impUsers * 2.8);
+        cells[35].textContent = formatInt(clickUsers * 1.35);
+        cells[36].textContent = formatInt(toNumber(cells[24].textContent) * 1.42);
+        cells[37].textContent = formatInt(dpvUsers * 1.55);
+        cells[38].textContent = formatInt(atcUsers * 1.18);
+        cells[39].textContent = formatInt(purchaseUsers * 1.08);
+      };
+
+      const applySegmentData = (row, values, index = 0) => {
+        const cells = row.children;
+        const [name, id, type, size, path, desc, target, rate, cost, sales, roas, impUsers, clickUsers, dpvUsers, atcUsers, purchaseUsers, ntbUsers] = values;
+        cells[0].innerHTML = `<span class="segment-name-cell"><span class="tag ${type.toLowerCase()}">${type}</span><span class="segment-name">${name}</span></span>`;
+        cells[1].textContent = id;
+        cells[2].textContent = 'US';
+        cells[3].textContent = 'Ensenior';
+        cells[4].textContent = rate.includes('3.') || name.includes('Lighting') ? 'Recessed Lighting' : (index % 2 ? 'Lighting Accessories' : 'Ceiling Light');
+        cells[5].textContent = index % 3 === 0 ? 'SP / SD' : (index % 3 === 1 ? 'Sponsored Products' : 'Sponsored Display');
+        cells[6].textContent = size;
+        cells[7].textContent = path;
+        cells[8].textContent = desc;
+        cells[10].textContent = target;
+        cells[12].textContent = rate;
+        cells[15].textContent = cost;
+        cells[16].textContent = sales;
+        cells[17].textContent = sales.replace('$', '$').replace(/\.\d+$/, '.00');
+        cells[18].textContent = roas;
+        cells[20].textContent = impUsers;
+        cells[22].textContent = clickUsers;
+        cells[26].textContent = dpvUsers;
+        cells[28].textContent = atcUsers;
+        cells[30].textContent = purchaseUsers;
+        cells[32].textContent = ntbUsers;
+        enrichRow(row, index + 5);
+      };
+
+      baseRows.forEach((row, index) => enrichRow(row, index));
+
+      extraSegments.forEach((segment, index) => {
+        const template = baseRows[index % baseRows.length];
+        const row = template.cloneNode(true);
+        applySegmentData(row, segment, index);
+        tbody.appendChild(row);
+      });
+
+      const pinIcon = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14.8 3.2 21 9.4l-2.1 2.1-1.4-1.4-3.9 3.9.5 4.7-1.5 1.5-3.7-3.7-4.6 4.6-1.4-1.4 4.6-4.6-3.7-3.7 1.5-1.5 4.7.5 3.9-3.9-1.4-1.4 2.3-2.4Z"/></svg>';
+      const maxPinnedRows = 3;
+      const syncPinnedRows = () => {
+        Array.from(tbody.querySelectorAll('tr.is-pinned')).reverse().forEach((row) => tbody.prepend(row));
+      };
+
+      Array.from(tbody.querySelectorAll('tr')).forEach((row, index) => {
+        const pinCell = document.createElement('td');
+        pinCell.className = 'pin-cell';
+        const pinButton = document.createElement('button');
+        pinButton.type = 'button';
+        pinButton.className = 'pin-btn';
+        pinButton.title = '置顶该行';
+        pinButton.innerHTML = pinIcon;
+        pinCell.appendChild(pinButton);
+        row.prepend(pinCell);
+
+        if (index < 2) {
+          row.classList.add('is-pinned');
+          pinButton.classList.add('active');
+          pinButton.title = '取消置顶';
+        }
+
+        pinButton.addEventListener('click', () => {
+          const isPinned = row.classList.contains('is-pinned');
+          const pinnedCount = tbody.querySelectorAll('tr.is-pinned').length;
+          if (!isPinned && pinnedCount >= maxPinnedRows) {
+            pinButton.title = '最多支持置顶 3 行';
+            return;
+          }
+
+          const active = row.classList.toggle('is-pinned');
+          pinButton.classList.toggle('active', active);
+          pinButton.title = active ? '取消置顶' : '置顶该行';
+          if (active) {
+            syncPinnedRows();
+          }
+        });
+      });
+
+      syncPinnedRows();
+
+    }
+
+    const metricConfigTrigger = document.getElementById('metric-config-trigger');
+    const metricConfigPopover = document.getElementById('metric-config-popover');
+    const metricSelectedList = document.getElementById('metric-selected-list');
+    const metricSelectedCount = document.getElementById('metric-selected-count');
+    const updateMetricCount = () => {
+      if (!metricSelectedList || !metricSelectedCount) return;
+      metricSelectedCount.textContent = `${metricSelectedList.querySelectorAll('.metric-item').length}/40`;
+    };
+    if (metricConfigTrigger && metricConfigPopover && metricSelectedList) {
+      metricConfigTrigger.addEventListener('click', (event) => {
+        event.stopPropagation();
+        metricConfigPopover.classList.toggle('open');
+      });
+
+      metricConfigPopover.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const button = event.target.closest('.metric-icon-btn');
+        if (!button) return;
+        const item = button.closest('.metric-item');
+        if (!item) return;
+
+        if (button.classList.contains('move-up')) {
+          const prev = item.previousElementSibling;
+          if (prev) metricSelectedList.insertBefore(item, prev);
+        }
+        if (button.classList.contains('move-down')) {
+          const next = item.nextElementSibling;
+          if (next) metricSelectedList.insertBefore(next, item);
+        }
+        if (button.classList.contains('remove')) {
+          item.remove();
+        }
+        updateMetricCount();
+      });
+
+      document.getElementById('metric-confirm')?.addEventListener('click', () => {
+        metricConfigPopover.classList.remove('open');
+      });
+
+      document.getElementById('metric-reset')?.addEventListener('click', () => {
+        metricConfigPopover.classList.remove('open');
+      });
+
+      document.getElementById('metric-clear')?.addEventListener('click', () => {
+        metricSelectedList.querySelectorAll('.metric-item').forEach((item) => item.remove());
+        updateMetricCount();
+      });
+
+      document.addEventListener('click', () => {
+        metricConfigPopover.classList.remove('open');
+      });
+
+      updateMetricCount();
+    }
+
+    const reportDateSelect = document.getElementById('report-date-select');
+    if (reportDateSelect) {
+      const reportDateLabel = document.getElementById('report-date-label');
+
+      reportDateSelect.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const option = event.target.closest('.report-date-option');
+        if (option) {
+          reportDateLabel.textContent = option.dataset.month;
+          reportDateSelect.querySelectorAll('.report-date-option').forEach((item) => item.classList.remove('active'));
+          option.classList.add('active');
+          reportDateSelect.classList.remove('open');
+          return;
+        }
+
+        reportDateSelect.classList.toggle('open');
+      });
+
+      reportDateSelect.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          reportDateSelect.classList.toggle('open');
+        }
+        if (event.key === 'Escape') {
+          reportDateSelect.classList.remove('open');
+        }
+      });
+
+      document.addEventListener('click', () => {
+        reportDateSelect.classList.remove('open');
+      });
+    }
+
+    const demoCategoryData = [{"l1":"Income","l2":"Income","l3":"50K - 75K"},{"l1":"Home Ownership","l2":"Property value","l3":"$250K to $400K"},{"l1":"Occupation","l2":"Occupation","l3":"Retired"},{"l1":"Household","l2":"Number of children in household","l3":"4+ children"},{"l1":"Household","l2":"Age of children","l3":"Presence of Children age 7-9"},{"l1":"Household","l2":"Length of residency","l3":"1-3 years"},{"l1":"Occupation","l2":"Occupation","l3":"Sales/Service"},{"l1":"Household","l2":"Number of adults in household","l3":"1 adult"},{"l1":"Household","l2":"Number of children in household","l3":"1 child"},{"l1":"Assets","l2":"Assets","l3":"$200K - $499K"},{"l1":"Age","l2":"Age","l3":"18 - 24"},{"l1":"Education","l2":"Education","l3":"High School"},{"l1":"Household","l2":"Presence of Children","l3":"Presence of Children"},{"l1":"Occupation","l2":"Occupation","l3":"Home Business Owners"},{"l1":"Home Ownership","l2":"Housing Status","l3":"Renters"},{"l1":"Household","l2":"Length of residency","l3":"11 or more years"},{"l1":"Home Ownership","l2":"Property value","l3":"$150K to $250K"},{"l1":"Relationship","l2":"Relationship","l3":"Married"},{"l1":"Education","l2":"Education","l3":"Some college"},{"l1":"Household","l2":"Number of adults in household","l3":"4 adults"},{"l1":"Assets","l2":"Assets","l3":"$10K - $49K"},{"l1":"Household","l2":"Length of residency","l3":"4-10 years"},{"l1":"Household","l2":"Number of adults in household","l3":"3 adults"},{"l1":"Household","l2":"Number of children in household","l3":"2 children"},{"l1":"Age","l2":"Age","l3":"25 - 34"},{"l1":"Home Ownership","l2":"Housing Status","l3":"Home Owners"},{"l1":"Household","l2":"Age of children","l3":"Presence of Children age 13-18"},{"l1":"Income","l2":"Income","l3":"150K+"},{"l1":"Income","l2":"Income","l3":"100K - 150K"},{"l1":"Household","l2":"Age of children","l3":"Presence of Children age 10-12"},{"l1":"Household","l2":"Age of children","l3":"Presence of Children age 0-3"},{"l1":"Occupation","l2":"Occupation","l3":"Farm Related"},{"l1":"Household","l2":"Length of residency","l3":"Less than 1 year"},{"l1":"Education","l2":"Education","l3":"Graduate degree"},{"l1":"Assets","l2":"Assets","l3":"$50K - $99K"},{"l1":"Household","l2":"Number of adults in household","l3":"2 adults"},{"l1":"Household","l2":"Presence of Children","l3":"No Presence of Children"},{"l1":"Gender","l2":"Gender","l3":"Male"},{"l1":"Assets","l2":"Assets","l3":"$100K - $199K"},{"l1":"Household","l2":"Number of adults in household","l3":"5+ adults"},{"l1":"Age","l2":"Age","l3":"45 - 54"},{"l1":"Home Ownership","l2":"Property value","l3":"$400K+"},{"l1":"Gender","l2":"Gender","l3":"Female"},{"l1":"Home Ownership","l2":"Property value","l3":"$100K to $150K"},{"l1":"Education","l2":"Education","l3":"Bachelors degree"},{"l1":"Assets","l2":"Assets","l3":"> $500K"},{"l1":"Age","l2":"Age","l3":"55 - 64"},{"l1":"Income","l2":"Income","l3":"75K - 100K"},{"l1":"Relationship","l2":"Relationship","l3":"Unmarried"},{"l1":"Occupation","l2":"Occupation","l3":"Professional/Technical"},{"l1":"Household","l2":"Age of children","l3":"Presence of Children age 4-6"},{"l1":"Household","l2":"Number of children in household","l3":"3 children"},{"l1":"Age","l2":"Age","l3":"35 - 44"}];
+    const uniqueValues = (rows, key) => [...new Set(rows.map((row) => row[key]))];
+    const writeOptions = (select, placeholder, values) => {
+      if (!select) return;
+      select.innerHTML = '';
+      select.add(new Option(placeholder, ''));
+      values.forEach((value) => select.add(new Option(value, value)));
+    };
+    const initCategoryCascade = (level1Id, level2Id, level3Id) => {
+      const level1 = document.getElementById(level1Id);
+      const level2 = document.getElementById(level2Id);
+      const level3 = document.getElementById(level3Id);
+      if (!level1 || !level2 || !level3) return;
+
+      const getFilteredRows = () => demoCategoryData.filter((row) => {
+        const level1Match = !level1.value || row.l1 === level1.value;
+        const level2Match = !level2.value || row.l2 === level2.value;
+        return level1Match && level2Match;
+      });
+      const refreshLevel2 = () => {
+        const rows = level1.value ? demoCategoryData.filter((row) => row.l1 === level1.value) : demoCategoryData;
+        writeOptions(level2, '全部二级类目', uniqueValues(rows, 'l2'));
+      };
+      const refreshLevel3 = () => {
+        writeOptions(level3, '全部三级类目', uniqueValues(getFilteredRows(), 'l3'));
+      };
+
+      writeOptions(level1, '全部一级类目', uniqueValues(demoCategoryData, 'l1'));
+      refreshLevel2();
+      refreshLevel3();
+
+      level1.addEventListener('change', () => {
+        refreshLevel2();
+        refreshLevel3();
+      });
+      level2.addEventListener('change', refreshLevel3);
+    };
+    const initCascadeDropdown = ({ rootId, triggerId, valueId, l1Id, l2Id, l3Id }) => {
+      const root = document.getElementById(rootId);
+      const trigger = document.getElementById(triggerId);
+      const value = document.getElementById(valueId);
+      const l1List = document.getElementById(l1Id);
+      const l2List = document.getElementById(l2Id);
+      const l3List = document.getElementById(l3Id);
+      if (!root || !trigger || !value || !l1List || !l2List || !l3List) return;
+
+      let selectedL1 = '';
+      let selectedL2 = '';
+      let selectedL3 = '';
+      const countBy = (rows, key) => rows.reduce((acc, row) => {
+        acc[row[key]] = (acc[row[key]] || 0) + 1;
+        return acc;
+      }, {});
+      const setOpen = (open) => {
+        root.classList.toggle('open', open);
+        trigger.setAttribute('aria-expanded', String(open));
+      };
+      const renderList = (container, rows, key, selected, onSelect) => {
+        container.innerHTML = '';
+        const counts = countBy(rows, key);
+        Object.keys(counts).forEach((item) => {
+          const button = document.createElement('div');
+          button.className = `demo-cascade-item${item === selected ? ' active' : ''}`;
+          button.textContent = item;
+          const count = document.createElement('span');
+          count.className = 'count';
+          count.textContent = counts[item];
+          button.appendChild(count);
+          button.addEventListener('click', (event) => {
+            event.stopPropagation();
+            onSelect(item);
+          });
+          container.appendChild(button);
+        });
+        if (!container.children.length) {
+          container.innerHTML = '<div class="demo-cascade-empty">暂无可选类目</div>';
+        }
+      };
+      const render = () => {
+        const l1Rows = demoCategoryData;
+        const l2Rows = selectedL1 ? demoCategoryData.filter((row) => row.l1 === selectedL1) : demoCategoryData;
+        const l3Rows = l2Rows.filter((row) => !selectedL2 || row.l2 === selectedL2);
+        renderList(l1List, l1Rows, 'l1', selectedL1, (item) => {
+          selectedL1 = item;
+          selectedL2 = '';
+          selectedL3 = '';
+          value.textContent = selectedL1;
+          render();
+        });
+        renderList(l2List, l2Rows, 'l2', selectedL2, (item) => {
+          selectedL2 = item;
+          selectedL3 = '';
+          value.textContent = `${selectedL1 || '全部一级类目'} > ${selectedL2}`;
+          render();
+        });
+        renderList(l3List, l3Rows, 'l3', selectedL3, (item) => {
+          selectedL3 = item;
+          const match = l3Rows.find((row) => row.l3 === item);
+          value.textContent = `${match?.l1 || selectedL1} > ${match?.l2 || selectedL2} > ${selectedL3}`;
+          setOpen(false);
+          render();
+        });
+      };
+
+      trigger.addEventListener('click', (event) => {
+        event.stopPropagation();
+        setOpen(!root.classList.contains('open'));
+      });
+      root.addEventListener('click', (event) => event.stopPropagation());
+      document.addEventListener('click', () => setOpen(false));
+      trigger.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          setOpen(!root.classList.contains('open'));
+        }
+        if (event.key === 'Escape') setOpen(false);
+      });
+      render();
+    };
+    initCascadeDropdown({
+      rootId: 'demo-category-cascade',
+      triggerId: 'demo-cascade-trigger',
+      valueId: 'demo-cascade-value',
+      l1Id: 'demo-cascade-l1',
+      l2Id: 'demo-cascade-l2',
+      l3Id: 'demo-cascade-l3'
+    });
+    initCascadeDropdown({
+      rootId: 'wide-category-cascade',
+      triggerId: 'wide-cascade-trigger',
+      valueId: 'wide-cascade-value',
+      l1Id: 'wide-cascade-l1',
+      l2Id: 'wide-cascade-l2',
+      l3Id: 'wide-cascade-l3'
+    });
+
+    document.querySelectorAll('.seg-btn').forEach((button) => {
+      button.addEventListener('click', () => {
+        const metric = button.dataset.metric || button.textContent.trim();
+        document.querySelectorAll('.seg-btn').forEach((item) => item.classList.remove('active'));
+        button.classList.add('active');
+
+        const axisCopy = document.getElementById('metric-axis-copy');
+        if (axisCopy) {
+          axisCopy.textContent = `当前坐标轴：X = ${metric}渗透率，Y = ${metric} TGI。下方明细表保留全部行为指标。`;
+        }
+
+        const actionCopy = document.getElementById('action-metric-copy');
+        if (actionCopy) {
+          actionCopy.textContent = `${metric}指标`;
+        }
+
+        document.querySelectorAll('.metric-filter').forEach((filter) => {
+          const chevron = filter.querySelector('.chev');
+          filter.textContent = `指标 = ${metric} `;
+          if (chevron) filter.appendChild(chevron);
+        });
+      });
+    });
+
+    document.querySelectorAll('.category-row').forEach((row) => {
+      row.addEventListener('click', () => {
+        document.querySelectorAll('.category-row').forEach((item) => item.classList.remove('active'));
+        row.classList.add('active');
+        const label = row.querySelector('strong')?.textContent.trim() || '全部二级类目';
+        const breadcrumb = document.getElementById('demo-breadcrumb');
+        const level2 = document.getElementById('demo-level2');
+        if (breadcrumb) breadcrumb.innerHTML = `全部类目 <span>/</span> In-market <span>/</span> ${label}`;
+        if (level2) level2.textContent = label;
+      });
+    });
+
+    document.querySelectorAll('.heat-cell.row-head.drillable').forEach((cell) => {
+      cell.addEventListener('click', () => {
+        document.querySelectorAll('.heat-cell.row-head.drillable').forEach((item) => item.classList.remove('active'));
+        cell.classList.add('active');
+        const label = cell.dataset.label || cell.textContent.trim();
+        const breadcrumb = document.getElementById('demo-breadcrumb');
+        const level3 = document.getElementById('demo-level3');
+        const comboTitle = document.getElementById('combo-title');
+        if (breadcrumb) breadcrumb.textContent = `全部 > In-market > Home & Garden > ${label}`;
+        if (level3) level3.textContent = label;
+        if (comboTitle) comboTitle.textContent = `In-market / Home & Garden / ${label}`;
+      });
+    });
+
+    const prdDrawer = document.getElementById('prd-drawer');
+    const prdClose = document.getElementById('prd-close');
+    const prdNotes = Array.from(document.querySelectorAll('.prd-note'));
+    const appShell = document.querySelector('.app');
+    const clearPrdFocus = () => {
+      document.querySelectorAll('.prd-focus').forEach((item) => item.classList.remove('prd-focus'));
+      prdNotes.forEach((item) => item.classList.remove('active'));
+    };
+    const focusPrdTarget = (targetSelector) => {
+      const target = document.querySelector(targetSelector);
+      if (!target) return;
+      clearPrdFocus();
+      target.classList.add('prd-focus');
+      document.querySelector(`.prd-note[data-target="${targetSelector}"]`)?.classList.add('active');
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    };
+
+    if (prdDrawer) {
+      prdClose?.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const collapsed = prdDrawer.classList.toggle('collapsed');
+        appShell?.classList.toggle('prd-collapsed', collapsed);
+        prdClose.textContent = collapsed ? '' : '›';
+        prdClose.setAttribute('aria-label', collapsed ? '展开 PRD 标注' : '收起 PRD 标注');
+      });
+
+      prdDrawer.querySelector('.prd-drawer-head')?.addEventListener('click', () => {
+        if (!prdDrawer.classList.contains('collapsed')) return;
+        prdDrawer.classList.remove('collapsed');
+        appShell?.classList.remove('prd-collapsed');
+        if (prdClose) {
+          prdClose.textContent = '›';
+          prdClose.setAttribute('aria-label', '收起 PRD 标注');
+        }
+      });
+
+      prdNotes.forEach((note) => {
+        const selector = note.dataset.target;
+        const target = document.querySelector(selector);
+        if (!selector || !target) return;
+
+        target.classList.add('prd-annotated');
+
+        const index = note.querySelector('.prd-index')?.textContent.trim() || 'PRD';
+        const title = note.querySelector('.prd-note-top span:last-child')?.textContent.trim() || 'PRD 标注';
+        const inlineIndex = document.createElement('button');
+        inlineIndex.type = 'button';
+        inlineIndex.className = 'prd-inline-index';
+        inlineIndex.textContent = index;
+        inlineIndex.title = title;
+        inlineIndex.addEventListener('click', (event) => {
+          event.stopPropagation();
+          prdDrawer.classList.remove('collapsed');
+          appShell?.classList.remove('prd-collapsed');
+          focusPrdTarget(selector);
+        });
+
+        if (target.classList.contains('legend-status')) {
+          inlineIndex.classList.add('is-compact');
+          target.appendChild(inlineIndex);
+        } else {
+          target.appendChild(inlineIndex);
+        }
+
+        note.addEventListener('click', () => {
+          prdDrawer.classList.remove('collapsed');
+          appShell?.classList.remove('prd-collapsed');
+          focusPrdTarget(selector);
+        });
+      });
+    }
+
+  </script>
+</body>
+</html>
+
+
+
