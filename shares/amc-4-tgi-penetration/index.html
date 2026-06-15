@@ -3120,6 +3120,19 @@
       line-height: 1.58;
     }
 
+    .prd-note-copy p {
+      margin: 0 0 6px;
+    }
+
+    .prd-note-copy p:last-child {
+      margin-bottom: 0;
+    }
+
+    .prd-note-copy strong {
+      color: #243044;
+      font-weight: 800;
+    }
+
     .prd-note-meta {
       margin-top: 8px;
       display: flex;
@@ -3492,7 +3505,7 @@
               <span class="seg-btn active" data-metric="购买">购买</span>
               <span class="seg-btn" data-metric="NTB">NTB</span>
             </div>
-            <div class="panel-sub" id="metric-axis-copy">当前坐标轴：X = 购买渗透率，Y = 购买 TGI。下方明细表保留全部行为指标。</div>
+            <div class="panel-sub" id="metric-axis-copy">当前坐标轴：X = 购买渗透率，Y = 购买 TGI。气泡图仅展示当前口径 Top 50；默认基准值支持调整。</div>
           </div>
 
           <div class="summary-cards">
@@ -3522,7 +3535,7 @@
             <article class="chart-panel">
               <div class="panel-title">
                 <span>TGI × 渗透率象限</span>
-                <span class="panel-sub">基准购买渗透率 0.072%，高渗透阈值 0.099%</span>
+                <span class="panel-sub">默认基准：平均 TGI 100，平均购买渗透率 0.072%</span>
               </div>
               <div class="quadrant">
                 <div class="axis y">TGI</div>
@@ -4210,7 +4223,11 @@
         </div>
         <div class="prd-note" data-target=".chart-panel">
           <div class="prd-note-top"><span class="prd-index">P6</span><span>TGI × 渗透率象限</span></div>
-          <div class="prd-note-copy">四象限默认展示 Top 50；X 为渗透率，Y 为 TGI，实心气泡为投放中，虚线气泡为未投放。</div>
+          <div class="prd-note-copy">
+            <p>气泡图仅展示当前筛选口径 <strong>Top 50</strong> 的标签。</p>
+            <p>默认以 <strong>平均 TGI</strong> 和 <strong>账号/品线平均渗透率</strong> 作为象限基准；基准值支持调整。</p>
+            <p><strong>四象限逻辑：</strong><br>高 TGI + 高渗透为 <strong>核心保量</strong>，高 TGI + 低渗透为 <strong>优先扩量</strong>，低 TGI + 高渗透为 <strong>控本复盘</strong>，低 TGI + 低渗透为 <strong>暂缓投放</strong>。</p>
+          </div>
           <div class="prd-note-meta"><span class="prd-chip">PRD 6.1</span><span class="prd-chip">PRD 7.6</span></div>
         </div>
         <div class="prd-note" data-target=".legend-status">
@@ -4279,10 +4296,14 @@
         if (rateValue >= 0.02) return 96 + rowIndex;
         return 78 + rowIndex;
       };
-      const getQuadrant = (tgi, rateValue, roas) => {
-        if (tgi >= 120 && rateValue >= 0.05 && roas >= 5) return ['core', '核心保量'];
-        if (tgi >= 120 && rateValue < 0.05) return ['grow', '优先扩量'];
-        if (tgi < 100 && roas >= 4.2) return ['watch', '控本复盘'];
+      const DEFAULT_TGI_BASELINE = 100;
+      const DEFAULT_PENETRATION_BASELINE = 0.072;
+      const getQuadrant = (tgi, rateValue) => {
+        const highTgi = tgi > DEFAULT_TGI_BASELINE;
+        const highPenetration = rateValue >= DEFAULT_PENETRATION_BASELINE;
+        if (highTgi && highPenetration) return ['core', '核心保量'];
+        if (highTgi && !highPenetration) return ['grow', '优先扩量'];
+        if (!highTgi && highPenetration) return ['watch', '控本复盘'];
         return ['low', '暂缓投放'];
       };
       const enrichRow = (row, rowIndex = 0) => {
@@ -4301,7 +4322,7 @@
         const sales = toNumber(cells[16].textContent);
         const tgi = getTgi(rateValue, rowIndex);
         const score = Math.min(99, Math.round(tgi * 0.32 + roas * 4.2 + rateValue * 9 + (target > 30000 ? 8 : 4)));
-        const [quadClass, quadLabel] = getQuadrant(tgi, rateValue, roas);
+        const [quadClass, quadLabel] = getQuadrant(tgi, rateValue);
 
         cells[2].textContent = cells[2].textContent.trim() || 'US';
         cells[3].textContent = 'Ensenior';
@@ -4640,7 +4661,7 @@
 
         const axisCopy = document.getElementById('metric-axis-copy');
         if (axisCopy) {
-          axisCopy.textContent = `当前坐标轴：X = ${metric}渗透率，Y = ${metric} TGI。下方明细表保留全部行为指标。`;
+          axisCopy.textContent = `当前坐标轴：X = ${metric}渗透率，Y = ${metric} TGI。气泡图仅展示当前口径 Top 50；默认基准值支持调整。`;
         }
 
         const actionCopy = document.getElementById('action-metric-copy');
@@ -4757,6 +4778,7 @@
   </script>
 </body>
 </html>
+
 
 
 
