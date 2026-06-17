@@ -584,7 +584,25 @@
 
     .model-filter-area {
       min-width: 0;
+      position: sticky;
+      top: 0;
+      z-index: 35;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 10px;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-bottom: 1px solid #d6e0ef;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, .96);
+      box-shadow: 0 8px 18px rgba(31, 45, 68, .08);
+      backdrop-filter: blur(8px);
+    }
+
+    .model-filter-area .filters {
       flex: 1;
+      min-width: 0;
     }
 
     .title-row {
@@ -734,6 +752,23 @@
     .control.search {
       color: #9aa3b2;
       justify-content: flex-start;
+    }
+
+    .audience-search {
+      width: 200px;
+      min-width: 200px;
+      gap: 8px;
+      padding: 0 12px;
+      color: #9aa3b2;
+      justify-content: flex-start;
+      overflow: hidden;
+    }
+
+    .audience-search .search-placeholder {
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .chev {
@@ -921,8 +956,177 @@
 
     .overview-grid {
       display: grid;
-      grid-template-columns: minmax(420px, .78fr) minmax(620px, 1.22fr);
+      grid-template-columns: minmax(0, 1fr);
       gap: 14px;
+    }
+
+    .concept-strip {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .concept-card {
+      border: 1px solid #dbe5f4;
+      background: #fbfcff;
+      border-radius: 3px;
+      padding: 10px 12px;
+    }
+
+    .concept-card strong {
+      display: block;
+      color: #243044;
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    .concept-card span {
+      color: #667386;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .axis-config {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      background: #fbfcff;
+    }
+
+    .scatter-title-row {
+      height: auto;
+      min-height: 48px;
+      gap: 12px;
+      flex-wrap: nowrap;
+      padding-top: 8px;
+      padding-bottom: 8px;
+    }
+
+    .scatter-title-main {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 10px;
+      min-width: 220px;
+      flex: 0 0 auto;
+    }
+
+    .scatter-title-actions {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: nowrap;
+      gap: 8px;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+
+    .scatter-title-actions .axis-config-group {
+      justify-content: flex-end;
+    }
+
+    .scatter-title-actions .axis-note {
+      max-width: 360px;
+      text-align: right;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .scatter-title-actions .panel-sub {
+      min-width: 0;
+      max-width: 360px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: right;
+    }
+
+    .axis-config-group {
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .axis-config-group.hidden {
+      display: none;
+    }
+
+    .axis-select {
+      height: 30px;
+      min-width: 154px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      background: #fff;
+      padding: 0 9px;
+      color: #5f6c82;
+      font-size: 12px;
+      font-weight: 650;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .axis-field {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 30px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      background: #fff;
+      padding: 0 8px;
+      color: #5f6c82;
+      font-size: 12px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .scatter-title-actions .axis-field {
+      height: 32px;
+      flex: none;
+    }
+
+    .scatter-title-actions .axis-field select {
+      min-width: 92px;
+      max-width: 118px;
+    }
+
+    .axis-field select {
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: #243044;
+      font: inherit;
+      min-width: 116px;
+      cursor: pointer;
+    }
+
+    .axis-note {
+      color: #8190a4;
+      font-size: 12px;
+    }
+
+    .priority-sentence {
+      margin: 0 14px 12px;
+      padding: 9px 10px;
+      border: 1px solid #dbe5f4;
+      border-radius: 3px;
+      background: #fbfcff;
+      color: #526074;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .priority-sentence strong {
+      color: #243044;
     }
 
     .decision-brief {
@@ -998,16 +1202,11 @@
       font-size: 12px;
     }
 
-    .chart-panel,
-    .action-panel {
+    .chart-panel {
       border: 1px solid var(--border);
       background: #fff;
       border-radius: 2px;
       min-width: 0;
-    }
-
-    .action-panel {
-      order: -1;
     }
 
     .panel-title {
@@ -1045,6 +1244,9 @@
       color: #748197;
       font-size: 12px;
       font-weight: 650;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .axis.x {
@@ -1060,33 +1262,72 @@
       transform-origin: left top;
     }
 
-    .quad-label {
+    .axis-help {
+      position: relative;
+      width: 16px;
+      height: 16px;
+      border: 1px solid #b7c4d6;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #6e7c91;
+      font-size: 10px;
+      font-weight: 800;
+      background: #fff;
+      cursor: help;
+      flex: none;
+    }
+
+    .axis-help::after {
+      content: attr(data-tip);
       position: absolute;
-      border: 1px solid #d5deeb;
-      background: rgba(255, 255, 255, .92);
+      left: 50%;
+      bottom: calc(100% + 10px);
+      z-index: 20;
+      width: 240px;
+      padding: 10px 12px;
+      border: 1px solid #9bb8ff;
       border-radius: 4px;
-      padding: 7px 9px;
-      max-width: 168px;
-      box-shadow: 0 4px 12px rgba(31, 45, 69, .06);
-    }
-
-    .quad-label strong {
-      display: block;
-      font-size: 13px;
-      color: #1e2b3d;
-      margin-bottom: 2px;
-    }
-
-    .quad-label span {
-      display: block;
-      color: #748197;
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(31, 45, 68, .16);
+      color: #4d5c70;
       font-size: 12px;
+      font-weight: 700;
+      line-height: 1.6;
+      white-space: pre-line;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 6px);
+      transition: opacity .15s ease, transform .15s ease;
     }
 
-    .quad-label.q1 { top: 12px; right: 12px; }
-    .quad-label.q2 { top: 12px; left: 34px; }
-    .quad-label.q3 { bottom: 34px; left: 34px; }
-    .quad-label.q4 { bottom: 34px; right: 12px; }
+    .axis-help::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 4px);
+      z-index: 21;
+      width: 10px;
+      height: 10px;
+      border-right: 1px solid #9bb8ff;
+      border-bottom: 1px solid #9bb8ff;
+      background: #fff;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 6px) rotate(45deg);
+      transition: opacity .15s ease, transform .15s ease;
+    }
+
+    .axis-help:hover::after,
+    .axis-help:hover::before {
+      opacity: 1;
+      transform: translate(-50%, 0) rotate(0deg);
+    }
+
+    .axis-help:hover::before {
+      transform: translate(-50%, 0) rotate(45deg);
+    }
 
     .bubble {
       position: absolute;
@@ -1318,13 +1559,579 @@
     }
 
     .action-detail-card {
-      order: 97;
+      order: 96;
       margin-top: 10px;
     }
 
     .category-drill-card {
       order: 98;
       margin-top: 10px;
+    }
+
+    .penetration-card {
+      order: 98;
+      margin-top: 10px;
+    }
+
+    .penetration-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+      padding: 12px;
+    }
+
+    .penetration-panel {
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: #fff;
+      min-width: 0;
+    }
+
+    .penetration-panel-head {
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      padding: 0 10px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 800;
+      color: #243044;
+    }
+
+    .penetration-panel-title {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 260px;
+    }
+
+    .adtype-panel-title {
+      display: inline-block;
+      width: 126px;
+      white-space: nowrap;
+    }
+
+    .adtype-panel-head {
+      flex-wrap: nowrap;
+    }
+
+    .adtype-panel-head .penetration-panel-title {
+      min-width: 0;
+      flex: 0 0 auto;
+    }
+
+    .adtype-panel-head .penetration-controls {
+      flex-wrap: nowrap;
+      white-space: nowrap;
+    }
+
+    .penetration-detail-head {
+      flex-wrap: nowrap;
+      align-items: center;
+    }
+
+    .penetration-detail-head > div:first-child {
+      min-width: 0;
+      flex: 0 0 auto;
+    }
+
+    .penetration-detail-head .detail-tools {
+      flex-wrap: nowrap;
+      white-space: nowrap;
+      margin-left: auto;
+    }
+
+    .penetration-controls {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+
+    .penetration-select {
+      height: 30px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 8px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      background: #fff;
+      color: #647184;
+      font-size: 12px;
+      font-weight: 750;
+      white-space: nowrap;
+    }
+
+    .penetration-select select {
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: #243044;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .penetration-canvas {
+      height: 310px;
+      position: relative;
+      margin: 16px 20px 80px 62px;
+      border-left: 1px solid #cad3e1;
+      border-bottom: 1px solid #cad3e1;
+      background:
+        linear-gradient(to bottom, rgba(224, 230, 239, .7) 1px, transparent 1px) 0 0 / 100% 52px;
+    }
+
+    .histogram-scale {
+      position: absolute;
+      left: -54px;
+      top: -8px;
+      bottom: -2px;
+      width: 46px;
+      display: grid;
+      grid-template-rows: repeat(6, 1fr);
+      color: #738093;
+      font-size: 11px;
+      text-align: right;
+    }
+
+    .histogram-bar {
+      position: absolute;
+      bottom: 0;
+      width: 34px;
+      height: 100%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      border-radius: 3px 3px 0 0;
+      overflow: visible;
+    }
+
+    .histogram-fill,
+    .histogram-empty {
+      display: block;
+      width: 100%;
+      position: relative;
+    }
+
+    .histogram-empty {
+      height: calc(100% - var(--h, 0%));
+      min-height: 0;
+      border-radius: 3px 3px 0 0;
+      background: #dfe7f2;
+    }
+
+    .histogram-fill {
+      height: var(--h, 0%);
+      background: #3f6ff3;
+    }
+
+    .histogram-segment-value {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 50%;
+      translate: 0 -50%;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      white-space: nowrap;
+      font-variant-numeric: tabular-nums;
+      text-shadow: 0 1px 1px rgba(31, 45, 61, .25);
+      pointer-events: none;
+    }
+
+    .histogram-segment-value.hidden {
+      display: none;
+    }
+
+    .histogram-empty .histogram-segment-value {
+      color: #516179;
+      text-shadow: none;
+    }
+
+    .histogram-fill .histogram-segment-value {
+      color: #fff;
+    }
+
+    .histogram-empty[data-tip]::after,
+    .histogram-fill[data-tip]::after {
+      content: attr(data-tip);
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 10px);
+      z-index: 20;
+      width: 236px;
+      padding: 10px 12px;
+      border: 1px solid #9bb8ff;
+      border-radius: 4px;
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(31, 45, 68, .16);
+      color: #4d5c70;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.65;
+      white-space: pre-line;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 6px);
+      transition: opacity .15s ease, transform .15s ease;
+    }
+
+    .histogram-empty[data-tip]::before,
+    .histogram-fill[data-tip]::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 4px);
+      z-index: 21;
+      width: 10px;
+      height: 10px;
+      border-right: 1px solid #9bb8ff;
+      border-bottom: 1px solid #9bb8ff;
+      background: #fff;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 6px) rotate(45deg);
+      transition: opacity .15s ease, transform .15s ease;
+    }
+
+    .histogram-empty[data-tip]:hover::after,
+    .histogram-empty[data-tip]:hover::before,
+    .histogram-fill[data-tip]:hover::after,
+    .histogram-fill[data-tip]:hover::before {
+      opacity: 1;
+      transform: translate(-50%, 0) rotate(0deg);
+    }
+
+    .histogram-empty[data-tip]:hover::before,
+    .histogram-fill[data-tip]:hover::before {
+      transform: translate(-50%, 0) rotate(45deg);
+    }
+
+    .histogram-label {
+      position: absolute;
+      bottom: -76px;
+      width: 104px;
+      max-height: 80px;
+      transform: translateX(-50%) rotate(-45deg);
+      transform-origin: top center;
+      color: #5f6c82;
+      font-size: 11px;
+      line-height: 1.2;
+      text-align: right;
+      white-space: normal;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      word-break: break-word;
+    }
+
+    .dumbbell-canvas {
+      position: relative;
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr);
+      grid-template-rows: 116px 38px 116px;
+      column-gap: 12px;
+      row-gap: 8px;
+      margin: 12px 16px 10px;
+      padding: 12px 10px 10px;
+      min-height: 330px;
+      border: 1px solid #edf2f8;
+      background: #fbfcff;
+    }
+
+    .dumbbell-canvas::before {
+      display: none;
+    }
+
+    .dumbbell-row {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: stretch;
+      gap: 14px;
+      min-height: 118px;
+    }
+
+    .dumbbell-side {
+      display: contents;
+    }
+
+    .dumbbell-side-label {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      color: #647184;
+      font-size: 11px;
+      font-weight: 800;
+      text-align: right;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .dumbbell-rate {
+      color: #243044;
+      font-size: 10px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+      overflow: visible;
+      text-overflow: clip;
+    }
+
+    .dumbbell-track {
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      flex: 1 1 0;
+      min-width: 0;
+      width: 32px;
+      max-width: 32px;
+      justify-self: center;
+      height: 100%;
+      border-radius: 0;
+      overflow: visible;
+    }
+
+    .dumbbell-fill {
+      position: relative;
+      width: 32px;
+      min-width: 2px;
+      border-radius: 0;
+      cursor: default;
+    }
+
+    .dumbbell-base .dumbbell-fill {
+      background: var(--blue);
+    }
+
+    .dumbbell-compare .dumbbell-fill {
+      background: var(--green);
+    }
+
+    .dumbbell-fill.is-leader {
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .28);
+    }
+
+    .dumbbell-fill-copy {
+      position: absolute;
+      left: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      white-space: nowrap;
+      transform: translateX(-50%);
+    }
+
+    .dumbbell-fill[data-tip]::after {
+      content: attr(data-tip);
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 10px);
+      z-index: 20;
+      width: 236px;
+      padding: 10px 12px;
+      border: 1px solid #9bb8ff;
+      border-radius: 4px;
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(31, 45, 68, .16);
+      color: #4d5c70;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.65;
+      white-space: pre-line;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 6px);
+      transition: opacity .15s ease, transform .15s ease;
+    }
+
+    .dumbbell-fill[data-tip]::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 4px);
+      z-index: 21;
+      width: 10px;
+      height: 10px;
+      border-right: 1px solid #9bb8ff;
+      border-bottom: 1px solid #9bb8ff;
+      background: #fff;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 6px) rotate(45deg);
+      transition: opacity .15s ease, transform .15s ease;
+    }
+
+    .dumbbell-fill[data-tip]:hover::after,
+    .dumbbell-fill[data-tip]:hover::before {
+      opacity: 1;
+      transform: translate(-50%, 0) rotate(0deg);
+    }
+
+    .dumbbell-fill[data-tip]:hover::before {
+      transform: translate(-50%, 0) rotate(45deg);
+    }
+
+    .dumbbell-fill-copy {
+      justify-content: center;
+    }
+
+    .dumbbell-diff {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 16px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 5px;
+      border-radius: 2px;
+      background: #fff;
+      color: #2f5fe8;
+      font-size: 9px;
+      font-weight: 800;
+      line-height: 1;
+      white-space: nowrap;
+      text-shadow: none;
+      box-shadow: 0 1px 3px rgba(31, 45, 61, .12);
+      pointer-events: none;
+    }
+
+    .dumbbell-left .dumbbell-diff {
+      right: calc(100% + 4px);
+    }
+
+    .dumbbell-right .dumbbell-diff {
+      left: calc(100% + 4px);
+      color: #12805c;
+    }
+
+    .dumbbell-diff.hidden {
+      display: none;
+    }
+
+    .dumbbell-label {
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      color: #243044;
+      font-size: 10px;
+      font-weight: 700;
+      line-height: 1.2;
+      text-align: center;
+      padding: 0;
+      background: transparent;
+      width: 72px;
+      max-width: 72px;
+      justify-self: center;
+      white-space: normal;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      word-break: break-word;
+    }
+
+    .dumbbell-label-row {
+      grid-column: 2;
+      display: grid;
+      grid-template-columns: repeat(var(--bar-count, 10), minmax(0, 1fr));
+      gap: 14px;
+      min-height: 38px;
+      align-items: start;
+    }
+
+    .dumbbell-base,
+    .dumbbell-compare {
+      grid-column: 1 / span 2;
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr);
+      column-gap: 12px;
+      min-height: 116px;
+    }
+
+    .dumbbell-base {
+      grid-row: 1;
+      position: relative;
+    }
+
+    .dumbbell-base::after {
+      content: '';
+      position: absolute;
+      left: 54px;
+      right: 0;
+      top: 6px;
+      bottom: 6px;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(115, 128, 147, .18) 0 1px,
+          transparent 1px 22px
+        );
+      opacity: .9;
+      pointer-events: none;
+    }
+
+    .dumbbell-compare {
+      grid-row: 3;
+      position: relative;
+    }
+
+    .dumbbell-compare::after {
+      content: '';
+      position: absolute;
+      left: 54px;
+      right: 0;
+      top: 6px;
+      bottom: 6px;
+      background:
+        repeating-linear-gradient(
+          to bottom,
+          rgba(115, 128, 147, .18) 0 1px,
+          transparent 1px 22px
+        );
+      opacity: .9;
+      pointer-events: none;
+    }
+
+    .dumbbell-bar-row {
+      display: grid;
+      grid-template-columns: repeat(var(--bar-count, 10), minmax(0, 1fr));
+      gap: 14px;
+      align-items: stretch;
+      min-width: 0;
+    }
+
+    .dumbbell-base .dumbbell-track {
+      align-items: flex-end;
+    }
+
+    .dumbbell-compare .dumbbell-track {
+      align-items: flex-start;
+    }
+
+    .dumbbell-base .dumbbell-fill-copy {
+      bottom: calc(100% + 4px);
+    }
+
+    .dumbbell-compare .dumbbell-fill-copy {
+      top: calc(100% + 4px);
+    }
+
+    .dumbbell-axis {
+      display: none;
     }
 
     .operator-view {
@@ -1337,6 +2144,18 @@
       margin: 18px 12px 0;
       padding: 16px 0 10px;
       border-top: 1px solid var(--border);
+    }
+
+    .wide-table-head.compact-head {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin: 0;
+      padding: 10px 12px;
+      border-top: 0;
+      border-bottom: 1px solid var(--border);
     }
 
     .operator-title {
@@ -3231,7 +4050,16 @@
         flex-direction: column;
       }
 
+      .model-filter-area {
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+
       .overview-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .penetration-grid {
         grid-template-columns: 1fr;
       }
 
@@ -3443,7 +4271,7 @@
               </div>
               <div>
                 <div class="model-name">人群机会</div>
-                <div class="model-sub">TGI、渗透率、品线机会象限</div>
+                <div class="model-sub">TGI、渗透率、实际值指标</div>
               </div>
             </div>
             <div class="model-status"><span class="status-dot"></span>当前模型</div>
@@ -3458,7 +4286,7 @@
               </div>
               <div class="model-title-meta">
                 <h1>人群机会分析</h1>
-                <p>先给出保量、扩量与复盘建议，再用 TGI、渗透率、ROAS 和人群规模解释每个投放动作的依据。</p>
+                <p>基于 TGI、渗透率和实际值指标，识别人群标签的机会分布与优先查看对象。</p>
               </div>
             </div>
             <div class="model-hero-actions">
@@ -3468,227 +4296,15 @@
               </button>
             </div>
           </div>
-          <div class="model-hero-body">
-            <div class="model-filter-area">
-              <div class="filters">
-                <div class="control with-label"><span class="control-label">品牌</span><span class="control-value">Ensenior <span class="chev"></span></span></div>
-                <div class="control with-label"><span class="control-label">品线</span><span class="control-value">Recessed Lighting... <span class="chev"></span></span></div>
-                <div class="control with-label"><span class="control-label">广告类型</span><span class="control-value">全部类型 <span class="chev"></span></span></div>
-                <div class="control search">搜索人群名称</div>
-                <div class="control search">搜索人群 ID</div>
-                <button class="btn secondary" id="advanced-filter-trigger" type="button">高级筛选</button>
-              </div>
-            </div>
-          </div>
         </div>
 
-        <section class="overview">
-          <div class="decision-brief">
-            <div>
-              <div class="decision-kicker">购买口径 · 投放结论生成</div>
-              <div class="decision-title">Recessed Lighting 相关人群优先保量，Home Improvement 大盘兴趣人群建议扩量测试，低 TGI 广覆盖人群进入控本复盘。</div>
-              <div class="decision-copy">结论由当前指标口径下的人群 TGI、渗透率、目标用户数与 ROAS 综合生成；未匹配人群仅保留在明细中，不进入机会象限。</div>
-            </div>
-            <div class="decision-tags">
-              <span class="badge green">保量 1,670</span>
-              <span class="badge blue">扩量 2,307</span>
-              <span class="badge amber">复盘 2,704</span>
-            </div>
-          </div>
-
-          <div class="metric-switch">
-            <div class="segment-control">
-              <span class="seg-btn" data-metric="曝光">曝光</span>
-              <span class="seg-btn" data-metric="点击">点击</span>
-              <span class="seg-btn" data-metric="DPV">DPV</span>
-              <span class="seg-btn" data-metric="ATC">ATC</span>
-              <span class="seg-btn active" data-metric="购买">购买</span>
-              <span class="seg-btn" data-metric="NTB">NTB</span>
-            </div>
-            <div class="panel-sub" id="metric-axis-copy">当前坐标轴：X = 购买渗透率，Y = 购买 TGI。气泡图仅展示当前口径 Top 50；默认基准值支持调整。</div>
-          </div>
-
-          <div class="summary-cards">
-            <div class="summary-card">
-              <div class="summary-label">已匹配人群</div>
-              <div class="summary-value">7,670</div>
-              <div class="summary-note">已匹配 ASI/FSI Segment Size 分母，可参与 TGI 与渗透率计算</div>
-            </div>
-            <div class="summary-card">
-              <div class="summary-label">核心人群</div>
-              <div class="summary-value">1,670</div>
-              <div class="summary-note">高 TGI + 高渗透</div>
-            </div>
-            <div class="summary-card">
-              <div class="summary-label">扩量观察人群</div>
-              <div class="summary-value">2,307</div>
-              <div class="summary-note">高 TGI + 低渗透</div>
-            </div>
-            <div class="summary-card">
-              <div class="summary-label">未匹配人群</div>
-              <div class="summary-value">122</div>
-              <div class="summary-note">占全量 1.6%</div>
-            </div>
-          </div>
-
-          <div class="overview-grid">
-            <article class="chart-panel">
-              <div class="panel-title">
-                <span>TGI × 渗透率象限</span>
-                <span class="panel-sub">默认基准：平均 TGI 100，平均购买渗透率 0.072%</span>
-              </div>
-              <div class="quadrant">
-                <div class="axis y">TGI</div>
-                <div class="axis x">渗透率</div>
-                <div class="quad-label q1"><strong>核心保量</strong><span>高 TGI + 高渗透</span></div>
-                <div class="quad-label q2"><strong>优先扩量</strong><span>高 TGI + 低渗透</span></div>
-                <div class="quad-label q3"><strong>暂缓投放</strong><span>低 TGI + 低渗透</span></div>
-                <div class="quad-label q4"><strong>控本复盘</strong><span>低 TGI + 高渗透</span></div>
-                <div class="bubble core tip-left" data-tip="IM - Recessed Lighting Housing &amp; Trim Kits&#10;TGI：4,325&#10;购买渗透率：3.131%&#10;购买用户数：21,827&#10;ROAS：10.05" style="left: 82%; top: 16%; width: 58px; height: 58px;">RH</div>
-                <div class="bubble core tip-left" data-tip="IM - Recessed Light Fixtures&#10;TGI：3,979&#10;购买渗透率：2.880%&#10;购买用户数：22,201&#10;ROAS：10.00" style="left: 75%; top: 22%; width: 56px; height: 56px;">RF</div>
-                <div class="bubble core tip-left" data-tip="LS - B2B - Business Lookalike - Electricians&#10;TGI：4,047&#10;购买渗透率：2.930%&#10;购买用户数：14,890&#10;ROAS：14.90" style="left: 67%; top: 18%; width: 50px; height: 50px;">EL</div>
-                <div class="bubble core" data-tip="LS - B2B - Business Lookalike - Plumbers&#10;TGI：1,714&#10;购买渗透率：1.241%&#10;购买用户数：15,797&#10;ROAS：11.57" style="left: 52%; top: 35%; width: 51px; height: 51px;">PL</div>
-                <div class="bubble core not-running" data-tip="LS - Interested in Home Improvement - Household Hardware&#10;TGI：202&#10;购买渗透率：0.146%&#10;购买用户数：63,135&#10;ROAS：7.61&#10;状态：未投放" style="left: 31%; top: 57%; width: 66px; height: 66px;">HH</div>
-                <div class="bubble grow not-running" data-tip="LS - Interested in Home Improvement&#10;TGI：103&#10;购买渗透率：0.074%&#10;购买用户数：81,102&#10;ROAS：7.17&#10;状态：未投放" style="left: 22%; top: 48%; width: 70px; height: 70px;">HI</div>
-                <div class="bubble low tip-up not-running" data-tip="LS - B2B - Seller Central Lookalikes&#10;TGI：29&#10;购买渗透率：0.021%&#10;购买用户数：80,812&#10;ROAS：6.87&#10;状态：未投放" style="left: 18%; top: 80%; width: 68px; height: 68px;">SC</div>
-              </div>
-              <div class="legend">
-                <span><span class="legend-dot" style="background: var(--green);"></span>核心保量</span>
-                <span><span class="legend-dot" style="background: var(--blue);"></span>优先扩量</span>
-                <span><span class="legend-dot" style="background: var(--amber);"></span>控本复盘</span>
-                <span><span class="legend-dot" style="background: var(--red);"></span>暂缓投放</span>
-                <span class="legend-status"><span><span class="status-dot-solid"></span>投放中</span><span><span class="status-dot-dashed"></span>未投放</span></span>
-              </div>
-            </article>
-
-            <aside class="action-panel">
-              <div class="panel-title">
-                <span>推荐动作</span>
-                <span class="panel-sub" id="action-metric-copy">购买指标</span>
-              </div>
-              <div class="action-list">
-                <div class="action-card">
-                  <div class="action-top"><span class="action-title">保量：保护核心照明相关人群</span><span class="badge green">P0</span></div>
-                  <div class="action-desc">Recessed Lighting、Light Fixtures、Electricians 等标签 TGI 超过 3,900，购买渗透率接近 3%，应优先保障预算和稳定 ROAS。</div>
-                  <div class="action-metrics">
-                    <div class="mini"><span>最高 TGI</span><strong>4,325</strong></div>
-                    <div class="mini"><span>最高渗透率</span><strong>3.131%</strong></div>
-                    <div class="mini"><span>最高 ROAS</span><strong>14.90</strong></div>
-                  </div>
-                </div>
-                <div class="action-card">
-                  <div class="action-top"><span class="action-title">扩量：测试家装硬件兴趣人群</span><span class="badge blue">P1</span></div>
-                  <div class="action-desc">Home Improvement、Household Hardware 等大盘人群购买用户数高，TGI 略高于均值，适合做预算扩展和素材分层验证。</div>
-                  <div class="action-metrics">
-                    <div class="mini"><span>扩量人群</span><strong>2,307</strong></div>
-                    <div class="mini"><span>平均 TGI</span><strong>116</strong></div>
-                    <div class="mini"><span>购买用户</span><strong>1,048万</strong></div>
-                  </div>
-                </div>
-                <div class="action-card">
-                  <div class="action-top"><span class="action-title">控本：复盘低 TGI 广覆盖人群</span><span class="badge amber">P2</span></div>
-                  <div class="action-desc">Seller Central Lookalikes、Home Builders 等购买用户数不低，但 TGI 低于 100，建议只保留绩效达标组合，避免按人群相关性继续扩量。</div>
-                  <div class="action-metrics">
-                    <div class="mini"><span>低 TGI 人群</span><strong>2,704</strong></div>
-                    <div class="mini"><span>平均 TGI</span><strong>75</strong></div>
-                    <div class="mini"><span>花费</span><strong>$2.50亿</strong></div>
-                  </div>
-                </div>
-              </div>
-            </aside>
-          </div>
-        </section>
-
-        <section class="detail-card action-detail-card">
-          <div class="detail-head">
-            <div>
-              <div class="detail-title">人群机会清单</div>
-              <div class="detail-desc">基于 TGI、渗透率、ROAS 和人群规模，输出各人群的投放优先级与建议动作。</div>
-            </div>
-            <div class="detail-tools">
-              <button class="btn secondary">指标配置</button>
-            </div>
-          </div>
-
-          <div class="operator-view">
-            <div class="data-table-wrap" style="max-height: 220px;">
-              <table class="operator-table">
-                <thead>
-                  <tr>
-                    <th>建议动作</th>
-                    <th>人群名称</th>
-                    <th>人群规模</th>
-                    <th>购买用户数</th>
-                    <th>购买渗透率</th>
-                    <th>TGI</th>
-                    <th>ROAS</th>
-                    <th>广告花费</th>
-                    <th>CTR</th>
-                    <th>CVR</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><span class="quad-tag core">核心保量</span></td>
-                    <td><span class="segment-name">IM - Recessed Lighting Housing & Trim Kits</span></td>
-                    <td>697,153</td>
-                    <td>21,827</td>
-                    <td>3.131%</td>
-                    <td class="metric-strong">4,325</td>
-                    <td>10.05</td>
-                    <td>$456,790</td>
-                    <td>14.7%</td>
-                    <td>11.6%</td>
-                  </tr>
-                  <tr>
-                    <td><span class="quad-tag core">核心保量</span></td>
-                    <td><span class="segment-name">LS - B2B - Business Lookalike - Electricians</span></td>
-                    <td>508,232</td>
-                    <td>14,890</td>
-                    <td>2.930%</td>
-                    <td class="metric-strong">4,047</td>
-                    <td>14.90</td>
-                    <td>$382,705</td>
-                    <td>13.9%</td>
-                    <td>12.4%</td>
-                  </tr>
-                  <tr>
-                    <td><span class="quad-tag grow">优先扩量</span></td>
-                    <td><span class="segment-name">LS - Interested in Home Improvement</span></td>
-                    <td>109,254,420</td>
-                    <td>81,102</td>
-                    <td>0.074%</td>
-                    <td class="metric-strong">103</td>
-                    <td>7.17</td>
-                    <td>$1,472,903</td>
-                    <td>2.8%</td>
-                    <td>3.8%</td>
-                  </tr>
-                  <tr>
-                    <td><span class="quad-tag watch">控本复盘</span></td>
-                    <td><span class="segment-name">LS - B2B - Seller Central Lookalikes</span></td>
-                    <td>384,487,224</td>
-                    <td>80,812</td>
-                    <td>0.021%</td>
-                    <td class="metric-strong">29</td>
-                    <td>6.87</td>
-                    <td>$2,701,852</td>
-                    <td>2.5%</td>
-                    <td>0.4%</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <section class="detail-card opportunity-wide-card">
-          <div class="wide-table-head">
-            <div class="detail-title">人群机会分析宽表</div>
-          </div>
-
-          <div class="data-filters">
-            <div class="wide-category-cascade" id="wide-category-cascade" aria-label="宽表类目三级联动筛选">
+        <div class="model-filter-area">
+          <div class="filters">
+            <div class="control with-label"><span class="control-label">品牌</span><span class="control-value">Ensenior <span class="chev"></span></span></div>
+            <div class="control with-label"><span class="control-label">品线</span><span class="control-value">Recessed Lighting... <span class="chev"></span></span></div>
+            <div class="control with-label"><span class="control-label">广告类型</span><span class="control-value">全部类型 <span class="chev"></span></span></div>
+            <div class="control with-label"><span class="control-label">人群类型</span><span class="control-value">全部类型 <span class="chev"></span></span></div>
+            <div class="wide-category-cascade" id="wide-category-cascade" aria-label="全局类目三级联动筛选">
               <button class="demo-cascade-trigger" id="wide-cascade-trigger" type="button" aria-expanded="false">
                 <span class="category-cascade-label">类目</span>
                 <span class="demo-cascade-value" id="wide-cascade-value">全部类目</span>
@@ -3709,7 +4325,167 @@
                 </div>
               </div>
             </div>
-            <div class="filter-spacer"></div>
+            <div class="control audience-search"><span>搜索人群名称/ID</span></div>
+            <button class="btn secondary" id="advanced-filter-trigger" type="button">高级筛选</button>
+          </div>
+        </div>
+
+        <section class="overview">
+          <div class="overview-grid">
+            <article class="chart-panel">
+              <div class="panel-title scatter-title-row">
+                <div class="scatter-title-main">
+                  <span>人群机会分布</span>
+                </div>
+                <div class="scatter-title-actions">
+                  <div class="axis-config-group" id="scatter-config">
+                  <label class="axis-field">Y 轴
+                    <select id="axis-y-select">
+                      <option>购买 TGI</option>
+                      <option>曝光 TGI</option>
+                      <option>点击 TGI</option>
+                      <option>DPV TGI</option>
+                      <option>ATC TGI</option>
+                      <option>NTB TGI</option>
+                    </select>
+                  </label>
+                  <label class="axis-field">X 轴
+                    <select id="axis-x-select">
+                      <option>购买渗透率</option>
+                      <option>曝光渗透率</option>
+                      <option>点击渗透率</option>
+                      <option>DPV 渗透率</option>
+                      <option>ATC 渗透率</option>
+                      <option>NTB 渗透率</option>
+                    </select>
+                  </label>
+                  <label class="axis-field">气泡
+                    <select id="bubble-metric-select">
+                      <option>曝光用户数</option>
+                      <option>人群规模</option>
+                      <option>购买用户数</option>
+                      <option>目标用户数</option>
+                      <option>广告花费</option>
+                      <option>销售额</option>
+                    </select>
+                  </label>
+                  </div>
+                </div>
+              </div>
+              <span class="axis-note" id="axis-mode-note" style="display:none;">自由散点图仅支持 TGI × 渗透率 指标组合；气泡大小选择实际值类指标，四象限颜色仅用于观察高低分区。</span>
+              <div class="quadrant">
+                <div class="axis y" id="axis-y-label">
+                  <span class="axis-label-text">购买 TGI</span>
+                  <span class="axis-help" data-tip="购买 TGI：用于衡量当前标签在目标行为上的相对倾向。&#10;计算公式：当前标签目标行为渗透率 / 大盘目标行为渗透率 × 100">?</span>
+                </div>
+                <div class="axis x" id="axis-x-label">
+                  <span class="axis-label-text">购买渗透率</span>
+                  <span class="axis-help" data-tip="购买渗透率：用于衡量当前标签在目标行为上的覆盖程度。&#10;计算公式：当前标签目标行为用户数 / 当前标签人群规模">?</span>
+                </div>
+                <div class="bubble core tip-left" data-tip="IM - Recessed Lighting Housing &amp; Trim Kits&#10;TGI：4,325&#10;购买渗透率：3.131%&#10;购买用户数：21,827&#10;ROAS：10.05" style="left: 82%; top: 16%; width: 58px; height: 58px;">RH</div>
+                <div class="bubble core tip-left" data-tip="IM - Recessed Light Fixtures&#10;TGI：3,979&#10;购买渗透率：2.880%&#10;购买用户数：22,201&#10;ROAS：10.00" style="left: 75%; top: 22%; width: 56px; height: 56px;">RF</div>
+                <div class="bubble core tip-left" data-tip="LS - B2B - Business Lookalike - Electricians&#10;TGI：4,047&#10;购买渗透率：2.930%&#10;购买用户数：14,890&#10;ROAS：14.90" style="left: 67%; top: 18%; width: 50px; height: 50px;">EL</div>
+                <div class="bubble core" data-tip="LS - B2B - Business Lookalike - Plumbers&#10;TGI：1,714&#10;购买渗透率：1.241%&#10;购买用户数：15,797&#10;ROAS：11.57" style="left: 52%; top: 35%; width: 51px; height: 51px;">PL</div>
+                <div class="bubble core not-running" data-tip="LS - Interested in Home Improvement - Household Hardware&#10;TGI：202&#10;购买渗透率：0.146%&#10;购买用户数：63,135&#10;ROAS：7.61&#10;状态：未投放" style="left: 31%; top: 57%; width: 66px; height: 66px;">HH</div>
+                <div class="bubble grow not-running" data-tip="LS - Interested in Home Improvement&#10;TGI：103&#10;购买渗透率：0.074%&#10;购买用户数：81,102&#10;ROAS：7.17&#10;状态：未投放" style="left: 22%; top: 48%; width: 70px; height: 70px;">HI</div>
+                <div class="bubble low tip-up not-running" data-tip="LS - B2B - Seller Central Lookalikes&#10;TGI：29&#10;购买渗透率：0.021%&#10;购买用户数：80,812&#10;ROAS：6.87&#10;状态：未投放" style="left: 18%; top: 80%; width: 68px; height: 68px;">SC</div>
+              </div>
+              <div class="legend">
+                <span id="legend-core"><span class="legend-dot" style="background: var(--green);"></span>高 TGI + 高渗透</span>
+                <span id="legend-grow"><span class="legend-dot" style="background: var(--blue);"></span>高 TGI + 低渗透</span>
+                <span id="legend-watch"><span class="legend-dot" style="background: var(--amber);"></span>低 TGI + 高渗透</span>
+                <span id="legend-low"><span class="legend-dot" style="background: var(--red);"></span>低 TGI + 低渗透</span>
+                <span class="legend-status"><span><span class="status-dot-solid"></span>投放中</span><span><span class="status-dot-dashed"></span>未投放</span></span>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="detail-card action-detail-card">
+          <div class="detail-head">
+            <div>
+              <div class="detail-title">散点标签明细</div>
+            </div>
+            <div class="detail-tools">
+              <button class="btn secondary">指标配置</button>
+            </div>
+          </div>
+
+          <div class="operator-view">
+            <div class="data-table-wrap" style="max-height: 220px;">
+              <table class="operator-table">
+                <thead>
+                  <tr>
+                    <th>指标分区</th>
+                    <th>人群名称</th>
+                    <th>人群规模</th>
+                    <th id="bubble-th">曝光用户数</th>
+                    <th id="x-axis-th">购买渗透率</th>
+                    <th id="y-axis-th">购买 TGI</th>
+                    <th>ROAS</th>
+                    <th>广告花费</th>
+                    <th>CTR</th>
+                    <th>CVR</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="quad-tag core">高TGI高渗透</span></td>
+                    <td><span class="segment-name">IM - Recessed Lighting Housing & Trim Kits</span></td>
+                    <td>697,153</td>
+                    <td>21,827</td>
+                    <td>3.131%</td>
+                    <td class="metric-strong">4,325</td>
+                    <td>10.05</td>
+                    <td>$456,790</td>
+                    <td>14.7%</td>
+                    <td>11.6%</td>
+                  </tr>
+                  <tr>
+                    <td><span class="quad-tag core">高TGI高渗透</span></td>
+                    <td><span class="segment-name">LS - B2B - Business Lookalike - Electricians</span></td>
+                    <td>508,232</td>
+                    <td>14,890</td>
+                    <td>2.930%</td>
+                    <td class="metric-strong">4,047</td>
+                    <td>14.90</td>
+                    <td>$382,705</td>
+                    <td>13.9%</td>
+                    <td>12.4%</td>
+                  </tr>
+                  <tr>
+                    <td><span class="quad-tag grow">高TGI低渗透</span></td>
+                    <td><span class="segment-name">LS - Interested in Home Improvement</span></td>
+                    <td>109,254,420</td>
+                    <td>81,102</td>
+                    <td>0.074%</td>
+                    <td class="metric-strong">103</td>
+                    <td>7.17</td>
+                    <td>$1,472,903</td>
+                    <td>2.8%</td>
+                    <td>3.8%</td>
+                  </tr>
+                  <tr>
+                    <td><span class="quad-tag watch">低TGI低渗透</span></td>
+                    <td><span class="segment-name">LS - B2B - Seller Central Lookalikes</span></td>
+                    <td>384,487,224</td>
+                    <td>80,812</td>
+                    <td>0.021%</td>
+                    <td class="metric-strong">29</td>
+                    <td>6.87</td>
+                    <td>$2,701,852</td>
+                    <td>2.5%</td>
+                    <td>0.4%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="detail-card opportunity-wide-card">
+          <div class="wide-table-head compact-head">
+            <div class="detail-title">人群机会分析宽表</div>
             <button class="btn secondary" id="metric-config-trigger" type="button">指标配置</button>
           </div>
 
@@ -3732,7 +4508,7 @@
                   <label class="metric-option"><input type="checkbox" checked> TGI</label>
                   <label class="metric-option"><input type="checkbox" checked> 渗透率</label>
                   <label class="metric-option"><input type="checkbox" checked> 评分</label>
-                  <label class="metric-option"><input type="checkbox" checked> 象限</label>
+                  <label class="metric-option"><input type="checkbox" checked> 指标分区</label>
                   <label class="metric-option"><input type="checkbox" checked> 总花费</label>
                   <label class="metric-option"><input type="checkbox" checked> 总销售额</label>
                   <label class="metric-option"><input type="checkbox" checked> NTB 销售额</label>
@@ -3777,7 +4553,7 @@
                   <div class="metric-item" data-field="TGI"><span class="metric-handle">⋮⋮</span><span>TGI</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
                   <div class="metric-item" data-field="渗透率"><span class="metric-handle">⋮⋮</span><span>渗透率</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
                   <div class="metric-item" data-field="评分"><span class="metric-handle">⋮⋮</span><span>评分</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
-                  <div class="metric-item" data-field="象限"><span class="metric-handle">⋮⋮</span><span>象限</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
+                  <div class="metric-item" data-field="指标分区"><span class="metric-handle">⋮⋮</span><span>指标分区</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
                   <div class="metric-item" data-field="总花费"><span class="metric-handle">⋮⋮</span><span>总花费</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
                   <div class="metric-item" data-field="总销售额"><span class="metric-handle">⋮⋮</span><span>总销售额</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
                   <div class="metric-item" data-field="NTB 销售额"><span class="metric-handle">⋮⋮</span><span>NTB 销售额</span><span class="metric-item-actions"><button class="metric-icon-btn move-up" type="button">↑</button><button class="metric-icon-btn move-down" type="button">↓</button><button class="metric-icon-btn remove" type="button">×</button></span></div>
@@ -3834,7 +4610,7 @@
                   <th>TGI</th>
                   <th>渗透率</th>
                   <th>评分</th>
-                  <th>象限</th>
+                  <th>指标分区</th>
                   <th>总花费</th>
                   <th>总销售额</th>
                   <th>NTB 销售额</th>
@@ -3878,7 +4654,7 @@
                   <td class="metric-strong">78</td>
                   <td>0.009%</td>
                   <td>47</td>
-                  <td><span class="quad-tag watch">控本复盘</span></td>
+                  <td><span class="quad-tag low">低TGI低渗透</span></td>
                   <td>$2,701,851.78</td>
                   <td>$11,614,384.59</td>
                   <td>$9,954,609.25</td>
@@ -4094,85 +4870,74 @@
           </div>
         </section>
 
-        <section class="detail-card category-drill-card" id="unmatched-segments">
-          <div class="detail-head">
+        <section class="detail-card penetration-card" id="penetration-performance">
+          <div class="detail-head penetration-detail-head">
             <div>
-              <div class="detail-title">Demo 标签趋势表现分析</div>
-              <div class="detail-desc">基于 Demo 标签数据，展示各 Demo 标签的曝光人数、商品详情页浏览率和购买率变化，用于判断 Demo 标签机会。</div>
+              <div class="detail-title">渗透率表现分析</div>
             </div>
-            <div class="demo-category-cascade" id="demo-category-cascade" aria-label="Demo 类目三级联动筛选">
-              <button class="demo-cascade-trigger" id="demo-cascade-trigger" type="button" aria-expanded="false">
-                <span class="category-cascade-label">类目</span>
-                <span class="demo-cascade-value" id="demo-cascade-value">全部类目</span>
-                <span class="chev"></span>
-              </button>
-              <div class="demo-cascade-panel" id="demo-cascade-panel">
-                <div class="demo-cascade-col">
-                  <div class="demo-cascade-title">一级类目</div>
-                  <div class="demo-cascade-list" id="demo-cascade-l1"></div>
-                </div>
-                <div class="demo-cascade-col">
-                  <div class="demo-cascade-title">二级类目</div>
-                  <div class="demo-cascade-list" id="demo-cascade-l2"></div>
-                </div>
-                <div class="demo-cascade-col">
-                  <div class="demo-cascade-title">三级类目</div>
-                  <div class="demo-cascade-list" id="demo-cascade-l3"></div>
-                </div>
-              </div>
+            <div class="detail-tools">
+              <label class="penetration-select">行为指标
+                <select id="penetration-numerator-select">
+                  <option value="purchase">品牌购买用户数</option>
+                  <option value="exposure">曝光用户数</option>
+                  <option value="click">点击用户数</option>
+                  <option value="dpv">DPV 用户数</option>
+                  <option value="atc">ATC 用户数</option>
+                  <option value="ntb">NTB 用户数</option>
+                </select>
+              </label>
             </div>
           </div>
-
-          <div class="drill-shell">
-            <div class="drill-charts demo-only">
-              <div class="demo-panel drill-panel-combo">
-                <div class="demo-trend-chart">
-                  <div class="demo-trend-toolbar">
-                    <div class="trend-picker"><span><i class="trend-marker bar"></i>曝光人数</span><span class="chev"></span></div>
-                    <div class="trend-picker"><span><i class="trend-marker dpv"></i>商品详情页浏览率</span><span class="chev"></span></div>
-                    <div class="trend-picker"><span><i class="trend-marker buy"></i>购买率</span><span class="chev"></span></div>
-                  </div>
-                  <div class="trend-y-left"><span>9.62M</span><span>7.70M</span><span>5.77M</span><span>3.85M</span><span>1.92M</span><span>0.00</span></div>
-                  <div class="trend-y-right"><span>1.9000%</span><span>1.5200%</span><span>1.1400%</span><span>0.7600%</span><span>0.3800%</span><span>0.0000%</span></div>
-                  <div class="trend-y-right-alt"><span>2.1000%</span><span>1.6800%</span><span>1.2600%</span><span>0.8400%</span><span>0.4200%</span><span>0.0000%</span></div>
-                  <div class="demo-trend-plot">
-                    <div class="trend-bars">
-                      <div class="trend-bar" style="height:100%"></div>
-                      <div class="trend-bar" style="height:67%"></div>
-                      <div class="trend-bar" style="height:66%"></div>
-                      <div class="trend-bar" style="height:48%"></div>
-                      <div class="trend-bar" style="height:52%"></div>
-                      <div class="trend-bar" style="height:50%"></div>
-                      <div class="trend-bar" style="height:55%"></div>
-                      <div class="trend-bar" style="height:51%"></div>
-                      <div class="trend-bar" style="height:54%"></div>
-                      <div class="trend-bar" style="height:53%"></div>
-                    </div>
-                    <svg class="trend-lines" viewBox="0 0 1000 260" preserveAspectRatio="none" aria-hidden="true">
-                      <polyline points="25,108 132,92 240,140 347,91 455,106 563,94 670,86 778,94 886,88 975,90" fill="none" stroke="#42d5be" stroke-width="3"/>
-                      <polyline points="25,165 132,150 240,184 347,148 455,154 563,149 670,137 778,150 886,146 975,146" fill="none" stroke="#ff6f8d" stroke-width="3"/>
-                      <g fill="#fff" stroke="#42d5be" stroke-width="3">
-                        <circle cx="25" cy="108" r="4"/><circle cx="132" cy="92" r="4"/><circle cx="240" cy="140" r="4"/><circle cx="347" cy="91" r="4"/><circle cx="455" cy="106" r="4"/><circle cx="563" cy="94" r="4"/><circle cx="670" cy="86" r="4"/><circle cx="778" cy="94" r="4"/><circle cx="886" cy="88" r="4"/><circle cx="975" cy="90" r="4"/>
-                      </g>
-                      <g fill="#fff" stroke="#ff6f8d" stroke-width="3">
-                        <circle cx="25" cy="165" r="4"/><circle cx="132" cy="150" r="4"/><circle cx="240" cy="184" r="4"/><circle cx="347" cy="148" r="4"/><circle cx="455" cy="154" r="4"/><circle cx="563" cy="149" r="4"/><circle cx="670" cy="137" r="4"/><circle cx="778" cy="150" r="4"/><circle cx="886" cy="146" r="4"/><circle cx="975" cy="146" r="4"/>
-                      </g>
-                    </svg>
-                  </div>
-                  <div class="trend-x-labels">
-                    <span>Demo - Amazon Reach Segment</span>
-                    <span>Demographics - Gender - Female</span>
-                    <span>Demo - Female</span>
-                    <span>Demo - Occupation - Professional</span>
-                    <span>Demo - Home Owners</span>
-                    <span>Demo - Occupation - Service</span>
-                    <span>Demo - Presence of Children</span>
-                    <span>Demo - Occupation - Management</span>
-                    <span>Demo - Occupation - Technical</span>
-                    <span>Demo - Occupation - Education</span>
-                  </div>
-                  <div class="trend-mini-scroll"></div>
+          <div class="penetration-grid">
+            <div class="penetration-panel">
+              <div class="penetration-panel-head">
+                <div class="penetration-panel-title">
+                  <span>人群标签渗透率表现</span>
                 </div>
+              </div>
+              <div class="penetration-canvas" id="penetration-histogram">
+                <div class="histogram-scale">
+                  <span>500K</span><span>400K</span><span>300K</span><span>200K</span><span>100K</span><span>0</span>
+                </div>
+              </div>
+              <div class="legend">
+                <span><span class="legend-dot" style="background:#3f6ff3"></span>当前分子指标覆盖占比</span>
+                <span><span class="legend-dot" style="background:#dfe7f2"></span>剩余未覆盖占比</span>
+              </div>
+            </div>
+            <div class="penetration-panel">
+              <div class="penetration-panel-head adtype-panel-head">
+                <div class="penetration-panel-title">
+                  <span class="adtype-panel-title">广告渗透表现</span>
+                </div>
+                <div class="penetration-controls">
+                  <label class="penetration-select">基准广告
+                    <select id="adtype-base-select">
+                      <option value="sa">SA</option>
+                      <option value="dsp">DSP</option>
+                      <option value="sp">SP</option>
+                      <option value="sb">SB</option>
+                      <option value="sd">SD</option>
+                    </select>
+                  </label>
+                  <label class="penetration-select">对比广告
+                    <select id="adtype-compare-select">
+                      <option value="dsp">DSP</option>
+                      <option value="sa">SA</option>
+                      <option value="sp">SP</option>
+                      <option value="sb">SB</option>
+                      <option value="sd">SD</option>
+                    </select>
+                  </label>
+                </div>
+              </div>
+              <div class="dumbbell-canvas" id="adtype-dumbbell-chart"></div>
+              <div class="dumbbell-axis" id="adtype-dumbbell-axis">
+                <span id="base-axis-label">SA</span><span>标签</span><span id="compare-axis-label">DSP</span>
+              </div>
+              <div class="legend">
+                <span><span class="legend-dot" style="background:var(--blue)"></span>基准广告</span>
+                <span><span class="legend-dot" style="background:var(--green)"></span>对比广告</span>
               </div>
             </div>
           </div>
@@ -4196,64 +4961,50 @@
           <div class="prd-note-copy">展示报告状态、时区、订阅月份与下载入口；月份下拉用于切换历史订阅报告。</div>
           <div class="prd-note-meta"><span class="prd-chip">PRD 7.1</span><span class="prd-chip">全局上下文</span></div>
         </div>
-        <div class="prd-note" data-target=".model-hero-card">
-          <div class="prd-note-top"><span class="prd-index">P2</span><span>模型入口与主筛选</span></div>
-          <div class="prd-note-copy">明确当前模型为“人群机会分析”，筛选支持品牌、品线、广告类型、人群名称和人群 ID。</div>
+        <div class="prd-note" data-target=".model-filter-area">
+          <div class="prd-note-top"><span class="prd-index">P2</span><span>全局筛选</span></div>
+          <div class="prd-note-copy">明确当前模型为“人群机会分析”；全局筛选栏支持品牌、品线、广告类型、人群类型（LS/LM）、类目、人群名称/ID 和高级筛选，并在页面滚动时吸顶，作用于当前模型全部分析模块与明细表。</div>
           <div class="prd-note-meta"><span class="prd-chip">PRD 7.2</span><span class="prd-chip">账号到品线下钻</span></div>
         </div>
         <div class="prd-note" data-target="#advanced-filter-trigger">
-          <div class="prd-note-top"><span class="prd-index">P2-1</span><span>高级筛选</span></div>
+          <div class="prd-note-top"><span class="prd-index">P3</span><span>高级筛选</span></div>
           <div class="prd-note-copy">点击后打开高级筛选面板，支持按数值型指标配置最小值/最大值区间；筛选范围应用于当前模型全部分析模块与明细表。</div>
           <div class="prd-note-meta"><span class="prd-chip">PRD 7.2</span><span class="prd-chip">区间筛选</span></div>
         </div>
-        <div class="prd-note" data-target=".decision-brief">
-          <div class="prd-note-top"><span class="prd-index">P3</span><span>一句话投放结论</span></div>
-          <div class="prd-note-copy">先给投手保量、扩量、控本复盘的方向，再说明结论来自 TGI、渗透率、ROAS 与目标用户规模。</div>
-          <div class="prd-note-meta"><span class="prd-chip">PRD 7.3</span><span class="prd-chip">决策摘要</span></div>
-        </div>
-        <div class="prd-note" data-target=".metric-switch">
-          <div class="prd-note-top"><span class="prd-index">P4</span><span>指标口径切换</span></div>
-          <div class="prd-note-copy">曝光、点击、DPV、ATC、购买、NTB 会影响象限坐标与明细口径；当前默认购买口径。</div>
-          <div class="prd-note-meta"><span class="prd-chip">PRD 7.4</span><span class="prd-chip">口径联动</span></div>
-        </div>
-        <div class="prd-note" data-target=".summary-cards">
-          <div class="prd-note-top"><span class="prd-index">P5</span><span>机会概览指标卡</span></div>
-          <div class="prd-note-copy">解释已匹配、核心、扩量观察、未匹配人群的数量结构，让客户先理解可计算范围。</div>
-          <div class="prd-note-meta"><span class="prd-chip">PRD 7.5</span><span class="prd-chip">模型边界</span></div>
-        </div>
         <div class="prd-note" data-target=".chart-panel">
-          <div class="prd-note-top"><span class="prd-index">P6</span><span>TGI × 渗透率象限</span></div>
+          <div class="prd-note-top"><span class="prd-index">P4</span><span>人群机会分布</span></div>
           <div class="prd-note-copy">
-            <p>气泡图仅展示当前筛选口径 <strong>Top 50</strong> 的标签。</p>
-            <p>默认以 <strong>平均 TGI</strong> 和 <strong>账号/品线平均渗透率</strong> 作为象限基准；基准值支持调整。</p>
-            <p><strong>四象限逻辑：</strong><br>高 TGI + 高渗透为 <strong>核心保量</strong>，高 TGI + 低渗透为 <strong>优先扩量</strong>，低 TGI + 高渗透为 <strong>控本复盘</strong>，低 TGI + 低渗透为 <strong>暂缓投放</strong>。</p>
+            <p>仅保留<strong>自由散点图</strong>方案：Y 轴只能选择 TGI 类指标，X 轴只能选择渗透率类指标。</p>
+            <p><strong>TGI 说明：</strong>用于衡量当前标签在目标行为上的相对倾向；计算公式为<strong>当前标签目标行为渗透率 / 大盘目标行为渗透率 × 100</strong>。</p>
+            <p><strong>渗透率说明：</strong>用于衡量当前标签在目标行为上的覆盖程度；计算公式为<strong>当前标签目标行为用户数 / 当前标签人群规模</strong>。</p>
+            <p>气泡大小只能选择实际值类指标，例如曝光用户数、人群规模、购买用户数、目标用户数、广告花费或销售额。</p>
+            <p>散点颜色仅展示高低分布形成的<strong>指标分区</strong>，不自动生成投放动作；默认展示当前筛选口径 <strong>Top 50</strong> 标签。</p>
           </div>
           <div class="prd-note-meta"><span class="prd-chip">PRD 6.1</span><span class="prd-chip">PRD 7.6</span></div>
         </div>
         <div class="prd-note" data-target=".legend-status">
-          <div class="prd-note-top"><span class="prd-index">P6-1</span><span>投放状态图例</span></div>
+          <div class="prd-note-top"><span class="prd-index">P5</span><span>投放状态图例</span></div>
           <div class="prd-note-copy">用于说明气泡样式：实心表示该标签当前投放中，虚线表示该标签未投放但具备机会识别价值。</div>
           <div class="prd-note-meta"><span class="prd-chip">PRD 6.2</span><span class="prd-chip">气泡样式</span></div>
         </div>
-        <div class="prd-note" data-target=".action-panel">
-          <div class="prd-note-top"><span class="prd-index">P7</span><span>推荐动作解释</span></div>
-          <div class="prd-note-copy">把象限结论翻译成投放动作：核心保量、优先扩量、控本复盘、暂缓投放。</div>
-          <div class="prd-note-meta"><span class="prd-chip">PRD 6.1</span><span class="prd-chip">投手动作</span></div>
-        </div>
         <div class="prd-note" data-target=".action-detail-card">
-          <div class="prd-note-top"><span class="prd-index">P8</span><span>人群机会清单</span></div>
-          <div class="prd-note-copy">面向投手的操作清单，字段包含人群规模、购买用户数、渗透率、TGI、ROAS、广告花费、CTR、CVR。</div>
-          <div class="prd-note-meta"><span class="prd-chip">PRD 7.7</span><span class="prd-chip">投放优先级</span></div>
+          <div class="prd-note-top"><span class="prd-index">P6</span><span>散点标签明细</span></div>
+          <div class="prd-note-copy">根据自由散点图当前 X/Y 轴指标和气泡大小选择联动展示 Top 50 明细；表格不展示副标题，字段包含指标分区、人群规模、实际值指标、渗透率、TGI、ROAS、广告花费、CTR、CVR。</div>
+          <div class="prd-note-meta"><span class="prd-chip">PRD 7.7</span><span class="prd-chip">标签明细</span></div>
         </div>
         <div class="prd-note" data-target=".opportunity-wide-card">
-          <div class="prd-note-top"><span class="prd-index">P9</span><span>人群机会分析宽表</span></div>
-          <div class="prd-note-copy">用于客户核数和下载，支持最多 Pin 3 行、指标配置、字段顺序调整、横向滚动和分页。</div>
+          <div class="prd-note-top"><span class="prd-index">P7</span><span>人群机会分析宽表</span></div>
+          <div class="prd-note-copy">保留原始 table，用于客户核数和下载；宽表字段统一使用“指标分区”而非推荐动作，继续支持最多 Pin 3 行、指标配置、字段顺序调整、横向滚动和分页。</div>
           <div class="prd-note-meta"><span class="prd-chip">PRD 7.8</span><span class="prd-chip">明细核数</span></div>
         </div>
-        <div class="prd-note" data-target=".category-drill-card">
-          <div class="prd-note-top"><span class="prd-index">P10</span><span>Demo 标签趋势表现</span></div>
-          <div class="prd-note-copy">Demo 标签类目体系独立，不进入主四象限；仅用折线柱状复合图解释曝光人数、DPV 率和购买率趋势。</div>
-          <div class="prd-note-meta"><span class="prd-chip">PRD 4.2</span><span class="prd-chip">PRD 7.9</span></div>
+        <div class="prd-note" data-target=".penetration-card">
+          <div class="prd-note-top"><span class="prd-index">P8</span><span>渗透率表现分析</span></div>
+          <div class="prd-note-copy">
+            <p>仅保留 LS/LM 等<strong>可计算渗透率</strong>的标签数据。两个图表均根据<strong>行为指标</strong>筛选框动态调整。</p>
+            <p><strong>1. 人群标签渗透率表现：</strong>每根柱子总高度固定代表标签 ASI 总人数；蓝色区块表示当前行为指标人数，灰色区块表示剩余未覆盖人数。鼠标 hover 任一色块时，展示标签名、行为指标人数绝对值及占比、未覆盖人数绝对值及占比、标签 ASI 总人数。</p>
+            <p><strong>2. 广告渗透表现：</strong>上半区展示基准广告，下半区展示对比广告；鼠标 hover 任一色块时，展示广告类型、标签名、渗透率、渗透率差异值。</p>
+          </div>
+          <div class="prd-note-meta"><span class="prd-chip">PRD 7.9</span><span class="prd-chip">标签渗透表现</span></div>
         </div>
       </div>
       <div class="prd-foot">说明：标注用于需求评审和研发对齐，不改变当前页面业务数据。完整 PRD 已写入 02_PRD&设计 目录。</div>
@@ -4301,10 +5052,10 @@
       const getQuadrant = (tgi, rateValue) => {
         const highTgi = tgi > DEFAULT_TGI_BASELINE;
         const highPenetration = rateValue >= DEFAULT_PENETRATION_BASELINE;
-        if (highTgi && highPenetration) return ['core', '核心保量'];
-        if (highTgi && !highPenetration) return ['grow', '优先扩量'];
-        if (!highTgi && highPenetration) return ['watch', '控本复盘'];
-        return ['low', '暂缓投放'];
+        if (highTgi && highPenetration) return ['core', '高TGI高渗透'];
+        if (highTgi && !highPenetration) return ['grow', '高TGI低渗透'];
+        if (!highTgi && highPenetration) return ['watch', '低TGI高渗透'];
+        return ['low', '低TGI低渗透'];
       };
       const enrichRow = (row, rowIndex = 0) => {
         const cells = row.children;
@@ -4636,14 +5387,16 @@
       });
       render();
     };
-    initCascadeDropdown({
-      rootId: 'demo-category-cascade',
-      triggerId: 'demo-cascade-trigger',
-      valueId: 'demo-cascade-value',
-      l1Id: 'demo-cascade-l1',
-      l2Id: 'demo-cascade-l2',
-      l3Id: 'demo-cascade-l3'
-    });
+    if (document.getElementById('demo-category-cascade')) {
+      initCascadeDropdown({
+        rootId: 'demo-category-cascade',
+        triggerId: 'demo-cascade-trigger',
+        valueId: 'demo-cascade-value',
+        l1Id: 'demo-cascade-l1',
+        l2Id: 'demo-cascade-l2',
+        l3Id: 'demo-cascade-l3'
+      });
+    }
     initCascadeDropdown({
       rootId: 'wide-category-cascade',
       triggerId: 'wide-cascade-trigger',
@@ -4653,29 +5406,218 @@
       l3Id: 'wide-cascade-l3'
     });
 
-    document.querySelectorAll('.seg-btn').forEach((button) => {
-      button.addEventListener('click', () => {
-        const metric = button.dataset.metric || button.textContent.trim();
-        document.querySelectorAll('.seg-btn').forEach((item) => item.classList.remove('active'));
-        button.classList.add('active');
-
-        const axisCopy = document.getElementById('metric-axis-copy');
-        if (axisCopy) {
-          axisCopy.textContent = `当前坐标轴：X = ${metric}渗透率，Y = ${metric} TGI。气泡图仅展示当前口径 Top 50；默认基准值支持调整。`;
+    const axisYSelect = document.getElementById('axis-y-select');
+    const axisXSelect = document.getElementById('axis-x-select');
+    const bubbleMetricSelect = document.getElementById('bubble-metric-select');
+    const axisModeNote = document.getElementById('axis-mode-note');
+    const renderAxisLabel = (element, metric, type) => {
+      if (!element) return;
+      const tip = type === 'tgi'
+        ? `${metric}：用于衡量当前标签在目标行为上的相对倾向。&#10;计算公式：当前标签目标行为渗透率 / 大盘目标行为渗透率 × 100`
+        : `${metric}：用于衡量当前标签在目标行为上的覆盖程度。&#10;计算公式：当前标签目标行为用户数 / 当前标签人群规模`;
+      element.innerHTML = `<span class="axis-label-text">${metric}</span><span class="axis-help" data-tip="${tip}">?</span>`;
+    };
+    const syncAxisConfig = () => {
+      const yMetric = axisYSelect?.value || '购买 TGI';
+      const xMetric = axisXSelect?.value || '购买渗透率';
+      const bubbleMetric = bubbleMetricSelect?.value || '曝光用户数';
+      const yLabel = document.getElementById('axis-y-label');
+      const xLabel = document.getElementById('axis-x-label');
+      const yTh = document.getElementById('y-axis-th');
+      const xTh = document.getElementById('x-axis-th');
+      const bubbleTh = document.getElementById('bubble-th');
+      renderAxisLabel(yLabel, yMetric, 'tgi');
+      renderAxisLabel(xLabel, xMetric, 'penetration');
+      if (yTh) yTh.textContent = yMetric;
+      if (xTh) xTh.textContent = xMetric;
+      if (bubbleTh) bubbleTh.textContent = bubbleMetric;
+      if (axisModeNote) {
+        axisModeNote.textContent = '自由散点图仅支持 TGI × 渗透率 指标组合；气泡大小选择实际值类指标，四象限颜色仅用于观察高低分区。';
+      }
+      const legendMap = [
+        ['legend-core', '高 TGI + 高渗透'],
+        ['legend-grow', '高 TGI + 低渗透'],
+        ['legend-watch', '低 TGI + 高渗透'],
+        ['legend-low', '低 TGI + 低渗透']
+      ];
+      legendMap.forEach(([id, text]) => {
+        const item = document.getElementById(id);
+        const dot = item?.querySelector('.legend-dot');
+        if (item && dot) {
+          item.textContent = '';
+          item.appendChild(dot);
+          item.append(text);
         }
-
-        const actionCopy = document.getElementById('action-metric-copy');
-        if (actionCopy) {
-          actionCopy.textContent = `${metric}指标`;
-        }
-
-        document.querySelectorAll('.metric-filter').forEach((filter) => {
-          const chevron = filter.querySelector('.chev');
-          filter.textContent = `指标 = ${metric} `;
-          if (chevron) filter.appendChild(chevron);
-        });
       });
+    };
+    [axisYSelect, axisXSelect, bubbleMetricSelect].forEach((select) => {
+      select?.addEventListener('change', syncAxisConfig);
     });
+    syncAxisConfig();
+
+    const penetrationNumeratorSelect = document.getElementById('penetration-numerator-select');
+    const penetrationHistogram = document.getElementById('penetration-histogram');
+    const adtypeDumbbellChart = document.getElementById('adtype-dumbbell-chart');
+    const adtypeDumbbellAxis = document.getElementById('adtype-dumbbell-axis');
+    const adtypeBaseSelect = document.getElementById('adtype-base-select');
+    const adtypeCompareSelect = document.getElementById('adtype-compare-select');
+    const baseAxisLabel = document.getElementById('base-axis-label');
+    const compareAxisLabel = document.getElementById('compare-axis-label');
+    const penetrationLabels = {
+      purchase: '品牌购买用户数',
+      exposure: '曝光用户数',
+      click: '点击用户数',
+      dpv: 'DPV 用户数',
+      atc: 'ATC 用户数',
+      ntb: 'NTB 用户数'
+    };
+    const adtypeMeta = {
+      sa: { label: 'SA', factor: 0.68 },
+      dsp: { label: 'DSP', factor: 0.52 },
+      sp: { label: 'SP', factor: 0.61 },
+      sb: { label: 'SB', factor: 0.47 },
+      sd: { label: 'SD', factor: 0.39 }
+    };
+    const penetrationData = [
+      { name: 'IM - Garment Racks', asi: 981420, purchase: 260100, exposure: 482300, click: 116900, dpv: 88300, atc: 51200, ntb: 231500, sa: .72, dsp: .44 },
+      { name: 'IM - Closet Rods', asi: 872610, purchase: 142400, exposure: 391200, click: 92400, dpv: 70200, atc: 41100, ntb: 126700, sa: .64, dsp: .52 },
+      { name: 'IM - Closet Shelf Brackets', asi: 704180, purchase: 133900, exposure: 322900, click: 78100, dpv: 58400, atc: 33800, ntb: 120100, sa: .58, dsp: .69 },
+      { name: 'IM - Storage Systems', asi: 662340, purchase: 129300, exposure: 301500, click: 74200, dpv: 55700, atc: 32900, ntb: 116400, sa: .61, dsp: .46 },
+      { name: 'IM - Coat Racks', asi: 612850, purchase: 119700, exposure: 284600, click: 68900, dpv: 51900, atc: 30100, ntb: 106800, sa: .54, dsp: .73 },
+      { name: 'IM - Hall Trees', asi: 544120, purchase: 114700, exposure: 245900, click: 61200, dpv: 46800, atc: 27600, ntb: 102900, sa: .66, dsp: .58 },
+      { name: 'IM - Tool Utility Shelves', asi: 493840, purchase: 94700, exposure: 226100, click: 53400, dpv: 41800, atc: 23900, ntb: 85100, sa: .49, dsp: .71 },
+      { name: 'IM - Pants Hangers', asi: 421910, purchase: 115300, exposure: 198700, click: 48900, dpv: 37200, atc: 22500, ntb: 101600, sa: .76, dsp: .39 },
+      { name: 'Standing Shelf Units', asi: 389620, purchase: 95900, exposure: 177300, click: 42600, dpv: 33800, atc: 20100, ntb: 87200, sa: .47, dsp: .63 },
+      { name: 'IM - Coat Hangers', asi: 355480, purchase: 106100, exposure: 164400, click: 40200, dpv: 30600, atc: 18900, ntb: 94300, sa: .52, dsp: .77 }
+    ];
+    const formatShortCount = (value) => {
+      if (value >= 1000000) return `${(value / 1000000).toFixed(1)}M`;
+      if (value >= 1000) return `${Math.round(value / 1000)}K`;
+      return String(Math.round(value));
+    };
+    const syncPenetrationChart = () => {
+      if (!penetrationHistogram) return;
+      const numeratorKey = penetrationNumeratorSelect?.value || 'purchase';
+      const numeratorLabel = penetrationLabels[numeratorKey] || '品牌购买用户数';
+      const baseKey = adtypeBaseSelect?.value || 'sa';
+      const compareKey = adtypeCompareSelect?.value || 'dsp';
+      const baseMeta = adtypeMeta[baseKey] || adtypeMeta.sa;
+      const compareMeta = adtypeMeta[compareKey] || adtypeMeta.dsp;
+      const baseLabel = baseMeta.label;
+      const compareLabel = compareMeta.label;
+      const values = penetrationData.map((item) => ({
+        ...item,
+        value: Math.round(item[numeratorKey]),
+        rate: item.asi ? Math.min(100, Math.max(0, (item[numeratorKey] / item.asi) * 100)) : 0,
+        baseValue: Math.round(item[numeratorKey] * baseMeta.factor),
+        compareValue: Math.round(item[numeratorKey] * compareMeta.factor),
+        baseRate: item.asi ? Math.min(100, Math.max(0, (item[numeratorKey] * baseMeta.factor / item.asi) * 100)) : 0,
+        compareRate: item.asi ? Math.min(100, Math.max(0, (item[numeratorKey] * compareMeta.factor / item.asi) * 100)) : 0
+      }));
+
+      penetrationHistogram.querySelectorAll('.histogram-bar').forEach((item) => item.remove());
+      const scale = penetrationHistogram.querySelector('.histogram-scale');
+      if (scale) {
+        scale.innerHTML = ['100%', '80%', '60%', '40%', '20%', '0%'].map((value) => `<span>${value}</span>`).join('');
+      }
+
+      values.forEach((item, index) => {
+        const left = 5 + index * 10;
+        const fillHeight = Math.max(0, Math.min(100, item.rate));
+        const emptyHeight = 100 - fillHeight;
+        const uncoveredValue = Math.max(0, item.asi - item.value);
+        const coveredValueLabel = formatShortCount(item.value);
+        const uncoveredValueLabel = formatShortCount(uncoveredValue);
+        const coveredTip = `标签名：${item.name}\n${numeratorLabel}：${item.value.toLocaleString('en-US')}（${fillHeight.toFixed(2)}%）\n未覆盖人数：${uncoveredValue.toLocaleString('en-US')}（${emptyHeight.toFixed(2)}%）\n标签 ASI 总人数：${item.asi.toLocaleString('en-US')}`;
+        const uncoveredTip = `标签名：${item.name}\n${numeratorLabel}：${item.value.toLocaleString('en-US')}（${fillHeight.toFixed(2)}%）\n未覆盖人数：${uncoveredValue.toLocaleString('en-US')}（${emptyHeight.toFixed(2)}%）\n标签 ASI 总人数：${item.asi.toLocaleString('en-US')}`;
+        const bar = document.createElement('div');
+        bar.className = 'histogram-bar';
+        bar.style.left = `${left}%`;
+        bar.style.setProperty('--h', `${fillHeight}%`);
+        bar.innerHTML = `
+          <span class="histogram-empty" data-tip="${uncoveredTip}"><span class="histogram-segment-value ${emptyHeight < 8 ? 'hidden' : ''}">${uncoveredValueLabel}</span></span>
+          <span class="histogram-fill" data-tip="${coveredTip}"><span class="histogram-segment-value ${fillHeight < 8 ? 'hidden' : ''}">${coveredValueLabel}</span></span>
+          <span class="histogram-label" title="${item.name}">${item.name}</span>
+        `;
+        penetrationHistogram.appendChild(bar);
+      });
+
+      if (adtypeDumbbellChart) {
+        const ranked = [...values]
+          .sort((a, b) => Math.abs(b.compareRate - b.baseRate) - Math.abs(a.compareRate - a.baseRate))
+          .slice(0, 10);
+        const maxRate = Math.max(.1, ...ranked.map((item) => Math.max(item.baseRate, item.compareRate)));
+        const axisMax = Math.ceil(maxRate / 5) * 5;
+        adtypeDumbbellChart.innerHTML = '';
+        adtypeDumbbellChart.style.setProperty('--bar-count', ranked.length || 1);
+        const baseSide = document.createElement('div');
+        baseSide.className = 'dumbbell-side dumbbell-base';
+        baseSide.innerHTML = `
+          <span class="dumbbell-side-label">${baseLabel}</span>
+          <span class="dumbbell-bar-row"></span>
+        `;
+        const labelRow = document.createElement('div');
+        labelRow.className = 'dumbbell-label-row';
+        const compareSide = document.createElement('div');
+        compareSide.className = 'dumbbell-side dumbbell-compare';
+        compareSide.innerHTML = `
+          <span class="dumbbell-side-label">${compareLabel}</span>
+          <span class="dumbbell-bar-row"></span>
+        `;
+        const baseBarRow = baseSide.querySelector('.dumbbell-bar-row');
+        const compareBarRow = compareSide.querySelector('.dumbbell-bar-row');
+        ranked.forEach((item) => {
+          const diff = item.compareRate - item.baseRate;
+          const diffAbs = Math.abs(diff);
+          const isCompareStrong = diff >= 0;
+          const baseHeight = Math.max(2, Math.min(100, (item.baseRate / axisMax) * 100));
+          const compareHeight = Math.max(2, Math.min(100, (item.compareRate / axisMax) * 100));
+          const rateLabel = numeratorLabel.replace(/用户数$/, '用户渗透率').replace(/数$/, '渗透率');
+          const diffText = `${isCompareStrong ? compareLabel : baseLabel} 比 ${isCompareStrong ? baseLabel : compareLabel} 高 ${diffAbs.toFixed(2)}%`;
+          const baseTip = `广告类型：${baseLabel}\n标签名：${item.name}\n${rateLabel}：${item.baseRate.toFixed(2)}%\n渗透率差异值：${diffText}`;
+          const compareTip = `广告类型：${compareLabel}\n标签名：${item.name}\n${rateLabel}：${item.compareRate.toFixed(2)}%\n渗透率差异值：${diffText}`;
+          const baseTrack = document.createElement('span');
+          baseTrack.className = 'dumbbell-track';
+          baseTrack.innerHTML = `
+            <span class="dumbbell-fill ${!isCompareStrong ? 'is-leader' : ''}" style="height:${baseHeight}%;">
+              <span class="dumbbell-fill-copy">
+                <span class="dumbbell-rate">${item.baseRate.toFixed(2)}%</span>
+              </span>
+            </span>
+          `;
+          const compareTrack = document.createElement('span');
+          compareTrack.className = 'dumbbell-track';
+          compareTrack.innerHTML = `
+            <span class="dumbbell-fill ${isCompareStrong ? 'is-leader' : ''}" style="height:${compareHeight}%;">
+              <span class="dumbbell-fill-copy">
+                <span class="dumbbell-rate">${item.compareRate.toFixed(2)}%</span>
+              </span>
+            </span>
+          `;
+          const label = document.createElement('span');
+          label.className = 'dumbbell-label';
+          label.textContent = item.name;
+          label.title = item.name;
+          baseTrack.querySelector('.dumbbell-fill')?.setAttribute('data-tip', baseTip);
+          compareTrack.querySelector('.dumbbell-fill')?.setAttribute('data-tip', compareTip);
+          baseBarRow?.appendChild(baseTrack);
+          labelRow.appendChild(label);
+          compareBarRow?.appendChild(compareTrack);
+        });
+        adtypeDumbbellChart.appendChild(baseSide);
+        adtypeDumbbellChart.appendChild(labelRow);
+        adtypeDumbbellChart.appendChild(compareSide);
+        if (adtypeDumbbellAxis) {
+          adtypeDumbbellAxis.innerHTML = `<span>标签</span><span>${baseLabel} / ${compareLabel}</span>`;
+        }
+        if (baseAxisLabel) baseAxisLabel.textContent = baseLabel;
+        if (compareAxisLabel) compareAxisLabel.textContent = compareLabel;
+      }
+    };
+    penetrationNumeratorSelect?.addEventListener('change', syncPenetrationChart);
+    adtypeBaseSelect?.addEventListener('change', syncPenetrationChart);
+    adtypeCompareSelect?.addEventListener('change', syncPenetrationChart);
+    syncPenetrationChart();
 
     document.querySelectorAll('.category-row').forEach((row) => {
       row.addEventListener('click', () => {
