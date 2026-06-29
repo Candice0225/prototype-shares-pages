@@ -571,6 +571,22 @@
       align-items: center;
       gap: 10px;
       flex: none;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .hero-run-mode {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .hero-run-mode-label {
+      color: #6f7a8c;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
     }
 
     .model-hero-body {
@@ -840,6 +856,10 @@
       overflow: hidden;
     }
 
+    .control.is-hidden {
+      display: none;
+    }
+
     .control-label {
       height: 100%;
       display: inline-flex;
@@ -905,6 +925,32 @@
       font: inherit;
       appearance: none;
       cursor: pointer;
+    }
+
+    .global-adtype-filter .control-value {
+      gap: 10px;
+      padding-right: 10px;
+    }
+
+    .global-adtype-filter select {
+      min-width: 0;
+      flex: 1;
+      height: 100%;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: #9aa3b2;
+      font: inherit;
+      appearance: none;
+      cursor: pointer;
+    }
+
+    .global-adtype-filter select.has-value {
+      color: #364052;
+    }
+
+    .global-adtype-filter .chev {
+      pointer-events: none;
     }
 
     .wide-partition-filter select.has-value {
@@ -1158,7 +1204,9 @@
 
     .scatter-title-row {
       position: relative;
-      height: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       min-height: 42px;
       gap: 6px;
       flex-wrap: wrap;
@@ -1169,10 +1217,14 @@
     .scatter-title-main {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-end;
       gap: 10px;
       min-width: 220px;
-      flex: 1 1 100%;
+      flex: 1 1 auto;
+    }
+
+    .scatter-title-main > span:first-child {
+      margin-right: auto;
     }
 
     .scatter-title-main > span:first-child {
@@ -1189,14 +1241,19 @@
     }
 
     .scatter-title-actions {
-      display: block;
-      flex: 0 0 0;
-      height: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 0 0 auto;
       min-width: 0;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
     .scatter-title-actions .axis-config-group {
-      justify-content: flex-start;
+      justify-content: flex-end;
+      flex: 0 1 auto;
+      min-width: 0;
     }
 
     .scatter-config-popover {
@@ -1255,7 +1312,7 @@
       padding: 10px;
       border: 1px solid #eaedf2;
       border-radius: 2px;
-      background: #fbfcff;
+      background: #fff;
     }
 
     .scatter-config-section-wide {
@@ -1459,8 +1516,13 @@
     }
 
     .scatter-title-actions .axis-field select {
-      min-width: 92px;
-      max-width: 118px;
+      min-width: 88px;
+      max-width: 108px;
+    }
+
+    .scatter-title-actions .axis-field.wide-select select {
+      min-width: 104px;
+      max-width: 128px;
     }
 
     .origin-config-wrap {
@@ -4933,6 +4995,13 @@
               </div>
             </div>
             <div class="model-hero-actions">
+              <div class="hero-run-mode">
+                <span class="hero-run-mode-label">跑数模式</span>
+                <div class="segment-control report-mode-switch" id="report-run-mode" aria-label="跑数模式">
+                  <button class="seg-btn active" type="button" data-run-mode="overall">不分广告类型</button>
+                  <button class="seg-btn" type="button" data-run-mode="by-adtype">分广告类型</button>
+                </div>
+              </div>
               <button class="btn secondary">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
                 下载数据
@@ -4945,7 +5014,20 @@
           <div class="filters">
             <div class="control with-label"><span class="control-label">品牌</span><span class="control-value">Ensenior <span class="chev"></span></span></div>
             <div class="control with-label"><span class="control-label">品线</span><span class="control-value">Recessed Lighting... <span class="chev"></span></span></div>
-            <div class="control with-label"><span class="control-label">广告类型</span><span class="control-value">全部类型 <span class="chev"></span></span></div>
+            <div class="control with-label global-adtype-filter" id="global-adtype-filter">
+              <span class="control-label">广告类型</span>
+              <span class="control-value">
+                <select id="global-adtype-select" aria-label="广告类型筛选">
+                  <option>所有广告汇总</option>
+                  <option>DSP</option>
+                  <option>SA广告汇总</option>
+                  <option>SB</option>
+                  <option>SP</option>
+                  <option>SD</option>
+                </select>
+                <span class="chev"></span>
+              </span>
+            </div>
             <div class="control with-label"><span class="control-label">人群类型</span><span class="control-value">全部类型 <span class="chev"></span></span></div>
             <div class="wide-category-cascade" id="wide-category-cascade" aria-label="全局类目三级联动筛选">
               <button class="demo-cascade-trigger" id="wide-cascade-trigger" type="button" aria-expanded="false">
@@ -5028,7 +5110,55 @@
               <div class="scatter-title-row">
                 <div class="scatter-title-main">
                   <span id="scatter-title-copy">TOP 50 曝光用户数人群机会分布</span>
-                  <button class="btn secondary scatter-config-trigger" id="scatter-config-trigger" type="button" aria-expanded="false">指标配置</button>
+                  <div class="axis-config-group">
+                    <label class="axis-field">横轴
+                      <select id="axis-x-select">
+                        <option>购买渗透率</option>
+                        <option>曝光渗透率</option>
+                        <option>点击渗透率</option>
+                        <option>DPV 渗透率</option>
+                        <option>ATC 渗透率</option>
+                        <option>NTB 渗透率</option>
+                      </select>
+                      <span class="metric-help" id="axis-x-help" data-tip="购买渗透率 计算公式：&#10;当前标签购买用户数 / 当前标签人群规模">?</span>
+                    </label>
+                    <label class="axis-field">竖轴
+                      <select id="axis-y-select">
+                        <option>购买 TGI</option>
+                        <option>曝光 TGI</option>
+                        <option>点击 TGI</option>
+                        <option>DPV TGI</option>
+                        <option>ATC TGI</option>
+                        <option>NTB TGI</option>
+                      </select>
+                      <span class="metric-help" id="axis-y-help" data-tip="购买 TGI 计算公式：&#10;(No. of Purchase UV within the segment / Total No. of Purchase UV) / (Total No. of Users within the segment / Amazon Total No. of Users)">?</span>
+                    </label>
+                    <label class="axis-field wide-select">气泡大小
+                      <select id="bubble-metric-select">
+                        <option>曝光用户数</option>
+                        <option>点击用户数</option>
+                        <option>品牌搜索用户数</option>
+                        <option>DPV 用户数</option>
+                        <option>ATC 用户数</option>
+                        <option>购买用户数</option>
+                        <option>NTB 用户数</option>
+                        <option>曝光次数</option>
+                        <option>点击次数</option>
+                        <option>品牌搜索次数</option>
+                        <option>DPV 次数</option>
+                        <option>ATC 次数</option>
+                        <option>购买次数</option>
+                        <option>人群规模</option>
+                        <option>标签总人数</option>
+                        <option>广告花费</option>
+                        <option>销售额</option>
+                        <option>ROAS</option>
+                        <option>CTR</option>
+                        <option>CVR</option>
+                      </select>
+                    </label>
+                  </div>
+                  <button class="btn secondary scatter-config-trigger" id="scatter-config-trigger" type="button" aria-expanded="false">高级设置</button>
                 </div>
                 <div class="scatter-title-actions">
                   <div class="scatter-config-popover" id="scatter-config-popover">
@@ -5069,64 +5199,11 @@
                           </label>
                         </div>
                       </div>
-                      <div class="scatter-config-section scatter-config-section-axis">
-                        <div class="scatter-config-section-head">
-                          <span>坐标轴</span>
-                        </div>
-                        <div class="scatter-config-field-grid">
-                          <label class="axis-field">横轴
-                            <select id="axis-x-select">
-                              <option>购买渗透率</option>
-                              <option>曝光渗透率</option>
-                              <option>点击渗透率</option>
-                              <option>DPV 渗透率</option>
-                              <option>ATC 渗透率</option>
-                              <option>NTB 渗透率</option>
-                            </select>
-                            <span class="metric-help" id="axis-x-help" data-tip="购买渗透率 计算公式：&#10;当前标签购买用户数 / 当前标签人群规模">?</span>
-                          </label>
-                          <label class="axis-field">竖轴
-                            <select id="axis-y-select">
-                              <option>购买 TGI</option>
-                              <option>曝光 TGI</option>
-                              <option>点击 TGI</option>
-                              <option>DPV TGI</option>
-                              <option>ATC TGI</option>
-                              <option>NTB TGI</option>
-                            </select>
-                            <span class="metric-help" id="axis-y-help" data-tip="购买 TGI 计算公式：&#10;(No. of Purchase UV within the segment / Total No. of Purchase UV) / (Total No. of Users within the segment / Amazon Total No. of Users)">?</span>
-                          </label>
-                        </div>
-                      </div>
                       <div class="scatter-config-section scatter-config-section-visual">
                         <div class="scatter-config-section-head">
                           <span>图形属性</span>
                         </div>
                         <div class="scatter-config-field-grid">
-                          <label class="axis-field">气泡大小
-                            <select id="bubble-metric-select">
-                              <option>曝光用户数</option>
-                              <option>点击用户数</option>
-                              <option>品牌搜索用户数</option>
-                              <option>DPV 用户数</option>
-                              <option>ATC 用户数</option>
-                              <option>购买用户数</option>
-                              <option>NTB 用户数</option>
-                              <option>曝光次数</option>
-                              <option>点击次数</option>
-                              <option>品牌搜索次数</option>
-                              <option>DPV 次数</option>
-                              <option>ATC 次数</option>
-                              <option>购买次数</option>
-                              <option>人群规模</option>
-                              <option>标签总人数</option>
-                              <option>广告花费</option>
-                              <option>销售额</option>
-                              <option>ROAS</option>
-                              <option>CTR</option>
-                              <option>CVR</option>
-                            </select>
-                          </label>
                           <div class="origin-config-wrap" id="origin-config-wrap">
                             <label class="axis-field">原点配置
                               <select id="origin-mode-select">
@@ -5598,13 +5675,6 @@
                   <option value="ntb">NTB 用户数</option>
                 </select>
               </label>
-              <div class="penetration-run-mode">
-                <span class="penetration-run-mode-label">跑数模式</span>
-                <div class="segment-control report-mode-switch" id="report-run-mode" aria-label="跑数模式">
-                  <button class="seg-btn active" type="button" data-run-mode="overall">不分广告类型</button>
-                  <button class="seg-btn" type="button" data-run-mode="by-adtype">分广告类型</button>
-                </div>
-              </div>
             </div>
           </div>
           <div class="penetration-grid">
@@ -5612,10 +5682,6 @@
               <div class="penetration-panel-head">
                 <div class="penetration-panel-title">
                   <span id="penetration-overall-title">人群标签渗透率表现</span>
-                </div>
-                <div class="segment-control penetration-display-switch" id="penetration-display-mode" aria-label="渗透率展示方案">
-                  <button class="seg-btn active" type="button" data-penetration-display="full">方案一</button>
-                  <button class="seg-btn" type="button" data-penetration-display="compact">方案二</button>
                 </div>
               </div>
               <div class="penetration-canvas" id="penetration-histogram">
@@ -6264,6 +6330,17 @@
       advancedFilterTrigger?.setAttribute('aria-expanded', 'false');
     });
 
+    const globalAdtypeSelect = document.getElementById('global-adtype-select');
+    const isGlobalAdtypeAll = () => !globalAdtypeSelect || globalAdtypeSelect.value === '所有广告汇总';
+    const syncGlobalAdtypeState = () => {
+      globalAdtypeSelect?.classList.toggle('has-value', Boolean(globalAdtypeSelect?.value));
+    };
+    globalAdtypeSelect?.addEventListener('change', () => {
+      syncGlobalAdtypeState();
+      syncPenetrationChart();
+    });
+    syncGlobalAdtypeState();
+
     const axisYSelect = document.getElementById('axis-y-select');
     const axisXSelect = document.getElementById('axis-x-select');
     const bubbleMetricSelect = document.getElementById('bubble-metric-select');
@@ -6406,11 +6483,10 @@
     const baseAxisLabel = document.getElementById('base-axis-label');
     const compareAxisLabel = document.getElementById('compare-axis-label');
     const penetrationOverallTitle = document.getElementById('penetration-overall-title');
-    const penetrationDisplayButtons = Array.from(document.querySelectorAll('[data-penetration-display]'));
     const penetrationAdtypePanel = document.getElementById('penetration-adtype-panel');
+    const globalAdTypeFilter = document.getElementById('global-adtype-filter');
     const runModeButtons = Array.from(document.querySelectorAll('[data-run-mode]'));
     let currentRunMode = 'overall';
-    let currentPenetrationDisplay = 'full';
     const penetrationLabels = {
       purchase: '品牌购买用户数',
       exposure: '曝光用户数',
@@ -6454,13 +6530,18 @@
       const baseLabel = baseMeta.label;
       const compareLabel = compareMeta.label;
 
+      const showAdtypeComparison = currentRunMode === 'by-adtype' && isGlobalAdtypeAll();
+
       if (penetrationOverallTitle) {
-        penetrationOverallTitle.textContent = currentRunMode === 'by-adtype'
+        penetrationOverallTitle.textContent = showAdtypeComparison
           ? '人群标签渗透率表现（All Types）'
           : '人群标签渗透率表现';
       }
       if (penetrationAdtypePanel) {
-        penetrationAdtypePanel.classList.toggle('hidden', currentRunMode !== 'by-adtype');
+        penetrationAdtypePanel.classList.toggle('hidden', !showAdtypeComparison);
+      }
+      if (globalAdTypeFilter) {
+        globalAdTypeFilter.classList.toggle('is-hidden', currentRunMode !== 'by-adtype');
       }
 
       const values = penetrationData.map((item) => ({
@@ -6491,7 +6572,7 @@
         const coveredTip = `标签名：${item.name}\n${numeratorLabel}：${item.value.toLocaleString('en-US')}（${fillHeight.toFixed(2)}%）\n未覆盖人数：${uncoveredValue.toLocaleString('en-US')}（${emptyHeight.toFixed(2)}%）\n标签 ASI 总人数：${item.asi.toLocaleString('en-US')}`;
         const uncoveredTip = `标签名：${item.name}\n${numeratorLabel}：${item.value.toLocaleString('en-US')}（${fillHeight.toFixed(2)}%）\n未覆盖人数：${uncoveredValue.toLocaleString('en-US')}（${emptyHeight.toFixed(2)}%）\n标签 ASI 总人数：${item.asi.toLocaleString('en-US')}`;
         const bar = document.createElement('div');
-        bar.className = `histogram-bar${currentPenetrationDisplay === 'compact' ? ' compact' : ''}`;
+        bar.className = 'histogram-bar';
         bar.style.left = `${left}%`;
         bar.style.setProperty('--h', `${fillHeight}%`);
         bar.innerHTML = `
@@ -6506,7 +6587,7 @@
 
       if (adtypeDumbbellChart) {
         adtypeDumbbellChart.innerHTML = '';
-        if (currentRunMode !== 'by-adtype') {
+        if (!showAdtypeComparison) {
           if (adtypeDumbbellAxis) {
             adtypeDumbbellAxis.innerHTML = `<span>标签</span><span>${baseLabel} / ${compareLabel}</span>`;
           }
@@ -6542,11 +6623,9 @@
           const baseHeight = Math.max(2, Math.min(100, (item.baseRate / axisMax) * 100));
           const compareHeight = Math.max(2, Math.min(100, (item.compareRate / axisMax) * 100));
           const rateLabel = numeratorLabel.replace(/用户数$/, '用户渗透率').replace(/数$/, '渗透率');
-          const baseValueLabel = `${item.baseValue.toLocaleString('en-US')}（${item.baseRate.toFixed(2)}%）`;
-          const compareValueLabel = `${item.compareValue.toLocaleString('en-US')}（${item.compareRate.toFixed(2)}%）`;
           const diffText = `${isCompareStrong ? compareLabel : baseLabel} 比 ${isCompareStrong ? baseLabel : compareLabel} 高 ${diffAbs.toFixed(2)}%`;
-          const baseTip = `广告类型：${baseLabel}\n标签名：${item.name}\n${rateLabel}：${baseValueLabel}\n渗透率差异值：${diffText}`;
-          const compareTip = `广告类型：${compareLabel}\n标签名：${item.name}\n${rateLabel}：${compareValueLabel}\n渗透率差异值：${diffText}`;
+          const baseTip = `${baseLabel}\n标签名：${item.name}\n${numeratorLabel}：${item.baseValue.toLocaleString('en-US')}\n${rateLabel}：${item.baseRate.toFixed(2)}%\n渗透率差异值：${diffText}`;
+          const compareTip = `${compareLabel}\n标签名：${item.name}\n${numeratorLabel}：${item.compareValue.toLocaleString('en-US')}\n${rateLabel}：${item.compareRate.toFixed(2)}%\n渗透率差异值：${diffText}`;
           const baseTrack = document.createElement('span');
           baseTrack.className = 'dumbbell-track';
           baseTrack.innerHTML = `
@@ -6586,13 +6665,6 @@
       }
     };
     penetrationNumeratorSelect?.addEventListener('change', syncPenetrationChart);
-    penetrationDisplayButtons.forEach((button) => {
-      button.addEventListener('click', () => {
-        currentPenetrationDisplay = button.dataset.penetrationDisplay || 'full';
-        penetrationDisplayButtons.forEach((item) => item.classList.toggle('active', item === button));
-        syncPenetrationChart();
-      });
-    });
     adtypeBaseSelect?.addEventListener('change', syncPenetrationChart);
     adtypeCompareSelect?.addEventListener('change', syncPenetrationChart);
     runModeButtons.forEach((button) => {
@@ -6700,4 +6772,5 @@
   </script>
 </body>
 </html>
+
 
