@@ -190,7 +190,7 @@
       place-items: center;
       color: #a8b1c0;
       background: #d8dde7;
-      font-size: 12px;
+      font-size: 14px;
       flex: none;
     }
 
@@ -270,7 +270,7 @@
       align-items: center;
       color: #159264;
       background: #e7f5ef;
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 800;
       white-space: nowrap;
     }
@@ -575,20 +575,6 @@
       justify-content: flex-end;
     }
 
-    .hero-run-mode {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .hero-run-mode-label {
-      color: #6f7a8c;
-      font-size: 12px;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
     .model-hero-body {
       display: flex;
       align-items: center;
@@ -619,6 +605,7 @@
     .model-filter-area .filters {
       flex: 1;
       min-width: 0;
+      align-items: flex-start;
     }
 
     .advanced-filter-wrap {
@@ -629,17 +616,18 @@
     .advanced-filter-panel {
       position: absolute;
       left: auto;
-      right: 0;
+      right: -226px;
       top: calc(100% + 8px);
       z-index: 70;
-      width: 560px;
-      max-width: min(560px, calc(100vw - 280px));
-      border: 1px solid #cdd8e8;
-      border-radius: 3px;
+      width: 790px;
+      max-width: min(790px, calc(100vw - 260px));
+      border: 1px solid #dde5f0;
+      border-radius: 2px;
       background: #fff;
-      box-shadow: 0 14px 28px rgba(31, 45, 68, .18);
+      box-shadow: 0 12px 26px rgba(31, 45, 68, .14);
       display: none;
       color: #232f3f;
+      overflow: hidden;
     }
 
     .advanced-filter-wrap.open .advanced-filter-panel {
@@ -649,90 +637,178 @@
     .advanced-filter-head {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      height: 40px;
-      padding: 0 12px;
-      border-bottom: 1px solid var(--border);
+      height: 50px;
+      padding: 0 16px;
+      border-bottom: 1px solid #e5ebf3;
       font-size: 14px;
-      font-weight: 700;
+      font-weight: 600;
+      color: #172033;
     }
 
     .advanced-filter-body {
-      padding: 12px;
-      display: grid;
-      gap: 12px;
+      padding: 12px 16px 16px;
     }
 
-    .advanced-filter-section {
-      border: 1px solid #e2e8f1;
-      border-radius: 2px;
-      background: #fbfcff;
-      padding: 10px;
-    }
-
-    .advanced-filter-section-title {
+    .advanced-filter-rule-line {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
+      height: 28px;
+      color: #667386;
+      font-size: 13px;
+      line-height: 1;
       margin-bottom: 8px;
-      color: #232f3f;
-      font-size: 12px;
-      font-weight: 700;
     }
 
-    .advanced-filter-row {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
+    .advanced-filter-inline-select {
+      height: 24px;
+      min-width: 34px;
+      border: 0;
+      outline: 0;
+      appearance: none;
+      background: transparent;
+      color: #263447;
+      font: inherit;
+      font-weight: 600;
+      padding: 0;
+      cursor: pointer;
+    }
+
+    .advanced-filter-condition-box {
+      padding: 10px;
+      border-radius: 3px;
+      background: #f7faff;
+      display: grid;
       gap: 8px;
     }
 
-    .advanced-filter-field {
-      height: 26px;
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      background: #fff;
-      color: #5f6c82;
-      font-size: 12px;
-      font-weight: 600;
-      display: inline-flex;
+    .advanced-filter-row {
+      display: grid;
+      grid-template-columns: 200px 200px 120px 10px 120px 20px;
       align-items: center;
-      gap: 6px;
-      padding: 0 8px;
-      white-space: nowrap;
+      gap: 12px;
+      min-width: 0;
     }
 
-    .advanced-filter-field select,
-    .advanced-filter-field input {
+    .advanced-filter-control {
+      position: relative;
+      min-width: 0;
+      height: 32px;
+      border: 1px solid #d9dfe8;
+      border-radius: 3px;
+      background: #fff;
+      color: #263447;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+    }
+
+    .advanced-filter-control select,
+    .advanced-filter-control input {
+      width: 100%;
+      height: 100%;
       border: 0;
       outline: 0;
       background: transparent;
-      color: #232f3f;
+      color: #263447;
       font: inherit;
-      min-width: 78px;
+      padding: 0 12px;
+      min-width: 0;
     }
 
-    .advanced-filter-field input {
-      width: 44px;
-      min-width: 44px;
+    .advanced-filter-control select {
+      appearance: none;
+      padding-right: 28px;
+      cursor: pointer;
+    }
+
+    .advanced-filter-control input::placeholder {
+      color: #a8b2c1;
+    }
+
+    .advanced-filter-select::after {
+      content: "";
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      width: 6px;
+      height: 6px;
+      border-right: 1px solid #58667a;
+      border-bottom: 1px solid #58667a;
+      pointer-events: none;
+      transform: translateY(-62%) rotate(45deg);
+    }
+
+    .advanced-filter-range-divider {
+      justify-self: center;
+      color: #aeb7c5;
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .advanced-filter-percentile-value {
+      grid-column: 3 / 6;
+    }
+
+    .advanced-filter-remove {
+      width: 24px;
+      height: 32px;
+      border: 0;
+      background: transparent;
+      color: #b1bbc9;
+      font-size: 18px;
+      line-height: 1;
+      padding: 0;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+    }
+
+    .advanced-filter-remove:hover {
+      color: #6f7a8c;
+    }
+
+    .advanced-add-condition {
+      height: 30px;
+      margin-top: 10px;
+      border: 0;
+      background: transparent;
+      color: var(--blue);
+      font: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 0 6px;
+      cursor: pointer;
+    }
+
+    .advanced-add-condition:hover {
+      text-decoration: underline;
+    }
+
+    .advanced-filter-number {
       text-align: right;
       font-variant-numeric: tabular-nums;
-    }
-
-    .advanced-filter-hint {
-      margin-top: 8px;
-      color: #667386;
-      font-size: 12px;
-      line-height: 1.5;
     }
 
     .advanced-filter-actions {
       display: flex;
       justify-content: flex-end;
       gap: 8px;
-      padding: 10px 12px;
-      border-top: 1px solid var(--border);
-      background: #fbfcff;
+      padding: 0 16px 10px;
+      background: #fff;
+    }
+
+    .advanced-filter-actions .btn {
+      height: 32px;
+      min-width: 76px;
+      border-radius: 3px;
+      font-weight: 600;
+    }
+
+    .advanced-filter-actions .btn.secondary {
+      border-color: #d9dfe8;
+      background: #fff;
+      color: #3d4a5c;
     }
 
     .title-row {
@@ -836,6 +912,43 @@
       padding: 0;
     }
 
+    .tag-scope-switch {
+      display: inline-flex;
+      align-items: center;
+      flex: none;
+      padding: 2px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      background: #fff;
+      gap: 2px;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, .02);
+    }
+
+    .tag-scope-btn {
+      height: 28px;
+      min-width: 76px;
+      padding: 0 14px;
+      border: 0;
+      border-radius: 2px;
+      background: transparent;
+      color: #6f7a8c;
+      font: inherit;
+      font-weight: 600;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: background-color .15s ease, color .15s ease;
+    }
+
+    .tag-scope-btn.active {
+      background: #eef4ff;
+      color: var(--blue);
+    }
+
+    .tag-scope-btn:focus-visible {
+      outline: 1px solid rgba(63, 111, 243, .45);
+      outline-offset: 1px;
+    }
+
     .control {
       height: 32px;
       min-width: 156px;
@@ -889,20 +1002,139 @@
     }
 
     .audience-search {
-      width: 200px;
-      min-width: 200px;
-      gap: 8px;
-      padding: 0 12px;
-      color: #9aa3b2;
-      justify-content: flex-start;
+      flex: 0 1 280px;
+      min-width: 260px;
+      max-width: 360px;
+      min-height: 32px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      background: #fff;
+      color: #263447;
+      display: flex;
+      align-items: stretch;
+      gap: 0;
       overflow: hidden;
+      box-shadow: 0 1px 0 rgba(0, 0, 0, .02);
+      align-self: flex-start;
     }
 
-    .audience-search .search-placeholder {
-      min-width: 0;
+    .audience-search-mode {
+      width: 88px;
+      flex: none;
+      min-height: 32px;
+      border-right: 1px solid var(--border);
+      background: #f8f9fb;
+      color: #364052;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+      padding: 0 10px;
       white-space: nowrap;
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    .audience-search-mode select {
+      min-width: 0;
+      flex: 1;
+      width: auto;
+      height: 100%;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      appearance: none;
+      cursor: pointer;
+    }
+
+    .audience-search-mode .chev {
+      pointer-events: none;
+    }
+
+    .audience-search-field {
+      min-width: 0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 4px 10px 5px;
+    }
+
+    .audience-search-input {
+      min-width: 0;
+      width: 100%;
+      height: 22px;
+      border: 0;
+      outline: 0;
+      padding: 0;
+      background: transparent;
+      color: #263447;
+      font: inherit;
+    }
+
+    .audience-search-input::placeholder {
+      color: #9aa3b2;
+    }
+
+    .audience-search-chip-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .audience-search-chip {
+      height: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .audience-search-chip.include {
+      background: #eef4ff;
+      color: #355fd0;
+    }
+
+    .audience-search-chip.exclude {
+      background: #fff1f2;
+      color: #d64d5d;
+    }
+
+    .audience-search-chip-mode {
+      opacity: .78;
+    }
+
+    .audience-search-chip-text {
+      max-width: 132px;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    .audience-search-chip-remove {
+      width: 14px;
+      height: 14px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      line-height: 1;
+      font-size: 13px;
+      padding: 0;
+    }
+
+    .audience-search-chip-remove:hover {
+      background: rgba(0, 0, 0, .06);
     }
 
     .wide-partition-filter {
@@ -927,30 +1159,171 @@
       cursor: pointer;
     }
 
+    .control.with-label.global-adtype-filter {
+      position: relative;
+      overflow: visible;
+      z-index: 2;
+    }
+
+    .control.with-label.global-adtype-filter.is-open {
+      z-index: 95;
+      border-color: var(--blue);
+      box-shadow: 0 0 0 1px rgba(63, 111, 243, .14);
+    }
+
     .global-adtype-filter .control-value {
+      position: relative;
+      align-self: stretch;
       gap: 10px;
-      padding-right: 10px;
+      padding: 0;
+      overflow: visible;
     }
 
     .global-adtype-filter select {
-      min-width: 0;
-      flex: 1;
-      height: 100%;
-      border: 0;
-      outline: 0;
-      background: transparent;
-      color: #9aa3b2;
-      font: inherit;
-      appearance: none;
-      cursor: pointer;
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+      clip-path: inset(50%);
     }
 
-    .global-adtype-filter select.has-value {
+    .adtype-select-trigger {
+      min-width: 146px;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: transparent;
       color: #364052;
+      font: inherit;
+      font-weight: 400;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 0 10px 0 12px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .adtype-select-trigger .chev {
+      transition: transform .16s ease;
+    }
+
+    .global-adtype-filter.is-open .adtype-select-trigger .chev {
+      transform: rotate(225deg) translate(-2px, -2px);
     }
 
     .global-adtype-filter .chev {
       pointer-events: none;
+    }
+
+    .adtype-select-panel {
+      position: absolute;
+      left: 0;
+      top: calc(100% + 7px);
+      z-index: 96;
+      width: 244px;
+      padding: 6px 0;
+      border: 1px solid #e3e9f2;
+      border-radius: 2px;
+      background: #fff;
+      color: #4c5a70;
+      box-shadow: 0 10px 22px rgba(31, 45, 68, .14);
+      display: none;
+    }
+
+    .adtype-select-panel::before {
+      content: "";
+      position: absolute;
+      top: -5px;
+      left: 50%;
+      width: 10px;
+      height: 10px;
+      border-top: 1px solid #e3e9f2;
+      border-left: 1px solid #e3e9f2;
+      background: #fff;
+      transform: translateX(-50%) rotate(45deg);
+    }
+
+    .global-adtype-filter.is-open .adtype-select-panel {
+      display: block;
+    }
+
+    .adtype-option-search {
+      height: 36px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 18px;
+      border-bottom: 1px solid #edf1f6;
+      color: #aab4c4;
+    }
+
+    .adtype-search-radio {
+      width: 10px;
+      height: 10px;
+      border: 1px solid #cfd7e4;
+      border-radius: 50%;
+      flex: none;
+    }
+
+    .adtype-search-input {
+      min-width: 0;
+      width: 100%;
+      height: 24px;
+      border: 0;
+      outline: 0;
+      padding: 0;
+      background: transparent;
+      color: #364052;
+      font: inherit;
+    }
+
+    .adtype-search-input::placeholder {
+      color: #b0bac8;
+    }
+
+    .adtype-option-group {
+      height: 30px;
+      display: flex;
+      align-items: flex-end;
+      padding: 0 20px 7px;
+      color: #9aa5b5;
+      font-size: 12px;
+      line-height: 1;
+    }
+
+    .adtype-select-option {
+      width: 100%;
+      height: 34px;
+      border: 0;
+      background: #fff;
+      color: #4c5a70;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      text-align: left;
+      font: inherit;
+      font-weight: 400;
+      cursor: pointer;
+    }
+
+    .adtype-select-option:hover,
+    .adtype-select-option:focus-visible {
+      outline: 0;
+      background: #f6f8fb;
+    }
+
+    .adtype-select-option.selected {
+      background: #f0f3f8;
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    .adtype-select-option[hidden],
+    .adtype-option-group[hidden] {
+      display: none;
     }
 
     .wide-partition-filter select.has-value {
@@ -1121,42 +1494,6 @@
       gap: 14px;
       margin-bottom: 10px;
       flex-wrap: wrap;
-    }
-
-    .segment-control {
-      height: 34px;
-      border: 1px solid var(--border);
-      background: #f7f9fc;
-      border-radius: 2px;
-      display: inline-flex;
-      align-items: center;
-      padding: 3px;
-      gap: 2px;
-    }
-
-    .seg-btn {
-      height: 28px;
-      padding: 0 12px;
-      border-radius: 3px;
-      display: inline-flex;
-      align-items: center;
-      color: #6d7788;
-      white-space: nowrap;
-      font-weight: 650;
-      cursor: pointer;
-      user-select: none;
-    }
-
-    .seg-btn.active {
-      background: var(--blue);
-      color: #fff;
-      box-shadow: 0 1px 2px rgba(63, 111, 243, .25);
-    }
-
-    button.seg-btn {
-      border: 0;
-      background: transparent;
-      font: inherit;
     }
 
     .overview-grid {
@@ -1933,11 +2270,28 @@
       word-break: break-word;
     }
 
-    .bubble.core { background: var(--green); }
-    .bubble.grow { background: var(--blue); }
-    .bubble.watch { background: var(--amber); }
-    .bubble.low { background: var(--red); }
-    .bubble.mix { background: var(--purple); }
+    .bubble.core { --bubble-color: var(--green); --bubble-tint: var(--green-soft); background: var(--bubble-color); }
+    .bubble.grow { --bubble-color: var(--blue); --bubble-tint: var(--blue-soft); background: var(--bubble-color); }
+    .bubble.watch { --bubble-color: var(--amber); --bubble-tint: var(--amber-soft); background: var(--bubble-color); }
+    .bubble.low { --bubble-color: var(--red); --bubble-tint: var(--red-soft); background: var(--bubble-color); }
+    .bubble.mix { --bubble-color: var(--purple); --bubble-tint: var(--purple-soft); background: var(--bubble-color); }
+
+    .bubble.is-live {
+      border-style: solid;
+      border-color: #fff;
+    }
+
+    .bubble.is-inactive {
+      border-style: dashed;
+      border-color: var(--bubble-color);
+      background: var(--bubble-tint);
+      color: var(--bubble-color);
+      box-shadow: 0 4px 12px rgba(32, 47, 73, .12);
+    }
+
+    .bubble.is-inactive .bubble-text {
+      color: var(--bubble-color);
+    }
 
     .bubble::after {
       content: attr(data-tip);
@@ -2008,6 +2362,36 @@
       border-radius: 50%;
       display: inline-block;
       margin-right: 4px;
+    }
+
+    .scatter-legend {
+      gap: 12px;
+    }
+
+    .scatter-legend .legend-dot,
+    .scatter-status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 4px;
+      vertical-align: middle;
+    }
+
+    .scatter-legend-status {
+      display: inline-flex;
+      align-items: center;
+      color: #667386;
+    }
+
+    .scatter-status-dot.is-live {
+      background: #8c98aa;
+      border: 1px solid #8c98aa;
+    }
+
+    .scatter-status-dot.is-inactive {
+      background: #fff;
+      border: 1px solid #8c98aa;
     }
 
     .action-list {
@@ -2195,22 +2579,6 @@
       align-items: center;
       gap: 6px;
       flex: 0 0 auto;
-    }
-
-    .penetration-run-mode-label {
-      color: #5f6d80;
-      font-size: 12px;
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    .report-mode-switch {
-      flex: 0 0 auto;
-    }
-
-    .report-mode-switch .seg-btn {
-      min-width: 88px;
-      justify-content: center;
     }
 
     .penetration-controls {
@@ -4995,13 +5363,6 @@
               </div>
             </div>
             <div class="model-hero-actions">
-              <div class="hero-run-mode">
-                <span class="hero-run-mode-label">跑数模式</span>
-                <div class="segment-control report-mode-switch" id="report-run-mode" aria-label="跑数模式">
-                  <button class="seg-btn active" type="button" data-run-mode="overall">不分广告类型</button>
-                  <button class="seg-btn" type="button" data-run-mode="by-adtype">分广告类型</button>
-                </div>
-              </div>
               <button class="btn secondary">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
                 下载数据
@@ -5012,20 +5373,41 @@
 
         <div class="model-filter-area">
           <div class="filters">
+            <div class="tag-scope-switch" id="tag-scope-switch" aria-label="标签范围">
+              <button class="tag-scope-btn active" type="button" data-tag-scope="all">所有标签</button>
+              <button class="tag-scope-btn" type="button" data-tag-scope="target">目标标签</button>
+            </div>
             <div class="control with-label"><span class="control-label">品牌</span><span class="control-value">Ensenior <span class="chev"></span></span></div>
             <div class="control with-label"><span class="control-label">品线</span><span class="control-value">Recessed Lighting... <span class="chev"></span></span></div>
             <div class="control with-label global-adtype-filter" id="global-adtype-filter">
               <span class="control-label">广告类型</span>
               <span class="control-value">
-                <select id="global-adtype-select" aria-label="广告类型筛选">
-                  <option>所有广告汇总</option>
-                  <option>DSP</option>
-                  <option>SA广告汇总</option>
-                  <option>SB</option>
-                  <option>SP</option>
-                  <option>SD</option>
+                <select id="global-adtype-select" aria-label="广告类型筛选" tabindex="-1">
+                  <option value="所有广告汇总">所有广告汇总</option>
+                  <option value="DSP">DSP</option>
+                  <option value="SA广告汇总">SA广告汇总</option>
+                  <option value="SP">SP</option>
+                  <option value="SD">SD</option>
+                  <option value="SB">SB</option>
                 </select>
-                <span class="chev"></span>
+                <button class="adtype-select-trigger" id="global-adtype-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-controls="global-adtype-panel">
+                  <span id="global-adtype-trigger-label">所有广告汇总</span>
+                  <span class="chev"></span>
+                </button>
+                <div class="adtype-select-panel" id="global-adtype-panel" role="listbox" aria-label="广告类型筛选">
+                  <div class="adtype-option-search">
+                    <span class="adtype-search-radio"></span>
+                    <input class="adtype-search-input" id="global-adtype-search" type="text" placeholder="查找" aria-label="查找广告类型" autocomplete="off">
+                  </div>
+                  <button class="adtype-select-option selected" type="button" role="option" aria-selected="true" data-global-adtype-option data-value="所有广告汇总">所有广告汇总</button>
+                  <div class="adtype-option-group" data-adtype-group="DSP">DSP</div>
+                  <button class="adtype-select-option" type="button" role="option" aria-selected="false" data-global-adtype-option data-value="DSP" data-adtype-group-option="DSP">DSP</button>
+                  <div class="adtype-option-group" data-adtype-group="SA">SA</div>
+                  <button class="adtype-select-option" type="button" role="option" aria-selected="false" data-global-adtype-option data-value="SA广告汇总" data-adtype-group-option="SA">SA广告汇总</button>
+                  <button class="adtype-select-option" type="button" role="option" aria-selected="false" data-global-adtype-option data-value="SP" data-adtype-group-option="SA">SP</button>
+                  <button class="adtype-select-option" type="button" role="option" aria-selected="false" data-global-adtype-option data-value="SD" data-adtype-group-option="SA">SD</button>
+                  <button class="adtype-select-option" type="button" role="option" aria-selected="false" data-global-adtype-option data-value="SB" data-adtype-group-option="SA">SB</button>
+                </div>
               </span>
             </div>
             <div class="control with-label"><span class="control-label">人群类型</span><span class="control-value">全部类型 <span class="chev"></span></span></div>
@@ -5050,19 +5432,38 @@
                 </div>
               </div>
             </div>
+            <div class="audience-search" id="global-audience-search" aria-label="搜索人群名称/ID">
+              <label class="audience-search-mode" aria-label="搜索条件">
+                <select id="audience-search-mode-select">
+                  <option value="include">包含</option>
+                  <option value="exclude">排除</option>
+                </select>
+                <span class="chev"></span>
+              </label>
+              <div class="audience-search-field">
+                <input id="audience-search-input" class="audience-search-input" type="text" placeholder="搜索人群名称/ID" autocomplete="off" />
+                <div class="audience-search-chip-list" id="audience-search-chip-list" aria-label="搜索 chip 列表" hidden></div>
+              </div>
+            </div>
             <div class="advanced-filter-wrap" id="advanced-filter-wrap">
               <button class="btn secondary" id="advanced-filter-trigger" type="button" aria-expanded="false">高级筛选</button>
               <div class="advanced-filter-panel" id="advanced-filter-panel">
                 <div class="advanced-filter-head">
-                  <span>高级筛选</span>
-                  <span class="panel-sub">P4 分层口径与指标区间</span>
+                  <span>设置高级筛选</span>
                 </div>
                 <div class="advanced-filter-body">
-                  <div class="advanced-filter-section">
-                    <div class="advanced-filter-section-title">指标区间筛选</div>
+                  <div class="advanced-filter-rule-line">
+                    <span>符合以下</span>
+                    <select class="advanced-filter-inline-select" aria-label="条件关系" data-advanced-filter-field data-default-value="所有">
+                      <option>所有</option>
+                      <option>任一</option>
+                    </select>
+                    <span>条件</span>
+                  </div>
+                  <div class="advanced-filter-condition-box">
                     <div class="advanced-filter-row">
-                      <label class="advanced-filter-field">指标
-                        <select>
+                      <label class="advanced-filter-control advanced-filter-select">
+                        <select aria-label="指标" data-advanced-filter-field data-default-value="曝光用户数">
                           <option>曝光用户数</option>
                           <option>点击用户数</option>
                           <option>购买用户数</option>
@@ -5070,30 +5471,51 @@
                           <option>广告花费</option>
                         </select>
                       </label>
-                      <label class="advanced-filter-field">最小值 <input type="text" value=""></label>
-                      <span>-</span>
-                      <label class="advanced-filter-field">最大值 <input type="text" value=""></label>
-                      <button class="btn secondary" type="button">添加条件</button>
+                      <label class="advanced-filter-control advanced-filter-select">
+                        <select aria-label="筛选方式" data-advanced-filter-field data-default-value="绝对值">
+                          <option>绝对值</option>
+                          <option>百分位</option>
+                        </select>
+                      </label>
+                      <label class="advanced-filter-control">
+                        <input class="advanced-filter-number" type="text" placeholder="最小值" value="" data-advanced-filter-field data-default-value="">
+                      </label>
+                      <span class="advanced-filter-range-divider">-</span>
+                      <label class="advanced-filter-control">
+                        <input class="advanced-filter-number" type="text" placeholder="最大值" value="" data-advanced-filter-field data-default-value="">
+                      </label>
+                      <button class="advanced-filter-remove" type="button" aria-label="删除条件">×</button>
                     </div>
-                  </div>
-                  <div class="advanced-filter-section percentile-filter-panel">
-                    <div class="advanced-filter-section-title">百分位筛选</div>
                     <div class="advanced-filter-row">
-                      <label class="advanced-filter-field">分层指标
-                        <select id="percentile-metric-select">
+                      <label class="advanced-filter-control advanced-filter-select">
+                        <select id="percentile-metric-select" aria-label="百分位指标" data-advanced-filter-field data-default-value="点击用户数">
                           <option>曝光用户数</option>
-                          <option>点击用户数</option>
+                          <option selected>点击用户数</option>
                           <option>购买用户数</option>
                           <option>人群规模</option>
                           <option>销售额</option>
                           <option>广告花费</option>
                         </select>
                       </label>
-                      <label class="advanced-filter-field">取 <input id="percentile-min-input" type="text" value="">%</label>
-                      <span>-</span>
-                      <label class="advanced-filter-field"><input id="percentile-max-input" type="text" value="">%</label>
+                      <label class="advanced-filter-control advanced-filter-select">
+                        <select aria-label="百分位筛选方式" data-advanced-filter-field data-default-value="百分位">
+                          <option>绝对值</option>
+                          <option selected>百分位</option>
+                        </select>
+                      </label>
+                      <label class="advanced-filter-control advanced-filter-select advanced-filter-percentile-value">
+                        <select aria-label="百分位范围" data-advanced-filter-field data-default-value="前10%">
+                          <option>前10%</option>
+                          <option>前20%</option>
+                          <option>前30%</option>
+                          <option>后10%</option>
+                          <option>后20%</option>
+                        </select>
+                      </label>
+                      <button class="advanced-filter-remove" type="button" aria-label="删除条件">×</button>
                     </div>
                   </div>
+                  <button class="advanced-add-condition" type="button">+ 添加条件</button>
                 </div>
                 <div class="advanced-filter-actions">
                   <button class="btn secondary" type="button" id="advanced-filter-reset">重置</button>
@@ -5243,19 +5665,21 @@
                   <span class="axis-label-text">购买渗透率</span>
                   <span class="metric-help" id="axis-x-inline-help" data-tip="购买渗透率 计算公式：&#10;当前标签购买用户数 / 当前标签人群规模">?</span>
                 </div>
-                <div class="bubble core tip-left" data-tip="IM - Recessed Lighting Housing &amp; Trim Kits&#10;TGI：4,325&#10;购买渗透率：3.131%&#10;购买用户数：21,827&#10;ROAS：10.05" style="left: 82%; top: 16%; width: 58px; height: 58px;"><span class="bubble-text">IM - Recessed Lighting Housing &amp; Trim Kits</span></div>
-                <div class="bubble core tip-left" data-tip="IM - Recessed Light Fixtures&#10;TGI：3,979&#10;购买渗透率：2.880%&#10;购买用户数：22,201&#10;ROAS：10.00" style="left: 75%; top: 22%; width: 56px; height: 56px;"><span class="bubble-text">IM - Recessed Light Fixtures</span></div>
-                <div class="bubble core tip-left" data-tip="LS - B2B - Business Lookalike - Electricians&#10;TGI：4,047&#10;购买渗透率：2.930%&#10;购买用户数：14,890&#10;ROAS：14.90" style="left: 67%; top: 18%; width: 50px; height: 50px;"><span class="bubble-text">LS - B2B - Business Lookalike - Electricians</span></div>
-                <div class="bubble core" data-tip="LS - B2B - Business Lookalike - Plumbers&#10;TGI：1,714&#10;购买渗透率：1.241%&#10;购买用户数：15,797&#10;ROAS：11.57" style="left: 52%; top: 35%; width: 51px; height: 51px;"><span class="bubble-text">LS - B2B - Business Lookalike - Plumbers</span></div>
-                <div class="bubble core" data-tip="LS - Interested in Home Improvement - Household Hardware&#10;TGI：202&#10;购买渗透率：0.146%&#10;购买用户数：63,135&#10;ROAS：7.61" style="left: 31%; top: 57%; width: 66px; height: 66px;"><span class="bubble-text">LS - Interested in Home Improvement - Household Hardware</span></div>
-                <div class="bubble grow" data-tip="LS - Interested in Home Improvement&#10;TGI：103&#10;购买渗透率：0.074%&#10;购买用户数：81,102&#10;ROAS：7.17" style="left: 22%; top: 48%; width: 70px; height: 70px;"><span class="bubble-text">LS - Interested in Home Improvement</span></div>
-                <div class="bubble low tip-up" data-tip="LS - B2B - Seller Central Lookalikes&#10;TGI：29&#10;购买渗透率：0.021%&#10;购买用户数：80,812&#10;ROAS：6.87" style="left: 18%; top: 80%; width: 68px; height: 68px;"><span class="bubble-text">LS - B2B - Seller Central Lookalikes</span></div>
+                <div class="bubble core is-live tip-left" data-tip="IM - Recessed Lighting Housing &amp; Trim Kits&#10;投放状态：投放中&#10;TGI：4,325&#10;购买渗透率：3.131%&#10;购买用户数：21,827&#10;ROAS：10.05" style="left: 82%; top: 16%; width: 58px; height: 58px;"><span class="bubble-text">IM - Recessed Lighting Housing &amp; Trim Kits</span></div>
+                <div class="bubble core is-inactive tip-left" data-tip="IM - Recessed Light Fixtures&#10;投放状态：未投放&#10;TGI：3,979&#10;购买渗透率：2.880%&#10;购买用户数：22,201&#10;ROAS：10.00" style="left: 75%; top: 22%; width: 56px; height: 56px;"><span class="bubble-text">IM - Recessed Light Fixtures</span></div>
+                <div class="bubble core is-live tip-left" data-tip="LS - B2B - Business Lookalike - Electricians&#10;投放状态：投放中&#10;TGI：4,047&#10;购买渗透率：2.930%&#10;购买用户数：14,890&#10;ROAS：14.90" style="left: 67%; top: 18%; width: 50px; height: 50px;"><span class="bubble-text">LS - B2B - Business Lookalike - Electricians</span></div>
+                <div class="bubble core is-inactive" data-tip="LS - B2B - Business Lookalike - Plumbers&#10;投放状态：未投放&#10;TGI：1,714&#10;购买渗透率：1.241%&#10;购买用户数：15,797&#10;ROAS：11.57" style="left: 52%; top: 35%; width: 51px; height: 51px;"><span class="bubble-text">LS - B2B - Business Lookalike - Plumbers</span></div>
+                <div class="bubble low is-inactive" data-tip="LS - Interested in Home Improvement - Household Hardware&#10;投放状态：未投放&#10;TGI：202&#10;购买渗透率：0.146%&#10;购买用户数：63,135&#10;ROAS：7.61" style="left: 31%; top: 57%; width: 66px; height: 66px;"><span class="bubble-text">LS - Interested in Home Improvement - Household Hardware</span></div>
+                <div class="bubble grow is-live" data-tip="LS - Interested in Home Improvement&#10;投放状态：投放中&#10;TGI：103&#10;购买渗透率：0.074%&#10;购买用户数：81,102&#10;ROAS：7.17" style="left: 22%; top: 48%; width: 70px; height: 70px;"><span class="bubble-text">LS - Interested in Home Improvement</span></div>
+                <div class="bubble low is-live tip-up" data-tip="LS - B2B - Seller Central Lookalikes&#10;投放状态：投放中&#10;TGI：29&#10;购买渗透率：0.021%&#10;购买用户数：80,812&#10;ROAS：6.87" style="left: 18%; top: 80%; width: 68px; height: 68px;"><span class="bubble-text">LS - B2B - Seller Central Lookalikes</span></div>
               </div>
-              <div class="legend">
+              <div class="legend scatter-legend">
                 <span id="legend-core"><span class="legend-dot" style="background: var(--green);"></span>高 TGI + 高渗透</span>
                 <span id="legend-grow"><span class="legend-dot" style="background: var(--blue);"></span>高 TGI + 低渗透</span>
                 <span id="legend-watch"><span class="legend-dot" style="background: var(--amber);"></span>低 TGI + 高渗透</span>
                 <span id="legend-low"><span class="legend-dot" style="background: var(--red);"></span>低 TGI + 低渗透</span>
+                <span class="scatter-legend-status"><span class="scatter-status-dot is-live"></span>投放中</span>
+                <span class="scatter-legend-status"><span class="scatter-status-dot is-inactive"></span>未投放</span>
               </div>
             </article>
           </div>
@@ -5267,7 +5691,6 @@
               <div class="detail-title">人群机会分析宽表</div>
             </div>
               <div class="wide-table-actions">
-                <div class="control audience-search"><span class="search-placeholder">搜索人群名称/ID</span></div>
                 <div class="control with-label wide-partition-filter">
                   <span class="control-label">指标分区</span>
                   <span class="control-value">
@@ -5740,55 +6163,103 @@
         <span class="prd-title-text">PRD 标注说明</span>
         <button class="prd-close" id="prd-close" type="button" aria-label="收起 PRD 标注">›</button>
       </div>
-      <div class="prd-drawer-sub">基于《AMC4.0_人群机会_TGI与渗透率_PRD_v2》，把页面模块、核心口径和交互验收点映射到当前原型。</div>
+      <div class="prd-drawer-sub">基于《【AMC】AMC Reports，新增人群机会模型》，把页面模块、核心口径和交互验收点映射到当前原型。</div>
     </div>
     <div class="prd-body">
       <div class="prd-section-title">页面故事线</div>
       <div class="prd-note-list" id="prd-note-list">
         <div class="prd-note" data-target=".report-header">
           <div class="prd-note-top"><span class="prd-index">P1</span><span>报告上下文</span></div>
-          <div class="prd-note-copy">展示报告状态、时区、订阅月份与下载入口；月份下拉用于切换历史订阅报告。</div>
-          <div class="prd-note-meta"><span class="prd-chip">PRD 7.1</span><span class="prd-chip">全局上下文</span></div>
+          <div class="prd-note-copy">
+            <p><strong>需求背景：</strong>本模型承接 AMC 3.0 中 Audience 模型能力，迁移到 AMC 4.0 的 Reports 体系，目标是在 AMC Reports 中新增“人群机会模型”，保证用户原有的人群分析使用链路平滑延续。</p>
+            <p><strong>创建报告传参：</strong>数据聚合方式为必填单选下拉，默认选中“分广告类型”，可切换“按整体输出”；品牌词为必填多行文本框，按回车分隔；报告维度为必填单选下拉，默认“账号”，可选“账号 / 品牌产品线”。</p>
+            <p><strong>品牌产品线维度：</strong>当报告维度选择“品牌产品线”时，创建报告表单展示品牌与产品线多选；不选择时等同 All。品牌来自 Mapping Upload 品牌词去重，产品线仅展示所选品牌下的产品线；如 Data Upload 中 Brand 或 Product line 为空，下拉提示 upload data，点击后跳转 Data Upload 页面，Instance 选项沿用创建报告时所选 Instance。</p>
+            <p><strong>预览页：</strong>人群机会模型预览页面隐藏下载按钮和指标配置按钮。</p>
+            <p><strong>下载口径：</strong>下载数据为同步下载，下载对应模型所有字段和数据；文件命名为“大写站点 + Instance name + 报告名称 - 模型名称”；Sheet 名为模型名称。PDF 下载沿用线上报告 PDF 下载逻辑。埋点参照系统已有模型处理，同步对接 admin 系统和观测云。</p>
+          </div>
+          <div class="prd-note-meta"><span class="prd-chip">创建报告</span><span class="prd-chip">下载口径</span></div>
         </div>
         <div class="prd-note" data-target=".model-filter-area">
           <div class="prd-note-top"><span class="prd-index">P2</span><span>全局筛选</span></div>
-          <div class="prd-note-copy">明确当前模型为“人群机会分析”；全局筛选栏支持品牌、品线、广告类型、人群类型（LS/LM）、类目与高级筛选，并在页面滚动时吸顶，作用于当前模型全部分析模块与明细表。类目筛选按外部配置文件《类目.xlsx》的一级类目、二级类目、三级类目生成联动选项，不再从宽表「类目路径」字段反推。人群名称/ID 搜索下沉到 P7 宽表，仅筛选明细，不影响图表。</div>
-          <div class="prd-note-meta"><span class="prd-chip">PRD 7.2</span><span class="prd-chip">账号到品线下钻</span></div>
+          <div class="prd-note-copy">
+            <p><strong>模块范围：</strong>全局筛选区承载当前“人群机会模型”的公共筛选项；除“搜索人群名称 / ID”按当前实现仅过滤宽表行外，其余筛选项作用于分析图表、自由散点气泡图与宽表明细；筛选区在页面滚动时保持吸顶。</p>
+            <p><strong>所有标签 / 目标标签：</strong>以页签形式展示，默认选中“目标标签”；可切换“所有标签”。同一页签区域只保留一个标注，不再为每个页签单独加角标。</p>
+            <p><strong>品牌：</strong>当报告维度为账号维度时不显示；当报告维度为品牌产品线时显示单选下拉。默认选中 raw data 下所有品牌词按 A-Z 排序后的第一个选项；不支持置空，支持输入搜索。</p>
+            <p><strong>产品线：</strong>当报告维度为账号维度时不显示；当报告维度为品牌产品线时显示单选下拉。默认选中当前品牌下第一个产品线；仅展示对应品牌词下的所有产品线；不支持置空，支持输入搜索。</p>
+            <p><strong>广告类型：</strong>当数据聚合方式为“按整体输出”时不显示；分广告类型时显示单选下拉，默认“所有广告汇总”。可选项为“所有广告汇总、DSP、SA广告汇总、SP、SD、SB”；ST 已按最新标注并入 SA 广告汇总，不作为独立筛选项。</p>
+            <p><strong>人群类型：</strong>下拉单选，默认不选择。系统根据当前报告数据中的人群标签名称动态提取并去重，取标签名称中 “-” 前的前缀作为人群类型，例如 “IM - GarmentRacks” 提取为 IM；若数据中不存在某类前缀，则不展示该选项。常见选项为 LS、IM、Others。</p>
+            <p><strong>搜索人群名称 / ID：</strong>入口放在全局筛选区高级筛选按钮左侧；由“包含 / 排除”条件下拉 + 可回车添加的输入框组成，条件下拉字号需与广告类型控件一致。输入内容后回车生成 chip；同一筛选项下多个 chip 之间为 OR 关系；该搜索入口从宽表上方迁移到全局区域后，仍用于宽表的人群名称或 ID 行过滤。</p>
+            <p><strong>类目：</strong>基于“人群机会分析宽表”中的类目路径生成一级、二级、三级联动类目；支持输入搜索，支持置空。</p>
+          </div>
+          <div class="prd-note-meta"><span class="prd-chip">全局筛选框</span><span class="prd-chip">搜索 chip</span></div>
         </div>
         <div class="prd-note" data-target="#advanced-filter-trigger">
           <div class="prd-note-top"><span class="prd-index">P3</span><span>高级筛选</span></div>
-          <div class="prd-note-copy">支持按百分位配置分层区间，联动 P4 的展示范围与原点计算逻辑。</div>
-          <div class="prd-note-meta"><span class="prd-chip">PRD 7.2</span><span class="prd-chip">区间筛选</span></div>
+          <div class="prd-note-copy">
+            <p><strong>筛选结构：</strong>高级筛选支持多条件组合。逻辑关系切换为单选下拉，可选“所有 / 任一”，默认“所有”。</p>
+            <p><strong>指标选择器：</strong>单选下拉，默认“曝光人数”，支持搜索；已选指标不可在其他条件行重复选择。可选指标包括曝光人数、点击人数、品牌搜索人数、DPV人数、ATC 人数、购买人数、新客人数、广告花费、曝光次数、点击次数、品牌搜索次数、DPV次数、销售额、新客销售额、购买次数、销售单位数、曝光渗透率、点击渗透率、品牌搜索渗透率、DPV 渗透率、购买渗透率、新客渗透率、曝光 TGI、点击 TGI、品牌搜索 TGI、DPV TGI、ATC TGI、购买 TGI、新客 TGI。</p>
+            <p><strong>数值类型：</strong>单选下拉，可选“绝对值 / 百分位”，默认“绝对值”。绝对值模式展示区间输入框，左侧为 MIN、右侧为 MAX；百分位模式可选前10%、前25%、前50%、后10%、后25%、后50%、自定义，自定义时再展示 MIN / MAX 区间输入框。</p>
+            <p><strong>输入校验：</strong>区间输入框只能输入数字；两个输入框可任意留空一个；若同时输入两个数字，右侧数值必须大于左侧。校验时点为光标移出输入框后；输入非数字时页面顶部 toast “请输入数字”；左右大小不符合要求时 toast “请注意右侧输入框数字须大于左边。”</p>
+            <p><strong>条件语义：</strong>仅输入最小值表示指标大于等于最小值；仅输入最大值表示指标小于等于最大值；同时输入最小值与最大值表示包含边界的闭区间。</p>
+            <p><strong>按钮交互：</strong>添加条件会在列表末尾插入空白条件行，默认自动分配未使用的首个指标、类型为“绝对值”、区间为空；删除 icon 移除当前行，仅剩一行时隐藏；重置清空所有数值与选择，恢复为仅保留一行默认状态，不自动刷新数据；应用筛选先做表单校验，校验通过后启动 loading 并请求后端刷新下方数据列表，成功提示“筛选成功，已更新数据”，请求失败 toast “网络错误，筛选失败，请重试”。</p>
+            <p><strong>防重复提交：</strong>应用筛选需做防抖 / 防重复点击处理，后端返回前按钮 Disable；用户未做任何修改时点击“应用”不重复发送请求。</p>
+          </div>
+          <div class="prd-note-meta"><span class="prd-chip">高级筛选</span><span class="prd-chip">区间筛选</span></div>
         </div>
         <div class="prd-note" data-target=".penetration-card">
           <div class="prd-note-top"><span class="prd-index">P8</span><span>渗透率表现分析</span></div>
           <div class="prd-note-copy">
-            <p>页面排版调整后，P8 置于最上方，作为用户进入报告后的第一屏重点分析。</p>
-            <p>P8 头部单独提供“跑数模式”切换，避免与全局筛选混杂；<strong>不分广告类型跑数</strong>时，仅展示“人群标签渗透率表现”；<strong>分广告类型跑数</strong>时，展示“人群标签渗透率表现（All Types）+ 广告渗透表现”。</p>
-            <p><strong>人群标签渗透率表现：</strong>每根柱子总高度固定代表标签 ASI 总人数；蓝色区块表示当前行为指标人数，灰色区块表示剩余未覆盖人数。鼠标 hover 任一色块时，展示标签名、行为指标人数绝对值及占比、未覆盖人数绝对值及占比、标签 ASI 总人数。</p>
-            <p><strong>广告渗透表现：</strong>仅在分广告类型跑数时展示；上半区展示基准广告，下半区展示对比广告；鼠标 hover 任一色块时，展示广告类型、标签名、渗透率、渗透率差异值。</p>
+            <p><strong>模块位置：</strong>渗透率表现分析置于页面上方，作为进入报告后的第一屏重点分析模块。</p>
+            <p><strong>标题联动：</strong>当处于“分广告类型”模式时，标题显示为“人群标签渗透率表现（{广告类型}）”，括号内文案随全局广告类型下拉框当前选中值实时变化，例如“人群标签渗透率表现（DSP）”。该联动只影响当前模块展示文案，不改变筛选控件本身。当处于“按整体输出”模式时，标题显示为“人群标签渗透率表现”。</p>
+            <p><strong>行为指标筛选：</strong>归属于人群标签渗透率表现与广告渗透表现，单选下拉，默认“曝光人数”；可选曝光人数、品牌搜索人数、点击人数、DPV 人数、ATC 人数、购买人数、新客人数。切换行为指标后，图表纵轴口径与横轴标签排序同步更新。</p>
+            <p><strong>人群标签渗透率表现：</strong>图表类型为堆叠柱状图。横轴为人群标签，标签名区域固定两行高度，超出显示省略号，Hover 展示完整标签名；排序按当前行为指标对应数值降序，数值越高越靠左。纵轴受行为指标下拉框控制并动态变化。图例中蓝色表示当前行为指标人数，灰色表示剩余未覆盖人数。</p>
+            <p><strong>堆叠柱展示规则：</strong>每根柱子的总高度固定不变，统一代表标签 ASI 总人数，按 100% 理解；蓝色部分表示当前行为指标人数；灰色部分表示剩余未覆盖人数，灰色区块内居中展示剩余未覆盖人数绝对值；蓝灰交界处展示覆盖率，公式为“当前行为指标人数 / 标签 ASI 总人数 * 100%”。当蓝色或灰色区块过小、无法清晰承载数值时，隐藏对应区块内数值文案。</p>
+            <p><strong>堆叠柱 Hover：</strong>自上而下展示标签名、{行为指标}人数（占比）、{行为指标}未覆盖人数（占比）、标签 ASI 总人数。</p>
+            <p><strong>广告渗透表现：</strong>图表类型为双侧对比柱状图。横轴为人群标签，同样固定两行高度并支持 Hover 完整展示；排序按当前行为指标对应数值降序。纵轴为“{行为指标}渗透率（%）”，随行为指标动态切换，例如行为指标为曝光人数时展示曝光渗透率。图例为蓝色 = 基准广告，绿色 = 对比广告。</p>
+            <p><strong>广告渗透展示条件：</strong>仅当处于“分广告类型”模式，且全局筛选广告类型未限定为单一广告类型时展示；当处于“按整体输出”模式，或分广告类型但全局广告类型已选择单一广告类型（如仅 SP）时隐藏。</p>
+            <p><strong>基准 / 对比广告：</strong>基准广告默认 DSP，对比广告默认 SP；两个下拉框可选范围一致，为 DSP、SA广告汇总、SP、SB、SD。ST 已并入 SA 广告汇总，不作为独立选项。两个下拉框不允许选择相同广告类型；当一侧选择广告类型 A 后，另一侧对应广告类型 A 置灰不可选，反之同理。</p>
+            <p><strong>广告渗透 Hover：</strong>自上而下展示广告类型、标签名、{行为指标}人数、{行为指标}渗透率、渗透率差异值。</p>
           </div>
-          <div class="prd-note-meta"><span class="prd-chip">PRD 7.9</span><span class="prd-chip">标签渗透表现</span></div>
+          <div class="prd-note-meta"><span class="prd-chip">渗透率表现</span><span class="prd-chip">标签渗透表现</span></div>
         </div>
         <div class="prd-note" data-target=".chart-panel">
           <div class="prd-note-top"><span class="prd-index">P4</span><span>人群机会分布</span></div>
           <div class="prd-note-copy">
-            <p>仅保留<strong>自由散点图</strong>方案：Y 轴只能选择 TGI 类指标，X 轴只能选择渗透率类指标。</p>
-            <p>图标题下方固定展示 TGI 与渗透率的业务解释：TGI 用于衡量标签在当前目标行为上的相对偏好强度，渗透率用于衡量该标签在目标行为上的实际覆盖水平；两者结合用于观察不同人群标签的机会分布。</p>
-            <p>图内 Y/X 轴小问号仅展示公式解释，并跟随当前选择的指标动态变化。例如选择“曝光 TGI”时，公式说明使用曝光相关口径。TGI 公式按数据组口径展示为：(No. of 行为 UV within the segment / Total No. of 行为 UV) / (Total No. of Users within the segment / Amazon Total No. of Users)。</p>
-            <p><strong>气泡大小：</strong>支持选择所有行为人数、行为次数以及计算指标，例如曝光/点击/DPV/ATC/购买/NTB 用户数与次数、人群规模、标签总人数、广告花费、销售额、ROAS、CTR、CVR。</p>
-            <p><strong>原点配置：</strong>支持中位数（默认）、平均数、自定义；选择自定义时，展开 TGI 与渗透率输入框，用于手动填写四象限十字线原点。</p>
-            <p>散点颜色仅展示高低分布形成的<strong>指标分区</strong>，不自动生成投放动作；展示范围支持选择排序指标、最大/最小方向与展示数量 N，排序指标可选行为人数、销售额和花费，并展示为“TOP N + 指标 + 人群机会分布”。</p>
+            <p><strong>图表类型：</strong>仅保留自由散点气泡图。标题格式为“TOP/BOTTOM {N} {排序指标}人群机会分布”，默认“TOP 50 曝光人数人群机会分布”；当用户修改展示范围中的排序指标、最大 / 最小方向或数量 N 后，标题同步更新。</p>
+            <p><strong>解释与摘要：</strong>标题下方固定展示 TGI 与渗透率的业务解释：TGI 用于衡量该人群相对于整体平均水平是否具有更强倾向，例如购买 TGI 大于 1 代表购买倾向高于平均水平；渗透率用于衡量该标签在目标行为上的实际覆盖水平。两者结合用于观察不同人群标签的机会分布。解释文案下方动态展示当前配置摘要：“当前配置：{排序指标} · {排序方向} {N} 个 · 原点：{原点配置方式}”。修改展示范围、横纵轴、气泡大小或原点配置时，摘要实时同步更新。</p>
+            <p><strong>横轴：</strong>横轴仅支持选择渗透率类指标，默认曝光渗透率；可选曝光渗透率、点击渗透率、品牌搜索渗透率、DPV 渗透率、ATC 渗透率、购买渗透率、新客渗透率。横轴问号提示随当前选中指标动态展示公式：“{行为指标}渗透率 =（该人群标签内的 {行为指标} 人数 / 全部人群标签的 {行为指标} 人数）*100%”。</p>
+            <p><strong>纵轴：</strong>纵轴仅支持选择 TGI 类指标，默认曝光 TGI；可选曝光 TGI、点击 TGI、品牌搜索 TGI、DPV TGI、ATC TGI、购买 TGI、新客 TGI。纵轴问号提示随当前选中指标动态展示公式：“{行为指标} TGI =（该人群标签内的 {行为指标} 人数 / 全部人群标签的 {行为指标} 人数）/（该人群标签总人数 / Amazon 总人数）”。</p>
+            <p><strong>图例与分区：</strong>绿色 = 高 TGI + 高渗透；蓝色 = 高 TGI + 低渗透；橙色 = 低 TGI + 高渗透；红色 = 低 TGI + 低渗透；灰色实心 = 投放中；灰色空心 = 未投放。气泡颜色表示四象限归属，虚实状态表示投放状态，两者需同时生效。</p>
+            <p><strong>气泡大小：</strong>气泡大小受“气泡大小”下拉框控制，默认曝光人数；可选曝光人数、点击人数、品牌搜索人数、DPV人数、ATC 人数、购买人数、新客人数、广告花费、曝光次数、点击次数、品牌搜索次数、DPV次数、销售额、新客销售额、购买次数、销售单位数、曝光渗透率、点击渗透率、品牌搜索渗透率、DPV 渗透率、购买渗透率、新客渗透率、曝光 TGI、点击 TGI、品牌搜索 TGI、DPV TGI、ATC TGI、购买 TGI、新客 TGI。切换气泡大小仅影响尺寸，不影响横轴、纵轴及四象限分区计算逻辑。</p>
+            <p><strong>气泡虚实状态：</strong>实心气泡代表该人群标签当前在投放；虚线描边气泡代表该人群标签当前未投放。</p>
+            <p><strong>展示规则：</strong>当前图表仅展示满足展示范围配置的 TOP/BOTTOM N 人群标签。四象限高低判定以原点配置确定的十字线为分界，将当前展示的 TOP/BOTTOM N 标签划分为四个象限；图例中的高 / 低基于当前展示标签数据，而非全部数据源。</p>
+            <p><strong>拖拽与范围条：</strong>支持鼠标拖拽图表视图进行平移；底部水平拖动条用于筛选和定位横轴渗透率范围，左侧垂直拖动条用于筛选和定位纵轴 TGI 范围。拖动两端手柄可缩小 / 扩大显示范围，超出范围气泡自动隐藏；拖动中间区域可整体平移视图。默认选中范围覆盖全部数据。拖动过程中气泡显示 / 隐藏实时更新，释放鼠标后状态确定；图表视图与拖动条双向联动。</p>
+            <p><strong>Hover：</strong>悬停气泡时该气泡高亮（增大边框、提升不透明度），其余气泡变暗至 12%；同时展示 tooltip，内容依次为标签名、{行为指标}TGI、{行为指标}渗透率、{气泡大小指标名称}、标签 ASI 总人数。</p>
+            <p><strong>高级设置：</strong>展示范围用于控制散点图展示的人群标签范围，包含排序指标、排序方向（最大 / 最小）和数量 N（1-50）。分界线位置用于确定四象限原点，支持中位数（默认）、平均数、自定义；中位数 / 平均数基于当前全局筛选 + 高级筛选后的全部数据计算；自定义时展示 TGI 与渗透率（%）输入框，默认不填充。切换原点配置后，四象限分区和颜色同步更新。</p>
+            <p><strong>高级设置按钮：</strong>重置仅恢复高级设置内的展示范围、排序方向、数量 N、原点配置及自定义原点输入值，不影响横轴、纵轴、气泡大小；重置后不自动刷新图表，需点击“应用”后生效；默认配置下重置按钮置灰。应用设置只提交高级设置并刷新 TOP/BOTTOM N、标题、配置摘要、四象限分界线、象限颜色归属，以及下方宽表中的指标分区标记；请求期间按钮置灰并 loading，防止重复点击。</p>
           </div>
-          <div class="prd-note-meta"><span class="prd-chip">PRD 6.1</span><span class="prd-chip">PRD 7.6</span></div>
+          <div class="prd-note-meta"><span class="prd-chip">自由散点</span><span class="prd-chip">TOP 50</span></div>
         </div>
         <div class="prd-note" data-target=".opportunity-wide-card">
           <div class="prd-note-top"><span class="prd-index">P7</span><span>人群机会分析宽表</span></div>
-          <div class="prd-note-copy">P6 独立明细模块并入 P7。宽表保留原始 table 用于客户核数和下载，同时承接 P4 当前筛选口径结果，并对属于 P4 当前展示范围的标签增加显式标记；删除评分字段，目标用户数改为标签总人数，渗透率字段使用进度条展示，类目路径和标签解释放到字段末尾。人群名称列默认冻结不可取消。人群名称/ID 搜索仅作用于宽表。</div>
-          <div class="prd-note-meta"><span class="prd-chip">PRD 7.8</span><span class="prd-chip">明细核数</span></div>
+          <div class="prd-note-copy">
+            <p><strong>宽表定位：</strong>宽表承接当前全局筛选、高级筛选与自由散点高级设置后的结果，用于客户核数、下载与明细排查；人群名称列固定，不允许取消冻结。</p>
+            <p><strong>Benchmark Pin：</strong>最多同时 Pin 3 个标签，超出上限不可继续新增。Pin 后的数据固定展示在 Benchmark 区域，不受主表筛选、搜索、排序影响；原始标签数据更新时 Benchmark 区域对应数据同步更新；Pin 状态按用户账号保存，页面刷新或再次进入后自动恢复；Benchmark 区域独立于主表排序并始终置顶。</p>
+            <p><strong>Pin 交互：</strong>点击宽表行左侧 Pin 图标将标签加入 Benchmark；已 Pin 后图标变为实心橙色；点击 Benchmark 区域内“取消 Pin”将其移出；尝试 Pin 第 4 个标签时 toast “最多支持 Pin 3 个标签，请先取消已有 Pin。”</p>
+            <p><strong>多级排序：</strong>点击字段名按“升序 → 降序 → 取消排序”循环；点击升 / 降序 icon 只切换升降序，不取消排序；已有多字段排序时，点击字段名会把该字段提到第 1 优先级；已存在 3 级排序时，再点击新字段 toast “最多支持 3 个排序字段”。默认按表格首个数据指标降序排序。</p>
+            <p><strong>表头字段：</strong>用户标签细分市场、用户标签ID、用户标签名、广告类型、品牌、产品线、用户标签描述、一级类目、二级类目、三级类目、曝光人数、点击人数、品牌搜索人数、DPV人数、ATC 人数、购买人数、新客人数、广告花费、曝光次数、点击次数、品牌搜索次数、DPV次数、ATC次数、销售额、新客销售额、购买次数、销售单位数、人群标签总人数、Amazon 总人数、曝光渗透率、点击渗透率、品牌搜索渗透率、DPV 渗透率、ATC 渗透率、购买渗透率、新客渗透率、曝光 TGI、点击 TGI、品牌搜索 TGI、DPV TGI、ATC TGI、购买 TGI、新客 TGI、用户标签名投放状态。</p>
+            <p><strong>字段配置：</strong>支持字段自定义勾选及拖拽排序；默认记住用户上次勾选。</p>
+            <p><strong>Metadata 匹配：</strong>宽表生成时先对 segment metadata 按 segment_id 去重，再通过 segment_id 与主结果表 LEFT JOIN，回填类目路径（下载表格字段拆为一级类目、二级类目、三级类目）和用户标签描述；未匹配到 Metadata 时主表记录仍保留，对应字段为空。</p>
+            <p><strong>渗透率字段：</strong>单元格展示渗透率数值，并在数值下方展示进度条；进度条长度按当前字段值占比计算，100% 基准为当前展示数据中该渗透率字段最大值。</p>
+            <p><strong>类目路径与类型标识：</strong>UI 中类目路径单列展示，格式为“一级类目 | 二级类目 | 三级类目”；下载表格拆为一级类目、二级类目、三级类目三列。人群名称中 “-” 前的前缀（如 IM - GarmentRacks → IM）作为类型标识展示在标签名前。</p>
+            <p><strong>搜索入口：</strong>原宽表上方“搜索人群名称 / ID”输入框取消，入口迁移到全局筛选区高级筛选按钮左侧；支持包含 / 排除 chip，同一筛选项下多个 chip 为 OR 关系。</p>
+            <p><strong>指标分区字段：</strong>已标记表示该标签在自由散点气泡图当前 TOP/BOTTOM N 范围内并参与四象限计算；绿色 = 高 TGI 高渗透，蓝色 = 高 TGI 低渗透，橙色 = 低 TGI 高渗透，红色 = 低 TGI 低渗透。未标记表示该标签不在当前 TOP/BOTTOM N 范围内、未参与四象限计算，显示为灰色 “—”。</p>
+            <p><strong>指标分区筛选：</strong>多选下拉，默认“全部分区”；选择全部分区时展示全部标签（含已标记和未标记）；选择具体象限时仅展示该象限归属标签；选择“未标记”时仅展示超出自由散点气泡图 TOP/BOTTOM N 范围、无象限归属的标签。</p>
+          </div>
+          <div class="prd-note-meta"><span class="prd-chip">宽表</span><span class="prd-chip">明细核数</span></div>
         </div>
       </div>
-      <div class="prd-foot">说明：标注用于需求评审和研发对齐，不改变当前页面业务数据。完整 PRD 已写入 02_PRD&设计 目录。</div>
+      <div class="prd-foot">说明：标注用于需求评审和研发对齐，不改变当前页面业务数据。完整需求文档见附件 zip。</div>
     </div>
   </aside>
   </div>
@@ -6308,9 +6779,7 @@
 
     const advancedFilterWrap = document.getElementById('advanced-filter-wrap');
     const advancedFilterTrigger = document.getElementById('advanced-filter-trigger');
-    const percentileMetricSelect = document.getElementById('percentile-metric-select');
-    const percentileMinInput = document.getElementById('percentile-min-input');
-    const percentileMaxInput = document.getElementById('percentile-max-input');
+    const advancedFilterFields = Array.from(document.querySelectorAll('[data-advanced-filter-field]'));
     advancedFilterTrigger?.addEventListener('click', (event) => {
       event.stopPropagation();
       const isOpen = advancedFilterWrap?.classList.toggle('open');
@@ -6322,8 +6791,9 @@
       advancedFilterTrigger?.setAttribute('aria-expanded', 'false');
     });
     document.getElementById('advanced-filter-reset')?.addEventListener('click', () => {
-      if (percentileMinInput) percentileMinInput.value = '';
-      if (percentileMaxInput) percentileMaxInput.value = '';
+      advancedFilterFields.forEach((field) => {
+        field.value = field.dataset.defaultValue ?? '';
+      });
     });
     document.getElementById('advanced-filter-apply')?.addEventListener('click', () => {
       advancedFilterWrap?.classList.remove('open');
@@ -6331,15 +6801,190 @@
     });
 
     const globalAdtypeSelect = document.getElementById('global-adtype-select');
+    const globalAdtypeFilter = document.getElementById('global-adtype-filter');
+    const globalAdtypeTrigger = document.getElementById('global-adtype-trigger');
+    const globalAdtypeTriggerLabel = document.getElementById('global-adtype-trigger-label');
+    const globalAdtypeSearch = document.getElementById('global-adtype-search');
+    const globalAdtypeOptions = Array.from(document.querySelectorAll('[data-global-adtype-option]'));
+    const globalAdtypeGroups = Array.from(document.querySelectorAll('[data-adtype-group]'));
     const isGlobalAdtypeAll = () => !globalAdtypeSelect || globalAdtypeSelect.value === '所有广告汇总';
+    const getGlobalAdtypeLabel = () => globalAdtypeSelect?.selectedOptions?.[0]?.textContent?.trim()
+      || globalAdtypeSelect?.value
+      || '所有广告汇总';
+    const setGlobalAdtypeOpen = (open) => {
+      globalAdtypeFilter?.classList.toggle('is-open', open);
+      globalAdtypeTrigger?.setAttribute('aria-expanded', String(open));
+      if (open) {
+        globalAdtypeSearch?.focus();
+        globalAdtypeSearch?.select();
+      } else if (globalAdtypeSearch) {
+        globalAdtypeSearch.value = '';
+        filterGlobalAdtypeOptions('');
+      }
+    };
+    const filterGlobalAdtypeOptions = (keyword) => {
+      const query = keyword.trim().toLowerCase();
+      globalAdtypeOptions.forEach((option) => {
+        const isVisible = !query || option.textContent.trim().toLowerCase().includes(query);
+        option.hidden = !isVisible;
+      });
+      globalAdtypeGroups.forEach((group) => {
+        const groupName = group.dataset.adtypeGroup || '';
+        const hasVisibleOption = globalAdtypeOptions.some((option) => option.dataset.adtypeGroupOption === groupName && !option.hidden);
+        group.hidden = !hasVisibleOption;
+      });
+    };
     const syncGlobalAdtypeState = () => {
       globalAdtypeSelect?.classList.toggle('has-value', Boolean(globalAdtypeSelect?.value));
+      if (globalAdtypeTriggerLabel) globalAdtypeTriggerLabel.textContent = getGlobalAdtypeLabel();
+      globalAdtypeOptions.forEach((option) => {
+        const isSelected = option.dataset.value === globalAdtypeSelect?.value;
+        option.classList.toggle('selected', isSelected);
+        option.setAttribute('aria-selected', String(isSelected));
+      });
     };
+    globalAdtypeTrigger?.addEventListener('click', (event) => {
+      event.stopPropagation();
+      advancedFilterWrap?.classList.remove('open');
+      advancedFilterTrigger?.setAttribute('aria-expanded', 'false');
+      setGlobalAdtypeOpen(!globalAdtypeFilter?.classList.contains('is-open'));
+    });
+    globalAdtypeFilter?.addEventListener('click', (event) => event.stopPropagation());
+    globalAdtypeOptions.forEach((option) => {
+      option.addEventListener('click', () => {
+        if (!globalAdtypeSelect) return;
+        globalAdtypeSelect.value = option.dataset.value || '';
+        globalAdtypeSelect.dispatchEvent(new Event('change', { bubbles: true }));
+        setGlobalAdtypeOpen(false);
+        globalAdtypeTrigger?.focus();
+      });
+    });
+    globalAdtypeSearch?.addEventListener('input', () => {
+      filterGlobalAdtypeOptions(globalAdtypeSearch.value);
+    });
+    globalAdtypeSearch?.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        event.stopPropagation();
+        setGlobalAdtypeOpen(false);
+        globalAdtypeTrigger?.focus();
+      }
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        const firstVisible = globalAdtypeOptions.find((option) => !option.hidden);
+        firstVisible?.click();
+      }
+    });
+    globalAdtypeTrigger?.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        setGlobalAdtypeOpen(true);
+      }
+      if (event.key === 'Escape') {
+        setGlobalAdtypeOpen(false);
+      }
+    });
+    advancedFilterTrigger?.addEventListener('click', () => {
+      setGlobalAdtypeOpen(false);
+    });
+    document.addEventListener('click', () => {
+      setGlobalAdtypeOpen(false);
+    });
     globalAdtypeSelect?.addEventListener('change', () => {
       syncGlobalAdtypeState();
       syncPenetrationChart();
     });
     syncGlobalAdtypeState();
+
+    const audienceSearchModeSelect = document.getElementById('audience-search-mode-select');
+    const audienceSearchInput = document.getElementById('audience-search-input');
+    const audienceSearchChipList = document.getElementById('audience-search-chip-list');
+    const audienceSearchModeLabel = {
+      include: '包含',
+      exclude: '排除'
+    };
+    let audienceSearchChipSeq = 0;
+    let audienceSearchChips = [];
+    const renderAudienceSearchChips = () => {
+      if (!audienceSearchChipList) return;
+      audienceSearchChipList.innerHTML = '';
+      audienceSearchChipList.hidden = audienceSearchChips.length === 0;
+      audienceSearchChips.forEach((chip) => {
+        const chipItem = document.createElement('span');
+        chipItem.className = `audience-search-chip ${chip.mode}`;
+        chipItem.dataset.chipId = String(chip.id);
+        chipItem.title = `${audienceSearchModeLabel[chip.mode] || '包含'}：${chip.value}`;
+
+        const modeBadge = document.createElement('span');
+        modeBadge.className = 'audience-search-chip-mode';
+        modeBadge.textContent = audienceSearchModeLabel[chip.mode] || '包含';
+
+        const chipText = document.createElement('span');
+        chipText.className = 'audience-search-chip-text';
+        chipText.textContent = chip.value;
+
+        const removeButton = document.createElement('button');
+        removeButton.type = 'button';
+        removeButton.className = 'audience-search-chip-remove';
+        removeButton.setAttribute('aria-label', `移除 ${chip.value}`);
+        removeButton.textContent = '×';
+        removeButton.addEventListener('click', (event) => {
+          event.stopPropagation();
+          audienceSearchChips = audienceSearchChips.filter((item) => item.id !== chip.id);
+          renderAudienceSearchChips();
+        });
+
+        chipItem.appendChild(modeBadge);
+        chipItem.appendChild(chipText);
+        chipItem.appendChild(removeButton);
+        audienceSearchChipList.appendChild(chipItem);
+      });
+      syncAudienceSearchRows();
+    };
+    const opportunityWideRows = Array.from(document.querySelectorAll('.opportunity-table tbody tr'));
+    const syncAudienceSearchRows = () => {
+      if (!opportunityWideRows.length) return;
+      const includeTerms = audienceSearchChips
+        .filter((chip) => chip.mode === 'include')
+        .map((chip) => chip.value.toLowerCase());
+      const excludeTerms = audienceSearchChips
+        .filter((chip) => chip.mode === 'exclude')
+        .map((chip) => chip.value.toLowerCase());
+
+      opportunityWideRows.forEach((row) => {
+        const cells = row.querySelectorAll('td');
+        const nameText = row.querySelector('.segment-name')?.textContent || cells[0]?.textContent || '';
+        const idText = cells[1]?.textContent || '';
+        const haystack = `${nameText} ${idText}`.toLowerCase();
+        const includeOk = includeTerms.length === 0 || includeTerms.some((term) => haystack.includes(term));
+        const excludeOk = !excludeTerms.some((term) => haystack.includes(term));
+        row.hidden = !(includeOk && excludeOk);
+      });
+    };
+    const addAudienceSearchChip = (value) => {
+      const normalized = value.trim();
+      if (!normalized) return false;
+      const mode = audienceSearchModeSelect?.value === 'exclude' ? 'exclude' : 'include';
+      const duplicate = audienceSearchChips.some((chip) => chip.mode === mode && chip.value.toLowerCase() === normalized.toLowerCase());
+      if (duplicate) return false;
+      audienceSearchChips = [...audienceSearchChips, { id: ++audienceSearchChipSeq, value: normalized, mode }];
+      renderAudienceSearchChips();
+      return true;
+    };
+    audienceSearchInput?.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        if (addAudienceSearchChip(audienceSearchInput.value)) {
+          audienceSearchInput.value = '';
+        }
+        return;
+      }
+      if (event.key === 'Backspace' && !audienceSearchInput.value && audienceSearchChips.length) {
+        event.preventDefault();
+        audienceSearchChips = audienceSearchChips.slice(0, -1);
+        renderAudienceSearchChips();
+      }
+    });
+    renderAudienceSearchChips();
 
     const axisYSelect = document.getElementById('axis-y-select');
     const axisXSelect = document.getElementById('axis-x-select');
@@ -6484,9 +7129,7 @@
     const compareAxisLabel = document.getElementById('compare-axis-label');
     const penetrationOverallTitle = document.getElementById('penetration-overall-title');
     const penetrationAdtypePanel = document.getElementById('penetration-adtype-panel');
-    const globalAdTypeFilter = document.getElementById('global-adtype-filter');
-    const runModeButtons = Array.from(document.querySelectorAll('[data-run-mode]'));
-    let currentRunMode = 'overall';
+    const tagScopeButtons = Array.from(document.querySelectorAll('[data-tag-scope]'));
     const penetrationLabels = {
       purchase: '品牌购买用户数',
       exposure: '曝光用户数',
@@ -6500,7 +7143,8 @@
       dsp: { label: 'DSP', factor: 0.52 },
       sp: { label: 'SP', factor: 0.61 },
       sb: { label: 'SB', factor: 0.47 },
-      sd: { label: 'SD', factor: 0.39 }
+      sd: { label: 'SD', factor: 0.39 },
+      st: { label: 'ST', factor: 0.43 }
     };
     const penetrationData = [
       { name: 'IM - Garment Racks', asi: 981420, purchase: 260100, exposure: 482300, click: 116900, dpv: 88300, atc: 51200, ntb: 231500, sa: .72, dsp: .44 },
@@ -6529,19 +7173,15 @@
       const compareMeta = adtypeMeta[compareKey] || adtypeMeta.dsp;
       const baseLabel = baseMeta.label;
       const compareLabel = compareMeta.label;
+      const globalAdtypeLabel = getGlobalAdtypeLabel();
 
-      const showAdtypeComparison = currentRunMode === 'by-adtype' && isGlobalAdtypeAll();
+      const showAdtypeComparison = isGlobalAdtypeAll();
 
       if (penetrationOverallTitle) {
-        penetrationOverallTitle.textContent = showAdtypeComparison
-          ? '人群标签渗透率表现（All Types）'
-          : '人群标签渗透率表现';
+        penetrationOverallTitle.textContent = `人群标签渗透率表现（${globalAdtypeLabel}）`;
       }
       if (penetrationAdtypePanel) {
         penetrationAdtypePanel.classList.toggle('hidden', !showAdtypeComparison);
-      }
-      if (globalAdTypeFilter) {
-        globalAdTypeFilter.classList.toggle('is-hidden', currentRunMode !== 'by-adtype');
       }
 
       const values = penetrationData.map((item) => ({
@@ -6667,11 +7307,14 @@
     penetrationNumeratorSelect?.addEventListener('change', syncPenetrationChart);
     adtypeBaseSelect?.addEventListener('change', syncPenetrationChart);
     adtypeCompareSelect?.addEventListener('change', syncPenetrationChart);
-    runModeButtons.forEach((button) => {
+    tagScopeButtons.forEach((button) => {
+      button.setAttribute('aria-pressed', String(button.classList.contains('active')));
       button.addEventListener('click', () => {
-        currentRunMode = button.dataset.runMode || 'overall';
-        runModeButtons.forEach((item) => item.classList.toggle('active', item === button));
-        syncPenetrationChart();
+        tagScopeButtons.forEach((item) => {
+          const isActive = item === button;
+          item.classList.toggle('active', isActive);
+          item.setAttribute('aria-pressed', String(isActive));
+        });
       });
     });
     syncPenetrationChart();
@@ -6772,5 +7415,3 @@
   </script>
 </body>
 </html>
-
-
