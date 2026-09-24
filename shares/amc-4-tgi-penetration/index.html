@@ -53,12 +53,7 @@
     .app {
       min-height: 100vh;
       display: grid;
-      grid-template-columns: 172px minmax(0, 1fr) 360px;
-      transition: grid-template-columns .18s ease;
-    }
-
-    .app.prd-collapsed {
-      grid-template-columns: 172px minmax(0, 1fr) 52px;
+      grid-template-columns: 172px minmax(0, 1fr);
     }
 
     .sidebar {
@@ -4860,258 +4855,6 @@
       font-size: 12px;
     }
 
-    .prd-toggle {
-      display: none;
-    }
-
-    .prd-drawer {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      width: auto;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      border-left: 1px solid #c9d7ff;
-      background: #fff;
-      box-shadow: -6px 0 18px rgba(24, 39, 75, .06);
-      overflow: hidden;
-    }
-
-    .prd-drawer.open {
-      transform: none;
-    }
-
-    .prd-drawer.collapsed {
-      align-items: stretch;
-    }
-
-    .prd-drawer-head {
-      padding: 14px 14px 12px;
-      border-bottom: 1px solid var(--border);
-      background: #f7f9ff;
-    }
-
-    .prd-drawer-title {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      color: #1f2b3d;
-      font-size: 15px;
-      font-weight: 800;
-    }
-
-    .prd-close {
-      width: 26px;
-      height: 26px;
-      border: 1px solid #d8e1f1;
-      border-radius: 4px;
-      background: #fff;
-      color: #657086;
-      cursor: pointer;
-    }
-
-    .prd-drawer.collapsed .prd-drawer-head {
-      height: 100%;
-      padding: 10px 10px 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #f7f9ff;
-    }
-
-    .prd-drawer.collapsed .prd-drawer-title {
-      width: 100%;
-      flex-direction: column-reverse;
-      justify-content: flex-end;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .prd-drawer.collapsed .prd-title-text {
-      writing-mode: vertical-rl;
-      letter-spacing: 0;
-      font-size: 13px;
-      white-space: nowrap;
-      line-height: 1.2;
-    }
-
-    .prd-drawer.collapsed .prd-close {
-      width: 28px;
-      height: 28px;
-      font-size: 0;
-    }
-
-    .prd-drawer.collapsed .prd-close::before {
-      content: "‹";
-      font-size: 18px;
-      line-height: 1;
-    }
-
-    .prd-drawer.collapsed .prd-drawer-sub,
-    .prd-drawer.collapsed .prd-body {
-      display: none;
-    }
-
-    .prd-drawer-sub {
-      margin-top: 7px;
-      color: #6f7b90;
-      font-size: 12px;
-      line-height: 1.55;
-    }
-
-    .prd-body {
-      padding: 12px;
-      overflow: auto;
-    }
-
-    .prd-section-title {
-      margin: 2px 0 8px;
-      color: #5f6c82;
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    .prd-note-list {
-      display: grid;
-      gap: 9px;
-    }
-
-    .prd-note {
-      border: 1px solid #e0e7f2;
-      border-radius: 6px;
-      background: #fff;
-      padding: 10px;
-      cursor: pointer;
-      transition: border-color .16s ease, background .16s ease;
-    }
-
-    .prd-note:hover,
-    .prd-note.active {
-      border-color: #3f6ff3;
-      background: #f6f9ff;
-    }
-
-    .prd-note-top {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      color: #202b3d;
-      font-size: 13px;
-      font-weight: 800;
-    }
-
-    .prd-index {
-      flex: none;
-      min-width: 30px;
-      height: 20px;
-      display: inline-grid;
-      place-items: center;
-      border-radius: 10px;
-      background: #edf3ff;
-      color: #2f5fe8;
-      font-size: 11px;
-      font-weight: 800;
-    }
-
-    .prd-note-copy {
-      margin-top: 7px;
-      color: #5f6c82;
-      font-size: 12px;
-      line-height: 1.58;
-    }
-
-    .prd-note-copy p {
-      margin: 0 0 6px;
-    }
-
-    .prd-note-copy p:last-child {
-      margin-bottom: 0;
-    }
-
-    .prd-note-copy strong {
-      color: #243044;
-      font-weight: 800;
-    }
-
-    .prd-note-meta {
-      margin-top: 8px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .prd-chip {
-      height: 20px;
-      display: inline-flex;
-      align-items: center;
-      padding: 0 7px;
-      border-radius: 3px;
-      background: #f1f4f8;
-      color: #657086;
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    .prd-inline-index {
-      position: absolute;
-      top: -12px;
-      left: 12px;
-      z-index: 12;
-      width: fit-content;
-      height: 22px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0;
-      padding: 0 8px;
-      border: 1px solid #b9c9fb;
-      border-radius: 11px;
-      background: #fff;
-      color: #2f5fe8;
-      font-size: 11px;
-      font-weight: 800;
-      line-height: 1;
-      box-shadow: 0 2px 6px rgba(37, 56, 112, .1);
-      cursor: pointer;
-    }
-
-    .prd-inline-index.is-compact {
-      top: -13px;
-      left: auto;
-      right: 6px;
-      margin: 0;
-      height: 20px;
-      padding: 0 7px;
-      font-size: 10px;
-    }
-
-    .prd-annotated {
-      position: relative;
-      outline: 1px dashed rgba(63, 111, 243, .32);
-      outline-offset: 2px;
-    }
-
-    .prd-anchor {
-      display: none;
-    }
-
-    .prd-annotated.prd-focus {
-      outline-color: #3f6ff3;
-      box-shadow: 0 0 0 3px rgba(63, 111, 243, .12);
-    }
-
-    .prd-foot {
-      margin-top: 12px;
-      padding: 10px;
-      border-radius: 6px;
-      background: #f7f9fc;
-      color: #6f7b90;
-      font-size: 12px;
-      line-height: 1.6;
-    }
-
     @media (max-width: 1320px) {
       .model-tab-strip {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -5205,48 +4948,479 @@
         height: 420px;
       }
     }
+
+    /* AMC Reports 统一导航：与主报告列表保持同一套 4KMILES 侧边栏 */
+    .app {
+      grid-template-columns: 143px minmax(0, 1fr);
+    }
+
+    .sidebar {
+      background: #3f70f5;
+      box-shadow: none;
+    }
+
+    .sidebar-logo {
+      height: 40px;
+      display: flex;
+      align-items: center;
+      padding: 0 14px;
+      gap: 6px;
+      background: #fff;
+      color: #232f3f;
+    }
+
+    .sidebar-logo .logo-icon {
+      width: 22px;
+      height: 22px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #3399ff;
+      flex: 0 0 22px;
+    }
+
+    .sidebar-logo .logo-text {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 8px 0;
+      overflow-y: auto;
+    }
+
+    .sidebar-nav .nav-item {
+      height: 48px;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+      color: rgba(255, 255, 255, .92);
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 400;
+      position: relative;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    .sidebar-nav .nav-item:hover {
+      background: rgba(255, 255, 255, .09);
+      color: #fff;
+    }
+
+    .sidebar-nav .nav-item.active {
+      background: rgba(255, 255, 255, .15);
+      color: #fff;
+    }
+
+    .sidebar-nav .nav-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: #fff;
+    }
+
+    .sidebar-nav .nav-icon {
+      width: 16px;
+      height: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 16px;
+      color: currentColor;
+    }
+
+    .sidebar-nav .nav-icon svg {
+      width: 16px;
+      height: 16px;
+      display: block;
+    }
+
+    .sidebar-nav .nav-item > span:nth-last-child(2):not(.nav-icon) {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .sidebar-nav .badge-new,
+    .sidebar-nav .badge-beta {
+      margin-left: auto;
+      padding: 0;
+      background: transparent;
+      color: #fff86b;
+      border-radius: 0;
+      font-size: 10px;
+      font-style: italic;
+      font-weight: 600;
+    }
+
+    .sidebar-nav .badge-beta {
+      color: #d9e6ff;
+      font-style: normal;
+    }
+
+    .sidebar-nav .nav-download-badge {
+      min-width: 14px;
+      height: 14px;
+      padding: 0 4px;
+      margin-left: auto;
+      border-radius: 7px;
+      background: #ff5050;
+      color: #fff;
+      font-size: 10px;
+      line-height: 14px;
+      text-align: center;
+    }
+
+    @media (max-width: 1366px) and (min-width: 901px) {
+      .app {
+        grid-template-columns: 132px minmax(0, 1fr);
+      }
+
+      .sidebar-logo {
+        padding: 0 8px;
+      }
+
+      .sidebar-logo .logo-text {
+        font-size: 12px;
+      }
+
+      .sidebar-nav .nav-item {
+        padding: 0 8px;
+        gap: 6px;
+      }
+
+      .sidebar-nav .badge-new,
+      .sidebar-nav .badge-beta {
+        display: none;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+    }
+
+    /* 异步下载：两个页面下载入口使用同一套确认反馈 */
+    .report-tool.icon-btn {
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .report-tool.icon-btn:hover,
+    .report-tool.icon-btn:focus-visible {
+      border-color: var(--blue);
+      color: var(--blue);
+      outline: none;
+    }
+
+    .async-export-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: rgba(31, 45, 68, .38);
+    }
+
+    .async-export-overlay.open {
+      display: flex;
+    }
+
+    .async-export-dialog {
+      width: min(500px, 100%);
+      overflow: hidden;
+      border: 1px solid #d9e1ec;
+      border-radius: 4px;
+      background: #fff;
+      box-shadow: 0 12px 32px rgba(31, 45, 68, .2);
+    }
+
+    .async-export-header,
+    .async-export-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 48px;
+      padding: 0 18px;
+      border-bottom: 1px solid var(--border);
+      background: #f8f8fa;
+    }
+
+    .async-export-header h2 {
+      margin: 0;
+      color: #232f3f;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .async-export-close {
+      width: 26px;
+      height: 26px;
+      border: 0;
+      border-radius: 2px;
+      background: transparent;
+      color: #7b8798;
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .async-export-close:hover { background: #eef2f7; color: #232f3f; }
+
+    .async-export-body { padding: 18px; }
+
+    .async-export-name { color: #232f3f; font-size: 14px; font-weight: 600; }
+
+    .async-export-list {
+      display: grid;
+      grid-template-columns: 84px minmax(0, 1fr);
+      gap: 9px 10px;
+      margin: 14px 0 0;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      background: #f8f8fa;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .async-export-list dt { color: #7b8798; }
+    .async-export-list dd { margin: 0; color: #232f3f; }
+
+    .async-export-note {
+      margin: 12px 0 0;
+      padding: 9px 10px;
+      border-left: 3px solid var(--blue);
+      background: #eef4ff;
+      color: #596579;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .async-export-footer {
+      justify-content: flex-end;
+      gap: 10px;
+      min-height: 56px;
+      border-top: 1px solid var(--border);
+      border-bottom: 0;
+      background: #fff;
+    }
+
+    .async-export-btn {
+      height: 28px;
+      padding: 0 12px;
+      border: 1px solid #d9dfe8;
+      border-radius: 2px;
+      background: #fff;
+      color: #232f3f;
+      font: inherit;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .async-export-btn.primary { border-color: var(--blue); background: var(--blue); color: #fff; }
+    .async-export-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .async-export-btn.primary:hover { background: var(--blue-dark); color: #fff; }
+
+    .async-export-toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 310;
+      display: none;
+      width: 340px;
+      padding: 12px 14px;
+      border: 1px solid #bcd8ff;
+      border-radius: 4px;
+      background: #fff;
+      box-shadow: 0 8px 22px rgba(31, 45, 68, .16);
+      color: #596579;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .async-export-toast.show { display: block; }
+    .async-export-toast strong { display: block; margin-bottom: 2px; color: #232f3f; font-size: 13px; }
+    .async-export-toast a { display: inline-block; margin-top: 5px; color: var(--blue); font-weight: 600; text-decoration: none; }
+
+    /* ============ 近期下载弹层（借鉴 Chrome 工具栏下载速览的信息架构） ============
+       流程：点击右上角「下载整份报告」/ 卡片「下载数据」→ 按钮进入 loading（模拟创建任务请求）
+            → 请求返回后于右上角弹出本弹层 → 点「查看全部下载记录」进入下载中心。
+       视觉：沿用本页设计令牌（--blue / --border / #232f3f），低圆角、紧凑节奏。 */
+    @keyframes rdp-spin { to { transform: rotate(360deg); } }
+
+    /* 下载入口 loading 态 */
+    .btn.loading,
+    .report-tool.icon-btn.loading {
+      pointer-events: none;
+      opacity: .9;
+    }
+
+    .btn.loading::before,
+    .report-tool.icon-btn.loading::before {
+      content: "";
+      width: 11px;
+      height: 11px;
+      flex: none;
+      border: 2px solid rgba(63, 111, 243, .3);
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: rdp-spin .8s linear infinite;
+    }
+
+    .btn.loading svg { display: none; }
+    .report-tool.icon-btn.loading { justify-content: center; padding: 0; }
+    .report-tool.icon-btn.loading svg { display: none; }
+
+    .recent-download-popup {
+      position: fixed;
+      z-index: 320;
+      display: none;
+      width: 336px;
+      overflow: hidden;
+      border: 1px solid #d9e1ec;
+      border-radius: 4px;
+      background: #fff;
+      box-shadow: 0 10px 28px rgba(31, 45, 68, .18);
+    }
+
+    .recent-download-popup.show { display: block; }
+
+    .rdp-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 38px;
+      padding: 0 12px;
+      border-bottom: 1px solid var(--border);
+      background: #f8f8fa;
+    }
+
+    .rdp-head .rdp-t { color: #232f3f; font-size: 13px; font-weight: 600; }
+
+    .rdp-head .rdp-x {
+      width: 20px;
+      height: 20px;
+      border: 0;
+      border-radius: 2px;
+      background: transparent;
+      color: #7b8798;
+      font: inherit;
+      font-size: 16px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .rdp-head .rdp-x:hover { background: #eef1f6; color: #232f3f; }
+
+    .rdp-body { max-height: 340px; overflow-y: auto; }
+
+    .rdp-item {
+      display: flex;
+      gap: 10px;
+      padding: 10px 12px;
+      border-bottom: 1px solid #f4f6f9;
+      cursor: pointer;
+    }
+
+    .rdp-item:last-child { border-bottom: 0; }
+    .rdp-item:hover { background: #f7f9fc; }
+    .rdp-item.is-new { background: #f5f9ff; }
+    .rdp-item.is-new:hover { background: #eef4ff; }
+
+    .rdp-icon {
+      width: 26px;
+      height: 26px;
+      flex: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #d9e1ec;
+      border-radius: 3px;
+      background: #f7f9fc;
+      color: #7b8798;
+    }
+
+    .rdp-icon.running { border-color: #f2ddb4; background: var(--amber-soft); color: var(--amber); }
+    .rdp-icon.done { border-color: #c8e8da; background: var(--green-soft); color: var(--green); }
+    .rdp-icon.fail { border-color: #f6cddd; background: var(--red-soft); color: var(--red); }
+    .rdp-icon svg { width: 14px; height: 14px; }
+
+    .rdp-content { flex: 1; min-width: 0; }
+
+    .rdp-name {
+      color: #232f3f;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1.5;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .rdp-meta {
+      margin-top: 2px;
+      color: #7b8798;
+      font-size: 11px;
+      line-height: 1.5;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .rdp-meta.fail { color: var(--red); }
+
+    .rdp-act { margin-top: 4px; color: var(--blue); font-size: 11px; font-weight: 600; }
+    .rdp-act:hover { text-decoration: underline; }
+
+    .rdp-foot {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      border-top: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .rdp-foot a { color: var(--blue); font-size: 12px; font-weight: 600; text-decoration: none; }
+    .rdp-foot a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
   <div class="app">
     <aside class="sidebar">
-      <div class="logo">
-        <div class="logo-mark"></div>
-        <div>4KMILES</div>
+      <div class="sidebar-logo">
+        <div class="logo-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4a8 8 0 1 0 7.2 11.5"/><path d="M12 8a4 4 0 1 0 3.6 5.75"/><path d="M19.2 15.5 21 17.3"/></svg></div>
+        <div class="logo-text">4KMILES</div>
       </div>
-      <nav class="nav">
-        <div class="nav-item">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M8 9h8M8 13h5"/></svg>
-          关于 AMC
-        </div>
-        <div class="nav-item">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4h10l2 2v16H6z"/><path d="M9 11h6M9 15h6"/></svg>
-          基础 AMC
-        </div>
-        <div class="nav-item">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5v14"/></svg>
-          高级 AMC
-        </div>
-        <div class="nav-item active">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
-          AMC 人群
-        </div>
-        <div class="nav-item">
-      <span class="new">新</span>
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5M4 19h18"/><path d="M8 16V9M13 16V7M18 16v-4"/></svg>
-          广告总览
-        </div>
-        <div class="nav-item">
-      <span class="new">新</span>
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 7h10v10H7z"/><path d="M3 11h4M17 11h4"/></svg>
-          映射上传
-        </div>
-        <div class="nav-item">
-          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 5h14v16H5z"/><path d="M9 9h6M9 13h6M9 17h4"/></svg>
-          报告
-        </div>
+      <nav class="sidebar-nav" aria-label="主导航">
+        <div class="nav-item"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h6v6H4zM14 5h6v6h-6zM4 15h6v4H4zM14 15h6v4h-6z"/></svg></span><span>About AMC</span></div>
+        <div class="nav-item"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9l4-3 4 3v10M12 19V5l4-2 4 2v14M3 19h18"/></svg></span><span>Ads Overview</span></div>
+        <a class="nav-item active" aria-current="page" href="../../../amc-async-download-prototype.html"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4h10a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M8 4v13a3 3 0 0 0 3 3M9 8h6M9 12h6"/></svg></span><span>AMC Reports</span></a>
+        <div class="nav-item"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M3 19c.7-3 2.3-4.5 5-4.5S12.3 16 13 19M11 19c.7-3 2.3-4.5 5-4.5s4.3 1.5 5 4.5"/></svg></span><span>AMC Audience</span></div>
+        <a class="nav-item nav-download-entry" href="../../../amc-async-download-prototype.html#download"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v11M8 10l4 4 4-4M5 19h14"/></svg></span><span>下载中心</span><span class="nav-download-badge">1</span></a>
+        <div class="nav-item"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v12H4zM8 21h8M12 17v4"/></svg></span><span>广告报告</span><span class="badge-new">NEW</span></div>
+        <div class="nav-item"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 7h14M5 12h14M5 17h9"/><circle cx="4" cy="7" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="17" r="1" fill="currentColor"/></svg></span><span>映射管理</span></div>
+        <div class="nav-item"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19h16M6 17V9h3v8M11 17V5h3v12M16 17v-5h3v5"/></svg></span><span>MA</span></div>
+        <div class="nav-item"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v14H4zM8 9h8M8 13h5"/></svg></span><span>Report</span></div>
+        <div class="nav-item"><span class="nav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="12" r="1" fill="currentColor"/><circle cx="12" cy="12" r="1" fill="currentColor"/><circle cx="18" cy="12" r="1" fill="currentColor"/></svg></span><span>More</span></div>
       </nav>
-      <div class="collapse">«</div>
     </aside>
 
     <main class="main">
@@ -5297,9 +5471,9 @@
                 </div>
               </div>
             </div>
-            <div class="report-tool icon-btn">
+            <button class="report-tool icon-btn" id="full-report-download" type="button" title="下载整份报告" aria-label="下载整份报告">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
-            </div>
+            </button>
           </div>
         </div>
 
@@ -5363,9 +5537,9 @@
               </div>
             </div>
             <div class="model-hero-actions">
-              <button class="btn secondary">
+              <button class="btn secondary" id="opportunity-data-download" type="button">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
-                下载数据
+                <span class="btn-label">下载数据</span>
               </button>
             </div>
           </div>
@@ -5674,10 +5848,10 @@
                 <div class="bubble low is-live tip-up" data-tip="LS - B2B - Seller Central Lookalikes&#10;投放状态：投放中&#10;TGI：29&#10;购买渗透率：0.021%&#10;购买用户数：80,812&#10;ROAS：6.87" style="left: 18%; top: 80%; width: 68px; height: 68px;"><span class="bubble-text">LS - B2B - Seller Central Lookalikes</span></div>
               </div>
               <div class="legend scatter-legend">
-                <span id="legend-core"><span class="legend-dot" style="background: var(--green);"></span>高 TGI + 高渗透</span>
-                <span id="legend-grow"><span class="legend-dot" style="background: var(--blue);"></span>高 TGI + 低渗透</span>
-                <span id="legend-watch"><span class="legend-dot" style="background: var(--amber);"></span>低 TGI + 高渗透</span>
-                <span id="legend-low"><span class="legend-dot" style="background: var(--red);"></span>低 TGI + 低渗透</span>
+                <span id="legend-core"><span class="legend-dot" style="background: var(--green);"></span>高购买 TGI + 高购买渗透率</span>
+                <span id="legend-grow"><span class="legend-dot" style="background: var(--blue);"></span>高购买 TGI + 低购买渗透率</span>
+                <span id="legend-watch"><span class="legend-dot" style="background: var(--amber);"></span>低购买 TGI + 高购买渗透率</span>
+                <span id="legend-low"><span class="legend-dot" style="background: var(--red);"></span>低购买 TGI + 低购买渗透率</span>
                 <span class="scatter-legend-status"><span class="scatter-status-dot is-live"></span>投放中</span>
                 <span class="scatter-legend-status"><span class="scatter-status-dot is-inactive"></span>未投放</span>
               </div>
@@ -5866,7 +6040,7 @@
                   <td class="metric-strong">78</td>
                   <td>0.009%</td>
                   <td>47</td>
-                  <td><span class="quad-tag low">低TGI低渗透</span></td>
+                  <td><span class="quad-tag low" data-quadrant="low">低购买 TGI + 低购买渗透率</span></td>
                   <td>$2,701,851.78</td>
                   <td>$11,614,384.59</td>
                   <td>$9,954,609.25</td>
@@ -6156,112 +6330,63 @@
         </section>
       </section>
     </main>
+  </div>
 
-  <aside class="prd-drawer open" id="prd-drawer" aria-label="PRD 标注说明">
-    <div class="prd-drawer-head">
-      <div class="prd-drawer-title">
-        <span class="prd-title-text">PRD 标注说明</span>
-        <button class="prd-close" id="prd-close" type="button" aria-label="收起 PRD 标注">›</button>
+  <div class="async-export-overlay" id="async-export-overlay" role="presentation">
+    <section class="async-export-dialog" role="dialog" aria-modal="true" aria-labelledby="async-export-title">
+      <header class="async-export-header">
+        <h2 id="async-export-title">创建下载任务</h2>
+        <button class="async-export-close" type="button" aria-label="关闭" id="async-export-close">×</button>
+      </header>
+      <div class="async-export-body">
+        <div class="async-export-name" id="async-export-name"></div>
+        <dl class="async-export-list">
+          <dt>下载内容</dt><dd id="async-export-scope"></dd>
+          <dt>输出格式</dt><dd id="async-export-format">Excel（.xlsx）</dd>
+          <dt>任务方式</dt><dd>后台生成，完成后在下载中心获取</dd>
+        </dl>
+        <p class="async-export-note">将创建异步下载任务。您可继续分析，文件完成后会通知您并保留在下载中心。</p>
       </div>
-      <div class="prd-drawer-sub">基于《【AMC】AMC Reports，新增人群机会模型》，把页面模块、核心口径和交互验收点映射到当前原型。</div>
+      <footer class="async-export-footer">
+        <button class="async-export-btn" type="button" id="async-export-cancel">取消</button>
+        <button class="async-export-btn primary" type="button" id="async-export-confirm">创建下载任务</button>
+      </footer>
+    </section>
+  </div>
+  <div class="async-export-toast" id="async-export-toast" role="status" aria-live="polite"></div>
+
+  <!-- 近期下载弹层：点击下载入口（loading 完成后）出现在右上角；底部「查看全部下载记录」进入下载中心 -->
+  <div class="recent-download-popup" id="recent-download-popup" role="dialog" aria-label="近期下载">
+    <div class="rdp-head">
+      <span class="rdp-t">近期下载</span>
+      <button class="rdp-x" type="button" id="rdp-close" aria-label="关闭">×</button>
     </div>
-    <div class="prd-body">
-      <div class="prd-section-title">页面故事线</div>
-      <div class="prd-note-list" id="prd-note-list">
-        <div class="prd-note" data-target=".report-header">
-          <div class="prd-note-top"><span class="prd-index">P1</span><span>报告上下文</span></div>
-          <div class="prd-note-copy">
-            <p><strong>需求背景：</strong>本模型承接 AMC 3.0 中 Audience 模型能力，迁移到 AMC 4.0 的 Reports 体系，目标是在 AMC Reports 中新增“人群机会模型”，保证用户原有的人群分析使用链路平滑延续。</p>
-            <p><strong>创建报告传参：</strong>数据聚合方式为必填单选下拉，默认选中“分广告类型”，可切换“按整体输出”；品牌词为必填多行文本框，按回车分隔；报告维度为必填单选下拉，默认“账号”，可选“账号 / 品牌产品线”。</p>
-            <p><strong>品牌产品线维度：</strong>当报告维度选择“品牌产品线”时，创建报告表单展示品牌与产品线多选；不选择时等同 All。品牌来自 Mapping Upload 品牌词去重，产品线仅展示所选品牌下的产品线；如 Data Upload 中 Brand 或 Product line 为空，下拉提示 upload data，点击后跳转 Data Upload 页面，Instance 选项沿用创建报告时所选 Instance。</p>
-            <p><strong>预览页：</strong>人群机会模型预览页面隐藏下载按钮和指标配置按钮。</p>
-            <p><strong>下载口径：</strong>下载数据为同步下载，下载对应模型所有字段和数据；文件命名为“大写站点 + Instance name + 报告名称 - 模型名称”；Sheet 名为模型名称。PDF 下载沿用线上报告 PDF 下载逻辑。埋点参照系统已有模型处理，同步对接 admin 系统和观测云。</p>
-          </div>
-          <div class="prd-note-meta"><span class="prd-chip">创建报告</span><span class="prd-chip">下载口径</span></div>
-        </div>
-        <div class="prd-note" data-target=".model-filter-area">
-          <div class="prd-note-top"><span class="prd-index">P2</span><span>全局筛选</span></div>
-          <div class="prd-note-copy">
-            <p><strong>模块范围：</strong>全局筛选区承载当前“人群机会模型”的公共筛选项；除“搜索人群名称 / ID”按当前实现仅过滤宽表行外，其余筛选项作用于分析图表、自由散点气泡图与宽表明细；筛选区在页面滚动时保持吸顶。</p>
-            <p><strong>所有标签 / 目标标签：</strong>以页签形式展示，默认选中“目标标签”；可切换“所有标签”。同一页签区域只保留一个标注，不再为每个页签单独加角标。</p>
-            <p><strong>品牌：</strong>当报告维度为账号维度时不显示；当报告维度为品牌产品线时显示单选下拉。默认选中 raw data 下所有品牌词按 A-Z 排序后的第一个选项；不支持置空，支持输入搜索。</p>
-            <p><strong>产品线：</strong>当报告维度为账号维度时不显示；当报告维度为品牌产品线时显示单选下拉。默认选中当前品牌下第一个产品线；仅展示对应品牌词下的所有产品线；不支持置空，支持输入搜索。</p>
-            <p><strong>广告类型：</strong>当数据聚合方式为“按整体输出”时不显示；分广告类型时显示单选下拉，默认“所有广告汇总”。可选项为“所有广告汇总、DSP、SA广告汇总、SP、SD、SB”；ST 已按最新标注并入 SA 广告汇总，不作为独立筛选项。</p>
-            <p><strong>人群类型：</strong>下拉单选，默认不选择。系统根据当前报告数据中的人群标签名称动态提取并去重，取标签名称中 “-” 前的前缀作为人群类型，例如 “IM - GarmentRacks” 提取为 IM；若数据中不存在某类前缀，则不展示该选项。常见选项为 LS、IM、Others。</p>
-            <p><strong>搜索人群名称 / ID：</strong>入口放在全局筛选区高级筛选按钮左侧；由“包含 / 排除”条件下拉 + 可回车添加的输入框组成，条件下拉字号需与广告类型控件一致。输入内容后回车生成 chip；同一筛选项下多个 chip 之间为 OR 关系；该搜索入口从宽表上方迁移到全局区域后，仍用于宽表的人群名称或 ID 行过滤。</p>
-            <p><strong>类目：</strong>基于“人群机会分析宽表”中的类目路径生成一级、二级、三级联动类目；支持输入搜索，支持置空。</p>
-          </div>
-          <div class="prd-note-meta"><span class="prd-chip">全局筛选框</span><span class="prd-chip">搜索 chip</span></div>
-        </div>
-        <div class="prd-note" data-target="#advanced-filter-trigger">
-          <div class="prd-note-top"><span class="prd-index">P3</span><span>高级筛选</span></div>
-          <div class="prd-note-copy">
-            <p><strong>筛选结构：</strong>高级筛选支持多条件组合。逻辑关系切换为单选下拉，可选“所有 / 任一”，默认“所有”。</p>
-            <p><strong>指标选择器：</strong>单选下拉，默认“曝光人数”，支持搜索；已选指标不可在其他条件行重复选择。可选指标包括曝光人数、点击人数、品牌搜索人数、DPV人数、ATC 人数、购买人数、新客人数、广告花费、曝光次数、点击次数、品牌搜索次数、DPV次数、销售额、新客销售额、购买次数、销售单位数、曝光渗透率、点击渗透率、品牌搜索渗透率、DPV 渗透率、购买渗透率、新客渗透率、曝光 TGI、点击 TGI、品牌搜索 TGI、DPV TGI、ATC TGI、购买 TGI、新客 TGI。</p>
-            <p><strong>数值类型：</strong>单选下拉，可选“绝对值 / 百分位”，默认“绝对值”。绝对值模式展示区间输入框，左侧为 MIN、右侧为 MAX；百分位模式可选前10%、前25%、前50%、后10%、后25%、后50%、自定义，自定义时再展示 MIN / MAX 区间输入框。</p>
-            <p><strong>输入校验：</strong>区间输入框只能输入数字；两个输入框可任意留空一个；若同时输入两个数字，右侧数值必须大于左侧。校验时点为光标移出输入框后；输入非数字时页面顶部 toast “请输入数字”；左右大小不符合要求时 toast “请注意右侧输入框数字须大于左边。”</p>
-            <p><strong>条件语义：</strong>仅输入最小值表示指标大于等于最小值；仅输入最大值表示指标小于等于最大值；同时输入最小值与最大值表示包含边界的闭区间。</p>
-            <p><strong>按钮交互：</strong>添加条件会在列表末尾插入空白条件行，默认自动分配未使用的首个指标、类型为“绝对值”、区间为空；删除 icon 移除当前行，仅剩一行时隐藏；重置清空所有数值与选择，恢复为仅保留一行默认状态，不自动刷新数据；应用筛选先做表单校验，校验通过后启动 loading 并请求后端刷新下方数据列表，成功提示“筛选成功，已更新数据”，请求失败 toast “网络错误，筛选失败，请重试”。</p>
-            <p><strong>防重复提交：</strong>应用筛选需做防抖 / 防重复点击处理，后端返回前按钮 Disable；用户未做任何修改时点击“应用”不重复发送请求。</p>
-          </div>
-          <div class="prd-note-meta"><span class="prd-chip">高级筛选</span><span class="prd-chip">区间筛选</span></div>
-        </div>
-        <div class="prd-note" data-target=".penetration-card">
-          <div class="prd-note-top"><span class="prd-index">P8</span><span>渗透率表现分析</span></div>
-          <div class="prd-note-copy">
-            <p><strong>模块位置：</strong>渗透率表现分析置于页面上方，作为进入报告后的第一屏重点分析模块。</p>
-            <p><strong>标题联动：</strong>当处于“分广告类型”模式时，标题显示为“人群标签渗透率表现（{广告类型}）”，括号内文案随全局广告类型下拉框当前选中值实时变化，例如“人群标签渗透率表现（DSP）”。该联动只影响当前模块展示文案，不改变筛选控件本身。当处于“按整体输出”模式时，标题显示为“人群标签渗透率表现”。</p>
-            <p><strong>行为指标筛选：</strong>归属于人群标签渗透率表现与广告渗透表现，单选下拉，默认“曝光人数”；可选曝光人数、品牌搜索人数、点击人数、DPV 人数、ATC 人数、购买人数、新客人数。切换行为指标后，图表纵轴口径与横轴标签排序同步更新。</p>
-            <p><strong>人群标签渗透率表现：</strong>图表类型为堆叠柱状图。横轴为人群标签，标签名区域固定两行高度，超出显示省略号，Hover 展示完整标签名；排序按当前行为指标对应数值降序，数值越高越靠左。纵轴受行为指标下拉框控制并动态变化。图例中蓝色表示当前行为指标人数，灰色表示剩余未覆盖人数。</p>
-            <p><strong>堆叠柱展示规则：</strong>每根柱子的总高度固定不变，统一代表标签 ASI 总人数，按 100% 理解；蓝色部分表示当前行为指标人数；灰色部分表示剩余未覆盖人数，灰色区块内居中展示剩余未覆盖人数绝对值；蓝灰交界处展示覆盖率，公式为“当前行为指标人数 / 标签 ASI 总人数 * 100%”。当蓝色或灰色区块过小、无法清晰承载数值时，隐藏对应区块内数值文案。</p>
-            <p><strong>堆叠柱 Hover：</strong>自上而下展示标签名、{行为指标}人数（占比）、{行为指标}未覆盖人数（占比）、标签 ASI 总人数。</p>
-            <p><strong>广告渗透表现：</strong>图表类型为双侧对比柱状图。横轴为人群标签，同样固定两行高度并支持 Hover 完整展示；排序按当前行为指标对应数值降序。纵轴为“{行为指标}渗透率（%）”，随行为指标动态切换，例如行为指标为曝光人数时展示曝光渗透率。图例为蓝色 = 基准广告，绿色 = 对比广告。</p>
-            <p><strong>广告渗透展示条件：</strong>仅当处于“分广告类型”模式，且全局筛选广告类型未限定为单一广告类型时展示；当处于“按整体输出”模式，或分广告类型但全局广告类型已选择单一广告类型（如仅 SP）时隐藏。</p>
-            <p><strong>基准 / 对比广告：</strong>基准广告默认 DSP，对比广告默认 SP；两个下拉框可选范围一致，为 DSP、SA广告汇总、SP、SB、SD。ST 已并入 SA 广告汇总，不作为独立选项。两个下拉框不允许选择相同广告类型；当一侧选择广告类型 A 后，另一侧对应广告类型 A 置灰不可选，反之同理。</p>
-            <p><strong>广告渗透 Hover：</strong>自上而下展示广告类型、标签名、{行为指标}人数、{行为指标}渗透率、渗透率差异值。</p>
-          </div>
-          <div class="prd-note-meta"><span class="prd-chip">渗透率表现</span><span class="prd-chip">标签渗透表现</span></div>
-        </div>
-        <div class="prd-note" data-target=".chart-panel">
-          <div class="prd-note-top"><span class="prd-index">P4</span><span>人群机会分布</span></div>
-          <div class="prd-note-copy">
-            <p><strong>图表类型：</strong>仅保留自由散点气泡图。标题格式为“TOP/BOTTOM {N} {排序指标}人群机会分布”，默认“TOP 50 曝光人数人群机会分布”；当用户修改展示范围中的排序指标、最大 / 最小方向或数量 N 后，标题同步更新。</p>
-            <p><strong>解释与摘要：</strong>标题下方固定展示 TGI 与渗透率的业务解释：TGI 用于衡量该人群相对于整体平均水平是否具有更强倾向，例如购买 TGI 大于 1 代表购买倾向高于平均水平；渗透率用于衡量该标签在目标行为上的实际覆盖水平。两者结合用于观察不同人群标签的机会分布。解释文案下方动态展示当前配置摘要：“当前配置：{排序指标} · {排序方向} {N} 个 · 原点：{原点配置方式}”。修改展示范围、横纵轴、气泡大小或原点配置时，摘要实时同步更新。</p>
-            <p><strong>横轴：</strong>横轴仅支持选择渗透率类指标，默认曝光渗透率；可选曝光渗透率、点击渗透率、品牌搜索渗透率、DPV 渗透率、ATC 渗透率、购买渗透率、新客渗透率。横轴问号提示随当前选中指标动态展示公式：“{行为指标}渗透率 =（该人群标签内的 {行为指标} 人数 / 全部人群标签的 {行为指标} 人数）*100%”。</p>
-            <p><strong>纵轴：</strong>纵轴仅支持选择 TGI 类指标，默认曝光 TGI；可选曝光 TGI、点击 TGI、品牌搜索 TGI、DPV TGI、ATC TGI、购买 TGI、新客 TGI。纵轴问号提示随当前选中指标动态展示公式：“{行为指标} TGI =（该人群标签内的 {行为指标} 人数 / 全部人群标签的 {行为指标} 人数）/（该人群标签总人数 / Amazon 总人数）”。</p>
-            <p><strong>图例与分区：</strong>绿色 = 高 TGI + 高渗透；蓝色 = 高 TGI + 低渗透；橙色 = 低 TGI + 高渗透；红色 = 低 TGI + 低渗透；灰色实心 = 投放中；灰色空心 = 未投放。气泡颜色表示四象限归属，虚实状态表示投放状态，两者需同时生效。</p>
-            <p><strong>气泡大小：</strong>气泡大小受“气泡大小”下拉框控制，默认曝光人数；可选曝光人数、点击人数、品牌搜索人数、DPV人数、ATC 人数、购买人数、新客人数、广告花费、曝光次数、点击次数、品牌搜索次数、DPV次数、销售额、新客销售额、购买次数、销售单位数、曝光渗透率、点击渗透率、品牌搜索渗透率、DPV 渗透率、购买渗透率、新客渗透率、曝光 TGI、点击 TGI、品牌搜索 TGI、DPV TGI、ATC TGI、购买 TGI、新客 TGI。切换气泡大小仅影响尺寸，不影响横轴、纵轴及四象限分区计算逻辑。</p>
-            <p><strong>气泡虚实状态：</strong>实心气泡代表该人群标签当前在投放；虚线描边气泡代表该人群标签当前未投放。</p>
-            <p><strong>展示规则：</strong>当前图表仅展示满足展示范围配置的 TOP/BOTTOM N 人群标签。四象限高低判定以原点配置确定的十字线为分界，将当前展示的 TOP/BOTTOM N 标签划分为四个象限；图例中的高 / 低基于当前展示标签数据，而非全部数据源。</p>
-            <p><strong>拖拽与范围条：</strong>支持鼠标拖拽图表视图进行平移；底部水平拖动条用于筛选和定位横轴渗透率范围，左侧垂直拖动条用于筛选和定位纵轴 TGI 范围。拖动两端手柄可缩小 / 扩大显示范围，超出范围气泡自动隐藏；拖动中间区域可整体平移视图。默认选中范围覆盖全部数据。拖动过程中气泡显示 / 隐藏实时更新，释放鼠标后状态确定；图表视图与拖动条双向联动。</p>
-            <p><strong>Hover：</strong>悬停气泡时该气泡高亮（增大边框、提升不透明度），其余气泡变暗至 12%；同时展示 tooltip，内容依次为标签名、{行为指标}TGI、{行为指标}渗透率、{气泡大小指标名称}、标签 ASI 总人数。</p>
-            <p><strong>高级设置：</strong>展示范围用于控制散点图展示的人群标签范围，包含排序指标、排序方向（最大 / 最小）和数量 N（1-50）。分界线位置用于确定四象限原点，支持中位数（默认）、平均数、自定义；中位数 / 平均数基于当前全局筛选 + 高级筛选后的全部数据计算；自定义时展示 TGI 与渗透率（%）输入框，默认不填充。切换原点配置后，四象限分区和颜色同步更新。</p>
-            <p><strong>高级设置按钮：</strong>重置仅恢复高级设置内的展示范围、排序方向、数量 N、原点配置及自定义原点输入值，不影响横轴、纵轴、气泡大小；重置后不自动刷新图表，需点击“应用”后生效；默认配置下重置按钮置灰。应用设置只提交高级设置并刷新 TOP/BOTTOM N、标题、配置摘要、四象限分界线、象限颜色归属，以及下方宽表中的指标分区标记；请求期间按钮置灰并 loading，防止重复点击。</p>
-          </div>
-          <div class="prd-note-meta"><span class="prd-chip">自由散点</span><span class="prd-chip">TOP 50</span></div>
-        </div>
-        <div class="prd-note" data-target=".opportunity-wide-card">
-          <div class="prd-note-top"><span class="prd-index">P7</span><span>人群机会分析宽表</span></div>
-          <div class="prd-note-copy">
-            <p><strong>宽表定位：</strong>宽表承接当前全局筛选、高级筛选与自由散点高级设置后的结果，用于客户核数、下载与明细排查；人群名称列固定，不允许取消冻结。</p>
-            <p><strong>Benchmark Pin：</strong>最多同时 Pin 3 个标签，超出上限不可继续新增。Pin 后的数据固定展示在 Benchmark 区域，不受主表筛选、搜索、排序影响；原始标签数据更新时 Benchmark 区域对应数据同步更新；Pin 状态按用户账号保存，页面刷新或再次进入后自动恢复；Benchmark 区域独立于主表排序并始终置顶。</p>
-            <p><strong>Pin 交互：</strong>点击宽表行左侧 Pin 图标将标签加入 Benchmark；已 Pin 后图标变为实心橙色；点击 Benchmark 区域内“取消 Pin”将其移出；尝试 Pin 第 4 个标签时 toast “最多支持 Pin 3 个标签，请先取消已有 Pin。”</p>
-            <p><strong>多级排序：</strong>点击字段名按“升序 → 降序 → 取消排序”循环；点击升 / 降序 icon 只切换升降序，不取消排序；已有多字段排序时，点击字段名会把该字段提到第 1 优先级；已存在 3 级排序时，再点击新字段 toast “最多支持 3 个排序字段”。默认按表格首个数据指标降序排序。</p>
-            <p><strong>表头字段：</strong>用户标签细分市场、用户标签ID、用户标签名、广告类型、品牌、产品线、用户标签描述、一级类目、二级类目、三级类目、曝光人数、点击人数、品牌搜索人数、DPV人数、ATC 人数、购买人数、新客人数、广告花费、曝光次数、点击次数、品牌搜索次数、DPV次数、ATC次数、销售额、新客销售额、购买次数、销售单位数、人群标签总人数、Amazon 总人数、曝光渗透率、点击渗透率、品牌搜索渗透率、DPV 渗透率、ATC 渗透率、购买渗透率、新客渗透率、曝光 TGI、点击 TGI、品牌搜索 TGI、DPV TGI、ATC TGI、购买 TGI、新客 TGI、用户标签名投放状态。</p>
-            <p><strong>字段配置：</strong>支持字段自定义勾选及拖拽排序；默认记住用户上次勾选。</p>
-            <p><strong>Metadata 匹配：</strong>宽表生成时先对 segment metadata 按 segment_id 去重，再通过 segment_id 与主结果表 LEFT JOIN，回填类目路径（下载表格字段拆为一级类目、二级类目、三级类目）和用户标签描述；未匹配到 Metadata 时主表记录仍保留，对应字段为空。</p>
-            <p><strong>渗透率字段：</strong>单元格展示渗透率数值，并在数值下方展示进度条；进度条长度按当前字段值占比计算，100% 基准为当前展示数据中该渗透率字段最大值。</p>
-            <p><strong>类目路径与类型标识：</strong>UI 中类目路径单列展示，格式为“一级类目 | 二级类目 | 三级类目”；下载表格拆为一级类目、二级类目、三级类目三列。人群名称中 “-” 前的前缀（如 IM - GarmentRacks → IM）作为类型标识展示在标签名前。</p>
-            <p><strong>搜索入口：</strong>原宽表上方“搜索人群名称 / ID”输入框取消，入口迁移到全局筛选区高级筛选按钮左侧；支持包含 / 排除 chip，同一筛选项下多个 chip 为 OR 关系。</p>
-            <p><strong>指标分区字段：</strong>已标记表示该标签在自由散点气泡图当前 TOP/BOTTOM N 范围内并参与四象限计算；绿色 = 高 TGI 高渗透，蓝色 = 高 TGI 低渗透，橙色 = 低 TGI 高渗透，红色 = 低 TGI 低渗透。未标记表示该标签不在当前 TOP/BOTTOM N 范围内、未参与四象限计算，显示为灰色 “—”。</p>
-            <p><strong>指标分区筛选：</strong>多选下拉，默认“全部分区”；选择全部分区时展示全部标签（含已标记和未标记）；选择具体象限时仅展示该象限归属标签；选择“未标记”时仅展示超出自由散点气泡图 TOP/BOTTOM N 范围、无象限归属的标签。</p>
-          </div>
-          <div class="prd-note-meta"><span class="prd-chip">宽表</span><span class="prd-chip">明细核数</span></div>
+    <div class="rdp-body" id="rdp-body">
+      <div class="rdp-item" data-rdp-go="1">
+        <span class="rdp-icon running" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg></span>
+        <div class="rdp-content">
+          <div class="rdp-name">人群洞察-1057query错误-可缺失开启（2026-08-01期）.xlsx</div>
+          <div class="rdp-meta">生成中</div>
         </div>
       </div>
-      <div class="prd-foot">说明：标注用于需求评审和研发对齐，不改变当前页面业务数据。完整需求文档见附件 zip。</div>
+      <div class="rdp-item" data-rdp-go="1">
+        <span class="rdp-icon done" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg></span>
+        <div class="rdp-content">
+          <div class="rdp-name">人群标签洞察-缺失均关闭3.xlsx</div>
+          <div class="rdp-meta">2.4 MB · 2026-08-31 16:28</div>
+          <div class="rdp-act">打开文件 ›</div>
+        </div>
+      </div>
+      <div class="rdp-item" data-rdp-go="1">
+        <span class="rdp-icon fail" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg></span>
+        <div class="rdp-content">
+          <div class="rdp-name">Campaign效能分析模型.xlsx</div>
+          <div class="rdp-meta fail">失败原因：数据源查询超时</div>
+          <div class="rdp-act">重试 ›</div>
+        </div>
+      </div>
     </div>
-  </aside>
+    <div class="rdp-foot"><a href="../../../amc-async-download-prototype.html#download">查看全部下载记录 →</a></div>
   </div>
 
   <script>
@@ -6288,6 +6413,15 @@
     top50RangeModeSelect?.addEventListener('change', syncTop50Title);
     top50CountInput?.addEventListener('input', syncTop50Title);
     syncTop50Title();
+
+    const DEFAULT_SCATTER_Y_METRIC = '购买 TGI';
+    const DEFAULT_SCATTER_X_METRIC = '购买渗透率';
+    const getQuadrantLegendMap = (yMetric = DEFAULT_SCATTER_Y_METRIC, xMetric = DEFAULT_SCATTER_X_METRIC) => ({
+      core: `高${yMetric} + 高${xMetric}`,
+      grow: `高${yMetric} + 低${xMetric}`,
+      watch: `低${yMetric} + 高${xMetric}`,
+      low: `低${yMetric} + 低${xMetric}`
+    });
 
     const opportunityTable = document.querySelector('.opportunity-table');
     if (opportunityTable) {
@@ -6334,10 +6468,11 @@
       const getQuadrant = (tgi, rateValue) => {
         const highTgi = tgi > DEFAULT_TGI_BASELINE;
         const highPenetration = rateValue >= DEFAULT_PENETRATION_BASELINE;
-        if (highTgi && highPenetration) return ['core', '高TGI高渗透'];
-        if (highTgi && !highPenetration) return ['grow', '高TGI低渗透'];
-        if (!highTgi && highPenetration) return ['watch', '低TGI高渗透'];
-        return ['low', '低TGI低渗透'];
+        const labels = getQuadrantLegendMap();
+        if (highTgi && highPenetration) return ['core', labels.core];
+        if (highTgi && !highPenetration) return ['grow', labels.grow];
+        if (!highTgi && highPenetration) return ['watch', labels.watch];
+        return ['low', labels.low];
       };
       const enrichRow = (row, rowIndex = 0) => {
         const cells = row.children;
@@ -6363,7 +6498,7 @@
         cells[5].textContent = cells[5].textContent.trim() === '--' ? 'SP / SD' : cells[5].textContent;
         cells[11].textContent = String(tgi);
         cells[13].textContent = String(score);
-        cells[14].innerHTML = `<span class="quad-tag ${quadClass}">${quadLabel}</span>`;
+        cells[14].innerHTML = `<span class="quad-tag ${quadClass}" data-quadrant="${quadClass}">${quadLabel}</span>`;
         cells[17].textContent = formatMoney(sales * 0.86);
         cells[19].textContent = formatInt(sales / 58);
         cells[21].textContent = formatRate((impUsers / Math.max(toNumber(cells[6].textContent), 1)) * 100);
@@ -7027,6 +7162,28 @@
         : `${metric} 计算公式：&#10;当前标签${behavior}用户数 / 当前标签人群规模`;
       element.setAttribute('data-tip', tip);
     };
+    const syncQuadrantLabels = (yMetric, xMetric) => {
+      const labels = getQuadrantLegendMap(yMetric, xMetric);
+      const legendMap = [
+        ['legend-core', labels.core],
+        ['legend-grow', labels.grow],
+        ['legend-watch', labels.watch],
+        ['legend-low', labels.low]
+      ];
+      legendMap.forEach(([id, text]) => {
+        const item = document.getElementById(id);
+        const dot = item?.querySelector('.legend-dot');
+        if (item && dot) {
+          item.textContent = '';
+          item.appendChild(dot);
+          item.append(text);
+        }
+      });
+      document.querySelectorAll('.quad-tag[data-quadrant]').forEach((tag) => {
+        const quadrant = tag.dataset.quadrant;
+        if (labels[quadrant]) tag.textContent = labels[quadrant];
+      });
+    };
     const syncAxisConfig = () => {
       const yMetric = axisYSelect?.value || '购买 TGI';
       const xMetric = axisXSelect?.value || '购买渗透率';
@@ -7070,23 +7227,9 @@
             : '中位数'}</strong>`;
       }
       if (axisModeNote) {
-        axisModeNote.textContent = `自由散点图仅支持 TGI × 渗透率 指标组合；气泡大小选择行为人数、行为次数或计算指标。${originCopy}，四象限颜色仅用于观察高低分区。`;
+        axisModeNote.textContent = `自由散点图仅支持 TGI × 渗透率 指标组合；气泡大小选择行为人数、行为次数或计算指标。${originCopy}，四象限颜色对应图表位置，图例随横轴和纵轴指标动态生成。`;
       }
-      const legendMap = [
-        ['legend-core', '高 TGI + 高渗透'],
-        ['legend-grow', '高 TGI + 低渗透'],
-        ['legend-watch', '低 TGI + 高渗透'],
-        ['legend-low', '低 TGI + 低渗透']
-      ];
-      legendMap.forEach(([id, text]) => {
-        const item = document.getElementById(id);
-        const dot = item?.querySelector('.legend-dot');
-        if (item && dot) {
-          item.textContent = '';
-          item.appendChild(dot);
-          item.append(text);
-        }
-      });
+      syncQuadrantLabels(yMetric, xMetric);
     };
     [axisYSelect, axisXSelect, bubbleMetricSelect, originModeSelect, top50MetricSelect, top50RangeModeSelect].forEach((select) => {
       select?.addEventListener('change', syncAxisConfig);
@@ -7345,72 +7488,162 @@
       });
     });
 
-    const prdDrawer = document.getElementById('prd-drawer');
-    const prdClose = document.getElementById('prd-close');
-    const prdNotes = Array.from(document.querySelectorAll('.prd-note'));
-    const appShell = document.querySelector('.app');
-    const clearPrdFocus = () => {
-      document.querySelectorAll('.prd-focus').forEach((item) => item.classList.remove('prd-focus'));
-      prdNotes.forEach((item) => item.classList.remove('active'));
+    // 交互开关：false = 点击下载入口 → 按钮 loading（模拟创建任务请求）→ 右上角弹出「近期下载」弹层；
+    //           true  = 沿用原有「先确认下载范围/格式」弹窗流程（备选，可随时回退）。
+    const ASYNC_EXPORT_CONFIRM_FIRST = false;
+
+    // 下载中心地址：弹层条目与底部链接均跳转此处
+    const DOWNLOAD_CENTER_HREF = '../../../amc-async-download-prototype.html#download';
+    const FILE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg>';
+
+    const recentDownloadPopup = document.getElementById('recent-download-popup');
+    const recentDownloadBody = document.getElementById('rdp-body');
+
+    // 原有确认弹窗（备用流程）
+    const asyncExportOverlay = document.getElementById('async-export-overlay');
+    const asyncExportName = document.getElementById('async-export-name');
+    const asyncExportScope = document.getElementById('async-export-scope');
+    const asyncExportFormat = document.getElementById('async-export-format');
+    const asyncExportConfirm = document.getElementById('async-export-confirm');
+    const asyncExportToast = document.getElementById('async-export-toast');
+    let asyncExportContext = null;
+
+    const getCurrentFilterSummary = () => {
+      const tagScope = document.querySelector('[data-tag-scope].active')?.textContent.trim() || '所有标签';
+      const brand = document.querySelector('.control.with-label:nth-of-type(2) .control-value')?.textContent.replace(/\s+/g, ' ').trim() || 'Ensenior';
+      const line = document.querySelector('.control.with-label:nth-of-type(3) .control-value')?.textContent.replace(/\s+/g, ' ').trim() || 'Recessed Lighting';
+      const adType = document.getElementById('global-adtype-select')?.value || '所有广告汇总';
+      const audienceType = document.querySelector('#global-adtype-filter + .control .control-value')?.textContent.replace(/\s+/g, ' ').trim() || '全部类型';
+      return `${tagScope}；品牌=${brand}；品线=${line}；广告类型=${adType}；人群类型=${audienceType}`;
     };
-    const focusPrdTarget = (targetSelector) => {
-      const target = document.querySelector(targetSelector);
-      if (!target) return;
-      clearPrdFocus();
-      target.classList.add('prd-focus');
-      document.querySelector(`.prd-note[data-target="${targetSelector}"]`)?.classList.add('active');
-      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    const openAsyncExport = (type) => {
+      const isFullReport = type === 'fullReport';
+      asyncExportContext = {
+        type,
+        title: isFullReport ? '下载整份报告' : '导出人群机会数据',
+        scope: isFullReport
+          ? '完整 AMC 报告数据（按已配置模型分 Sheet）'
+          : `全局数据、当前筛选数据、筛选条件说明；当前条件：${getCurrentFilterSummary()}`,
+        format: isFullReport ? 'Excel（.xlsx，按模型分 Sheet）' : 'Excel（.xlsx，3 个 Sheet）'
+      };
+      document.getElementById('async-export-title').textContent = '创建下载任务';
+      asyncExportName.textContent = asyncExportContext.title;
+      asyncExportScope.textContent = asyncExportContext.scope;
+      asyncExportFormat.textContent = asyncExportContext.format;
+      asyncExportOverlay.classList.add('open');
+      asyncExportConfirm.focus();
     };
 
-    if (prdDrawer) {
-      prdClose?.addEventListener('click', (event) => {
-        event.stopPropagation();
-        const collapsed = prdDrawer.classList.toggle('collapsed');
-        appShell?.classList.toggle('prd-collapsed', collapsed);
-        prdClose.textContent = collapsed ? '' : '›';
-        prdClose.setAttribute('aria-label', collapsed ? '展开 PRD 标注' : '收起 PRD 标注');
-      });
+    const closeAsyncExport = () => {
+      asyncExportOverlay.classList.remove('open');
+      asyncExportContext = null;
+    };
 
-      prdDrawer.querySelector('.prd-drawer-head')?.addEventListener('click', () => {
-        if (!prdDrawer.classList.contains('collapsed')) return;
-        prdDrawer.classList.remove('collapsed');
-        appShell?.classList.remove('prd-collapsed');
-        if (prdClose) {
-          prdClose.textContent = '›';
-          prdClose.setAttribute('aria-label', '收起 PRD 标注');
-        }
-      });
+    // ===== 近期下载弹层：定位 / 显示 / 新增任务 =====
+    // 定位基准固定为右上角下载图标：无论点哪个下载入口，弹层都出现在页面右上角
+    const recentDownloadAnchorEl = document.getElementById('full-report-download') || recentDownloadPopup;
 
-      prdNotes.forEach((note) => {
-        const selector = note.dataset.target;
-        const target = document.querySelector(selector);
-        if (!selector || !target) return;
+    const positionRecentDownloads = () => {
+      if (!recentDownloadPopup || !recentDownloadAnchorEl) return;
+      const rect = recentDownloadAnchorEl.getBoundingClientRect();
+      const width = recentDownloadPopup.offsetWidth || 336;
+      const right = Math.min(Math.max(12, window.innerWidth - rect.right), Math.max(12, window.innerWidth - width - 12));
+      recentDownloadPopup.style.top = `${Math.round(rect.bottom + 8)}px`;
+      recentDownloadPopup.style.right = `${Math.round(right)}px`;
+    };
 
-        target.classList.add('prd-annotated');
+    const showRecentDownloads = () => {
+      if (!recentDownloadPopup) return;
+      recentDownloadPopup.classList.add('show');
+      positionRecentDownloads();
+    };
 
-        const index = note.querySelector('.prd-index')?.textContent.trim() || 'PRD';
-        const title = note.querySelector('.prd-note-top span:last-child')?.textContent.trim() || 'PRD 标注';
-        const inlineIndex = document.createElement('button');
-        inlineIndex.type = 'button';
-        inlineIndex.className = 'prd-inline-index';
-        inlineIndex.textContent = index;
-        inlineIndex.title = title;
-        inlineIndex.addEventListener('click', (event) => {
-          event.stopPropagation();
-          prdDrawer.classList.remove('collapsed');
-          appShell?.classList.remove('prd-collapsed');
-          focusPrdTarget(selector);
-        });
+    const hideRecentDownloads = () => recentDownloadPopup?.classList.remove('show');
 
-        target.appendChild(inlineIndex);
+    // 新任务插入列表顶部：只展示「生成中」状态，不展示不可预测的百分比或剩余时间
+    const prependRunningTask = (fileName) => {
+      if (!recentDownloadBody) return;
+      recentDownloadBody.querySelectorAll('.rdp-item.is-new').forEach((node) => node.classList.remove('is-new'));
+      const item = document.createElement('div');
+      item.className = 'rdp-item is-new';
+      item.dataset.rdpGo = '1';
+      item.innerHTML = `
+        <span class="rdp-icon running" aria-hidden="true">${FILE_ICON}</span>
+        <div class="rdp-content">
+          <div class="rdp-name">${fileName}</div>
+          <div class="rdp-meta">生成中</div>
+        </div>`;
+      recentDownloadBody.prepend(item);
+    };
 
-        note.addEventListener('click', () => {
-          prdDrawer.classList.remove('collapsed');
-          appShell?.classList.remove('prd-collapsed');
-          focusPrdTarget(selector);
-        });
-      });
+    // 点击下载入口：按钮 loading →（模拟创建任务请求）→ 请求返回后在右上角弹出近期下载
+    const startAsyncDownload = (button, fileName) => {
+      if (!button || button.classList.contains('loading')) return;
+      button.classList.add('loading');
+      const label = button.querySelector('.btn-label');
+      const originalLabel = label ? label.textContent : '';
+      if (label) label.textContent = '生成中…';
+
+      window.setTimeout(() => {
+        button.classList.remove('loading');
+        if (label) label.textContent = originalLabel;
+        prependRunningTask(fileName);
+        showRecentDownloads();
+      }, 1200);
+    };
+
+    const fullReportDownloadBtn = document.getElementById('full-report-download');
+    const opportunityDownloadBtn = document.getElementById('opportunity-data-download');
+
+    if (ASYNC_EXPORT_CONFIRM_FIRST) {
+      fullReportDownloadBtn?.addEventListener('click', () => openAsyncExport('fullReport'));
+      opportunityDownloadBtn?.addEventListener('click', () => openAsyncExport('opportunityData'));
+    } else {
+      fullReportDownloadBtn?.addEventListener('click', () => startAsyncDownload(fullReportDownloadBtn, 'US demoInstance-Demo Report.xlsx'));
+      opportunityDownloadBtn?.addEventListener('click', () => startAsyncDownload(opportunityDownloadBtn, 'US demoInstance-人群机会分析-人群机会.xlsx'));
     }
+
+    // 弹层交互：点条目 → 下载中心；点外部 / Esc / 关闭按钮 → 收起
+    recentDownloadPopup?.addEventListener('click', (event) => {
+      if (event.target.closest('[data-rdp-go]')) window.location.href = DOWNLOAD_CENTER_HREF;
+    });
+
+    document.getElementById('rdp-close')?.addEventListener('click', (event) => {
+      event.stopPropagation();
+      hideRecentDownloads();
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!recentDownloadPopup?.classList.contains('show')) return;
+      if (recentDownloadPopup.contains(event.target)) return;
+      if (event.target.closest('#full-report-download, #opportunity-data-download')) return;
+      hideRecentDownloads();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') hideRecentDownloads();
+    });
+
+    window.addEventListener('resize', () => {
+      if (recentDownloadPopup?.classList.contains('show')) positionRecentDownloads();
+    });
+    document.getElementById('async-export-close')?.addEventListener('click', closeAsyncExport);
+    document.getElementById('async-export-cancel')?.addEventListener('click', closeAsyncExport);
+    asyncExportOverlay?.addEventListener('click', (event) => {
+      if (event.target === asyncExportOverlay) closeAsyncExport();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && asyncExportOverlay?.classList.contains('open')) closeAsyncExport();
+    });
+    asyncExportConfirm?.addEventListener('click', () => {
+      if (!asyncExportContext) return;
+      const taskLabel = asyncExportContext.title;
+      closeAsyncExport();
+      asyncExportToast.innerHTML = `<strong>下载任务已创建</strong>${taskLabel}正在后台生成。<a href="../../../amc-async-download-prototype.html#download">查看下载中心</a>`;
+      asyncExportToast.classList.add('show');
+      window.setTimeout(() => asyncExportToast.classList.remove('show'), 7000);
+    });
 
   </script>
 </body>
