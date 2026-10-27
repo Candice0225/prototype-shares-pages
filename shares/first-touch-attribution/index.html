@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>首次触点转化归因模型 · AMC 报表</title>
+<style>
+/* ============ Tokens ============ */
+:root{
+  --brand:#3C6EFC;
+  --brand-hover:#5580FD;
+  --brand-50:#EFF3FF;
+  --brand-100:#E5EBFE;
+  --brand-200:#D9E2FE;
+
+  --text-1:#232F3F;
+  --text-2:#525A69;
+  --text-3:#7B828C;
+  --text-4:#91979F;
+  --text-5:#B9BEC7;
+
+  --border:#E5E7EB;
+  --border-2:#EDEFF3;
+  --table-border:#E9EBEF;
+
+  --card:#FFFFFF;
+  --chart-bg:#F8FAFF;
+  --head-bg:#FAFAFA;
+
+  --c-dsp:#628AFC;
+  --c-sb:#2ED3B7;
+  --c-sd:#DFAE6A;
+  --c-sp:#36BFFA;
+
+  --radius:8px;
+  --sidebar-w:144px;
+  --sidebar-w-collapsed:58px;
+  --shadow-card:0 1px 2px rgba(16,24,40,.04),0 1px 3px rgba(16,24,40,.03);
+  --shadow-pop:0 6px 20px rgba(16,24,40,.12);
+}
+
+*{box-sizing:border-box;}
+[hidden]{display:none!important;}
+html,body{height:100%;}
+body{
+  margin:0;
+  font-family:"Outfit",-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;
+  font-size:13px;
+  color:var(--text-1);
+  background:#E8ECFE;
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:inherit;cursor:pointer;}
+svg{display:block;}
+
+/* ============ Layout ============ */
+.app{display:flex;height:100vh;overflow:hidden;}
+
+/* ============ Sidebar ============ */
+.sidebar{
+  width:var(--sidebar-w);flex:0 0 var(--sidebar-w);
+  background:var(--brand);
+  display:flex;flex-direction:column;
+  position:relative;transition:width .18s ease,flex-basis .18s ease;
+  z-index:20;
+}
+.sidebar.collapsed{width:var(--sidebar-w-collapsed);flex-basis:var(--sidebar-w-collapsed);}
+.brand{
+  height:38px;background:#fff;display:flex;align-items:center;gap:6px;
+  padding:0 10px;overflow:hidden;flex:0 0 38px;
+}
+.brand-mark{width:18px;height:18px;flex:0 0 18px;}
+.brand-text{font-size:14px;font-weight:700;letter-spacing:.4px;color:#1B2A4A;white-space:nowrap;}
+.sidebar.collapsed .brand-text{opacity:0;width:0;}
+
+.nav{padding:8px 0;flex:1;overflow-y:auto;overflow-x:hidden;}
+.nav::-webkit-scrollbar{width:0;}
+.nav-item{
+  display:flex;align-items:center;gap:9px;
+  height:32px;margin:2px 6px;padding:0 8px;
+  border-radius:6px;color:#fff;text-decoration:none;
+  font-size:11.5px;white-space:nowrap;position:relative;
+  opacity:.95;transition:background .14s;
+}
+.nav-item:hover{background:rgba(255,255,255,.12);}
+.nav-item.active{background:rgba(255,255,255,.16);}
+.nav-item svg{width:15px;height:15px;flex:0 0 15px;stroke:#fff;fill:none;stroke-width:1.6;}
+.nav-label{overflow:hidden;text-overflow:ellipsis;}
+.nav-new{
+  position:absolute;top:-1px;right:4px;
+  font-size:8px;font-weight:800;font-style:italic;letter-spacing:.3px;
+  color:#FFD84D;text-shadow:0 0 2px rgba(0,0,0,.12);
+}
+.sidebar.collapsed .nav-item{justify-content:center;padding:0;}
+.sidebar.collapsed .nav-label,
+.sidebar.collapsed .nav-new{display:none;}
+
+.collapse-btn{
+  height:34px;border:0;background:rgba(0,0,0,.06);color:#fff;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;letter-spacing:1px;
+}
+.collapse-btn:hover{background:rgba(0,0,0,.12);}
+
+/* ============ Workspace ============ */
+.workspace{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden;}
+
+/* --- Row 1: doc tabs --- */
+.topbar{
+  height:38px;flex:0 0 38px;background:#F8F8FA;
+  display:flex;align-items:stretch;border-bottom:1px solid var(--border);
+}
+.doc-tabs{display:flex;align-items:stretch;min-width:0;overflow:hidden;}
+.doc-tab{
+  display:flex;align-items:center;gap:8px;
+  padding:0 12px;font-size:12.5px;color:var(--text-2);
+  border-right:1px solid var(--border);white-space:nowrap;
+  background:transparent;border-top:0;border-left:0;border-bottom:2px solid transparent;
+  transition:background .14s,color .14s;
+}
+.doc-tab:hover{background:#F1F2F5;}
+.doc-tab.active{
+  background:#F1F5FF;color:var(--brand);border-bottom-color:var(--brand);
+}
+.doc-tab .tab-x{
+  border:0;background:transparent;color:var(--text-4);font-size:13px;line-height:1;
+  padding:2px;border-radius:3px;
+}
+.doc-tab .tab-x:hover{background:rgba(60,110,252,.12);color:var(--brand);}
+
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px;padding:0 14px 0 10px;}
+.sys-btn{
+  display:flex;align-items:center;gap:8px;height:26px;padding:0 10px;
+  border:1px solid #BFD2FE;background:#F4F8FF;color:var(--brand);
+  border-radius:4px;font-size:12px;
+}
+.sys-btn:hover{background:#EAF2FF;}
+.lang-btn{
+  display:flex;align-items:center;gap:5px;border:0;background:transparent;
+  color:var(--text-2);font-size:12px;padding:0 2px;
+}
+.user{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-2);}
+.avatar{
+  width:20px;height:20px;border-radius:50%;background:#DCE8FA;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.avatar svg{width:14px;height:14px;stroke:#8AA6D8;stroke-width:1.6;fill:none;}
+
+/* --- Row 2: breadcrumb --- */
+.crumbbar{
+  height:34px;flex:0 0 34px;background:#fff;
+  display:flex;align-items:center;gap:8px;padding:0 14px;
+  border-bottom:1px solid var(--border-2);
+}
+.crumb{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--text-3);}
+.crumb svg{width:14px;height:14px;stroke:var(--text-3);stroke-width:1.5;fill:none;}
+.crumb b{font-weight:400;color:var(--text-2);}
+.crumb .sep{color:var(--text-5);margin:0 1px;}
+.tag-done{
+  display:inline-flex;align-items:center;height:19px;padding:0 7px;margin-left:4px;
+  background:#E4F4EC;color:#2E8B62;border-radius:4px;font-size:11px;
+}
+.crumbbar-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
+
+.field{
+  display:flex;align-items:center;gap:6px;height:26px;padding:0 9px;
+  border:1px solid var(--border);background:#F5F7FA;border-radius:4px;
+  font-size:12px;color:var(--text-2);white-space:nowrap;
+}
+.field.is-disabled{color:var(--text-5);width:150px;justify-content:space-between;background:#F7F8FA;}
+.field .chev{width:10px;height:10px;stroke:var(--text-4);stroke-width:1.6;fill:none;}
+.field.plain{background:#fff;}
+.field.plain:hover{border-color:#BFD2FE;}
+.icon-square{
+  width:26px;height:26px;border:1px solid var(--border);background:#fff;border-radius:4px;
+  display:flex;align-items:center;justify-content:center;
+}
+.icon-square:hover{border-color:#BFD2FE;}
+.icon-square svg{width:13px;height:13px;stroke:var(--text-2);stroke-width:1.6;fill:none;}
+
+/* --- Row 3: model tabs --- */
+.modeltabs{
+  height:40px;flex:0 0 40px;background:#fff;display:flex;align-items:stretch;
+  padding:0 14px;border-bottom:1px solid var(--border-2);
+}
+.mtab{
+  position:relative;display:flex;align-items:center;padding:0 18px;
+  font-size:13px;color:var(--text-2);background:transparent;border:0;
+  transition:color .14s;
+}
+.mtab:hover{color:var(--brand);}
+a.mtab,a.subtab{text-decoration:none;}
+.mtab.active{color:var(--text-1);font-weight:600;}
+.mtab.active::after{
+  content:"";position:absolute;left:14px;right:14px;bottom:0;height:2px;
+  background:var(--brand);border-radius:2px 2px 0 0;
+}
+.modeltabs-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
+
+/* --- Row 4: subtab strip --- */
+.subtab-strip{
+  flex:0 0 auto;background:#E4EAFE;padding:7px 14px 0;
+  display:flex;align-items:flex-end;gap:6px;overflow-x:auto;
+  border-bottom:1px solid #DCE4FD;
+}
+.subtab-strip::-webkit-scrollbar{height:0;}
+.subtab{
+  display:flex;align-items:center;gap:7px;
+  height:31px;padding:0 13px;border:1px solid transparent;border-bottom:0;
+  border-radius:6px 6px 0 0;background:#E9EDFB;color:#4A5262;font-size:12.5px;
+  white-space:nowrap;transition:background .14s,color .14s;
+}
+.subtab svg{width:13px;height:13px;stroke:currentColor;stroke-width:1.5;fill:none;opacity:.75;}
+.subtab .dot{width:6px;height:6px;border-radius:50%;background:#26B47A;}
+.subtab:hover{background:#F1F4FE;}
+.subtab.active{
+  background:#fff;color:var(--brand);border-color:#fff;
+  box-shadow:0 -1px 0 #fff;
+}
+.subtab.active svg{opacity:1;}
+
+/* --- Content --- */
+.content{
+  flex:1;overflow-y:auto;padding:12px 14px 18px;
+  background:linear-gradient(100deg,#E7F2FE 0%,#E8ECFE 58%,#E8E9FE 100%);
+}
+.content::-webkit-scrollbar{width:8px;}
+.content::-webkit-scrollbar-thumb{background:#C9D2E8;border-radius:4px;}
+
+.card{
+  background:var(--card);border-radius:var(--radius);
+  box-shadow:var(--shadow-card);
+}
+
+/* Report head */
+.report-head{display:flex;align-items:flex-start;gap:16px;padding:14px 16px 10px;}
+.report-head h1{margin:0 0 6px;font-size:14.5px;font-weight:600;color:var(--text-1);letter-spacing:.2px;}
+.report-head p{margin:0;font-size:12px;color:var(--text-3);line-height:1.75;}
+.report-head .meta{color:var(--text-4);margin-top:2px;}
+.btn{
+  display:inline-flex;align-items:center;gap:5px;height:28px;padding:0 11px;
+  border:1px solid var(--border);background:#fff;border-radius:4px;
+  font-size:12px;color:var(--text-2);white-space:nowrap;transition:all .14s;
+}
+.btn:hover{border-color:#BFD2FE;color:var(--brand);}
+.btn svg{width:13px;height:13px;stroke:currentColor;stroke-width:1.6;fill:none;}
+.report-head .btn{margin-left:auto;flex:0 0 auto;}
+
+/* Chart panel */
+.chart-panel{
+  margin:0 16px 14px;background:var(--chart-bg);
+  border:1px solid #ECF0FA;border-radius:var(--radius);
+  padding:11px 14px 8px;position:relative;
+}
+.cp-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:2px;}
+.cp-title{font-size:12.5px;font-weight:600;color:var(--text-1);}
+.segmented{
+  display:inline-flex;padding:2px;background:#F1F2F6;border-radius:5px;gap:2px;
+}
+.seg{
+  border:0;background:transparent;color:var(--text-2);
+  height:22px;padding:0 11px;border-radius:4px;font-size:12px;
+  transition:all .14s;
+}
+.seg:hover{color:var(--brand);}
+.seg.active{
+  background:#fff;color:var(--brand);font-weight:500;
+  box-shadow:0 1px 2px rgba(16,24,40,.08);
+}
+.chart-wrap{position:relative;}
+.chart-wrap svg{width:100%;display:block;overflow:visible;}
+.axis-note{
+  position:absolute;right:14px;bottom:6px;
+  font-size:11.5px;color:var(--text-3);pointer-events:none;
+}
+.chart-tip{
+  position:absolute;z-index:9;pointer-events:none;opacity:0;
+  transform:translate(-50%,-100%);
+  background:#fff;border-radius:6px;box-shadow:var(--shadow-pop);
+  padding:7px 10px;font-size:12px;color:var(--text-2);
+  white-space:nowrap;transition:opacity .12s;
+}
+.chart-tip.show{opacity:1;}
+.chart-tip .tt{font-weight:600;color:var(--text-1);margin-bottom:2px;}
+.chart-tip .tv{color:var(--text-3);}
+.chart-tip .sw{display:inline-block;width:7px;height:7px;border-radius:2px;margin-right:5px;}
+
+.sankey-node{cursor:pointer;transition:opacity .15s;}
+.sankey-link{transition:opacity .15s;cursor:pointer;}
+.sankey-label{font-size:12px;dominant-baseline:middle;pointer-events:none;}
+.dim .sankey-link{opacity:.07!important;}
+.dim .sankey-label,.dim .label-tick{opacity:.35;}
+
+/* Empty state */
+.module-empty{
+  margin:6px 16px 18px;padding:56px 20px;text-align:center;min-height:320px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:var(--chart-bg);border:1px dashed #D6DFF5;border-radius:var(--radius);
+}
+.module-empty svg{width:38px;height:38px;stroke:#A9B8DA;stroke-width:1.3;fill:none;margin:0 auto 10px;}
+.module-empty h3{margin:0 0 6px;font-size:13px;font-weight:600;color:var(--text-2);}
+.module-empty p{margin:0;font-size:12px;color:var(--text-4);}
+
+/* Table */
+.tablecard{margin-top:10px;overflow:hidden;}
+.table-scroll{max-height:calc(100vh - 520px);min-height:220px;overflow:auto;}
+.table-scroll::-webkit-scrollbar{width:8px;height:8px;}
+.table-scroll::-webkit-scrollbar-thumb{background:#D6DBE5;border-radius:4px;}
+table{width:100%;border-collapse:separate;border-spacing:0;font-size:12.5px;}
+thead th{
+  position:sticky;top:0;z-index:2;background:var(--head-bg);
+  font-weight:600;color:#3D4552;font-size:12.5px;
+  height:38px;padding:0 14px;text-align:left;
+  border-bottom:1px solid var(--table-border);
+  border-right:1px solid var(--table-border);
+  white-space:nowrap;user-select:none;cursor:pointer;
+}
+thead th:last-child{border-right:0;}
+thead th.num{text-align:right;}
+thead th:hover{background:#F5F6F8;}
+.th-inner{display:inline-flex;align-items:center;gap:5px;}
+th.num .th-inner{justify-content:flex-end;width:100%;}
+.info-i{
+  width:12px;height:12px;border-radius:50%;border:1px solid var(--text-4);
+  color:var(--text-4);font-size:8px;line-height:10px;text-align:center;
+  font-style:normal;font-weight:600;flex:0 0 12px;
+}
+.sort-ico{width:8px;height:13px;flex:0 0 8px;opacity:.55;}
+.sort-ico path{fill:var(--text-3);}
+th.sorted .sort-ico{opacity:1;}
+th.sorted .sort-ico path.up{fill:#C6CCD6;}
+th.sorted .sort-ico path.down{fill:var(--brand);}
+th.sorted.asc .sort-ico path.up{fill:var(--brand);}
+th.sorted.asc .sort-ico path.down{fill:#C6CCD6;}
+tbody td{
+  height:34px;padding:0 14px;border-bottom:1px solid var(--table-border);
+  border-right:1px solid var(--table-border);color:var(--text-2);
+  white-space:nowrap;
+}
+tbody td:last-child{border-right:0;}
+tbody td.num{text-align:right;font-variant-numeric:tabular-nums;color:var(--text-1);}
+tbody tr:hover td{background:#F8FAFF;}
+tbody tr:last-child td{border-bottom:0;}
+.cell-type{font-weight:500;color:var(--text-1);}
+</style>
+<style id="first-touch-insight-styles">
+/* 首触归因卡片对齐「六种输出形态」新版设计系统（ui-surface-refinement + diagnostic-compact-layout）。 */
+#first-touch-insight{--page:#f3f6fa;--ink:#27364a;--muted:#69778a;--faint:#8290a2;--line:#e3e9f0;--nar:#5a86c2;margin:0;min-width:0;font-family:"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.65;color:var(--ink)}
+.insight-outer{background:transparent!important;box-shadow:none!important;border:none!important;padding-left:0!important;padding-right:0!important;padding-top:0!important;padding-bottom:0!important}
+#first-touch-insight *{box-sizing:border-box;margin:0;padding:0}
+#first-touch-insight .card{width:100%;border-radius:14px;padding:16px;box-shadow:none;border:1px solid transparent;background:transparent;scroll-margin-top:74px}
+#first-touch-insight .card.narrative{--type-soft:#edf4fd;--type-accent:#5a86c2;background:linear-gradient(115deg,#eef4ff 0%,#f7faff 48%,#fefeff 100%);border-color:#dce6f4}
+#first-touch-insight .card-head{display:flex;align-items:center;gap:9px;margin-bottom:12px}
+#first-touch-insight .h-icon{width:22px;height:22px;flex-shrink:0}
+#first-touch-insight .h-icon svg{stroke:var(--type-accent);display:block}
+#first-touch-insight .h-title{font-size:17px;font-weight:700;letter-spacing:.2px;color:#2d3d52}
+#first-touch-insight .inline-card-summary{flex:1;min-width:0;font-size:12px;line-height:24px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#597b9d;cursor:help}
+#first-touch-insight .inline-card-summary strong{font-weight:600;color:#3f78b3}
+#first-touch-insight .inline-card-summary:focus-visible{outline:2px solid #3399ff;outline-offset:2px}
+#first-touch-insight .h-collapse{margin-left:auto;border:0;background:transparent;cursor:pointer;width:26px;height:26px;border-radius:6px;color:var(--muted);display:flex;align-items:center;justify-content:center}
+#first-touch-insight .h-collapse:hover{background:#f1f5f9}
+#first-touch-insight .h-collapse svg{transition:transform .2s}
+#first-touch-insight .headline{font-size:13.5px;color:#405168;font-weight:500;background:rgba(255,255,255,.62);border-left:3px solid var(--type-accent);padding:9px 14px;border-radius:8px;margin-bottom:16px}
+#first-touch-insight .m-cell{position:relative;background:rgba(255,255,255,.76);border-radius:10px;padding:14px 15px 13px;box-shadow:none}
+#first-touch-insight .m-icon{position:absolute;top:14px;right:14px;width:20px;height:20px}
+#first-touch-insight .m-label{font-size:12px;color:var(--muted);margin-bottom:5px;padding-right:24px}
+#first-touch-insight .m-value{font-size:28px;font-weight:800;letter-spacing:-.5px;line-height:1.12;color:#293a50}
+#first-touch-insight .m-note{font-size:11.5px;color:var(--faint);margin-top:5px}
+#first-touch-insight .metrics-grid{display:grid;gap:12px;margin-bottom:16px}
+#first-touch-insight .metrics-grid.c3{grid-template-columns:repeat(3,1fr)}
+#first-touch-insight .conf-line{display:flex;align-items:center;gap:8px;margin-top:14px;padding-top:13px;border-top:1px dashed #e5eaf1;font-size:12px;color:var(--muted)}
+#first-touch-insight .conf-pill{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;color:#fff;border-radius:20px;padding:1px 8px}
+#first-touch-insight .conf-pill.mid{background:#eee2c9;color:#806832}
+/* 新版紧凑收起态：标题 + inline 摘要 + 带文字的收起按钮 */
+#first-touch-insight .card.collapsed{padding:10px 14px;min-height:48px;border-radius:10px;box-shadow:none}
+#first-touch-insight .card.collapsed .card-head{display:flex;flex-wrap:nowrap;gap:8px;margin:0;min-width:0;min-height:26px}
+#first-touch-insight .card.collapsed .h-icon{width:26px;height:26px;flex:0 0 26px;padding:4px;border-radius:6px;background:var(--type-soft)}
+#first-touch-insight .card.collapsed .h-title{font-size:13px;font-weight:600;flex:0 1 auto;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#first-touch-insight .card.collapsed .headline,#first-touch-insight .card.collapsed .body{display:none}
+#first-touch-insight .card.collapsed .inline-card-summary{display:block;flex:1;min-width:0;font-size:12px;line-height:24px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#597b9d;cursor:help}
+#first-touch-insight .card.collapsed .h-collapse{margin-left:4px;width:auto;height:26px;flex:none;gap:4px;padding:0 8px;border:1px solid #d8e0eb;background:rgba(255,255,255,.85);border-radius:3px;font-size:12px;color:#637f9e}
+#first-touch-insight .card.collapsed .h-collapse svg{width:12px;height:12px;transform:rotate(180deg)}
+#first-touch-insight .collapse-action-text{display:none}
+#first-touch-insight .card.collapsed .collapse-action-text{display:inline}
+#first-touch-insight .h-collapse:focus-visible{outline:2px solid #3399ff;outline-offset:3px}#first-touch-insight .body[hidden]{display:none}#first-touch-insight .card{margin:0}
+@media(max-width:1366px){#first-touch-insight .card{padding:16px 18px}#first-touch-insight .m-value{font-size:26px}#first-touch-insight .h-title{font-size:16px}}
+@media(max-width:760px){#first-touch-insight .metrics-grid.c3{grid-template-columns:1fr}}
+</style>
+<style id="first-touch-overview-layout">
+/* 模型概览独立成块，与洞察和图表内容分隔。 */
+#content>.model-overview{margin:0 0 12px;border:1px solid #e4eaf5;border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-card)}
+#content>.model-overview>.report-head{padding:14px 16px}
+#content>.report{padding-top:14px}
+</style>
+<style id="first-touch-chart-layout">
+/* 模型说明、洞察、图表、明细分别使用独立卡片。 */
+#content>.report{padding:14px 16px}
+#content>.report>#first-touch-insight{margin:0}
+#content>.first-touch-chart-card{margin:12px 0 0;padding:14px 16px;border:1px solid #e4eaf5;border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow-card)}
+#content>.first-touch-chart-card>.chart-panel{margin:0}
+#content>.tablecard{margin-top:12px}
+</style>
+<style id="first-touch-feedback-styles">#first-touch-insight .insight-feedback{--feedback-blue:#0077ea;display:inline-flex;align-items:center;gap:4px;flex:none;margin:0 0 0 auto;padding:0;border:0;color:#808896}#first-touch-insight .feedback-options{display:inline-flex;gap:4px;align-items:center}#first-touch-insight .insight-feedback button{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;padding:6px;border:0;border-radius:4px;background:transparent;color:#808896;cursor:pointer}#first-touch-insight .insight-feedback button svg{width:16px;height:16px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}#first-touch-insight .insight-feedback button:hover{background:#eff1f4;color:var(--feedback-blue)}#first-touch-insight .insight-feedback button[aria-pressed=true]{background:#e5f1fd;color:var(--feedback-blue)}#first-touch-insight .insight-feedback button:focus-visible{outline:2px solid #80bbf5;outline-offset:2px}#first-touch-insight .card .card-head>.h-collapse{margin-left:0;flex:none}#first-touch-insight .card.collapsed .card-head{min-height:28px}#first-touch-insight .card.collapsed .insight-feedback{display:inline-flex;margin-left:0}#first-touch-insight .feedback-status{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}#first-touch-insight .insight-feedback-toast{position:fixed;right:16px;bottom:16px;z-index:3000;max-width:calc(100vw - 32px);padding:8px 16px;border:1px solid #e2e8f0;border-radius:8px;background:#fff;color:#232f3f;box-shadow:0 4px 16px #232f3f1f;font-size:13px;pointer-events:none}#first-touch-insight .insight-feedback-toast[hidden]{display:none}
+</style>
+<style id="first-touch-uniform-collapse-styles">#first-touch-insight .card .card-head>.h-collapse,#first-touch-insight .card.collapsed .card-head>.h-collapse{display:inline-flex;align-items:center;justify-content:center;flex:0 0 64px;width:64px;min-width:64px;height:28px;margin-left:0;padding:0 6px;gap:4px;border:0;border-radius:4px;background:transparent;color:#69778a;font-family:inherit;font-size:12px;line-height:1;cursor:pointer;white-space:nowrap}#first-touch-insight .card .card-head>.h-collapse:hover{background:#eff1f4;color:#0077ea}#first-touch-insight .card .card-head>.h-collapse:focus-visible{outline:2px solid #80bbf5;outline-offset:2px}#first-touch-insight .card .card-head>.h-collapse svg{width:14px;height:14px;flex:none;stroke:currentColor;transform:rotate(0deg)}#first-touch-insight .card.collapsed .card-head>.h-collapse svg{transform:rotate(180deg)}#first-touch-insight .card .card-head>.h-collapse .collapse-action-text{display:inline}
+</style>
+<link rel="stylesheet" href="docs/design/first-touch-assistant.css">
+<link rel="stylesheet" href="docs/design/first-touch-plan-two.css">
+<link rel="stylesheet" href="docs/design/first-touch-button-variants.css">
+<link rel="stylesheet" href="docs/design/client-shell/client-shell.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- ===== Sidebar ===== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="10" fill="#3C6EFC"/>
+        <path d="M6.5 13.2c1.8 0 2.4-2.6 4.2-2.6 1.5 0 1.9 2.2 3.4 2.2 1.3 0 1.9-1.6 3.4-1.6" stroke="#fff" stroke-width="1.7" stroke-linecap="round"/>
+      </svg>
+      <span class="brand-text">4KMILES</span>
+    </div>
+    <nav class="nav">
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6"/></svg>
+        <span class="nav-label">About AMC</span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M9 15.2 12 8.8l3 6.4M10.1 13.4h3.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="nav-label">Ads Overview</span>
+        <i class="nav-new">NEW</i>
+      </a>
+      <a class="nav-item active" href="#">
+        <svg viewBox="0 0 24 24"><path d="M7 4.5h7.5L19 9v10.5H7z" stroke-linejoin="round"/><path d="M14 4.5V9h4.5M9.5 12.5h6M9.5 15.5h4" stroke-linecap="round"/></svg>
+        <span class="nav-label">AMC Reports</span>
+        <i class="nav-new">NEW</i>
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24"><circle cx="9.5" cy="9" r="3"/><path d="M4 19c0-2.7 2.5-4.4 5.5-4.4S15 16.3 15 19" stroke-linecap="round"/><path d="M16 7.2a2.8 2.8 0 0 1 0 5.4M17.6 14.9c1.6.6 2.6 1.9 2.6 3.6" stroke-linecap="round"/></svg>
+        <span class="nav-label">AMC Audience</span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24"><path d="M4 9V5h4M20 15v4h-4M4 15v4h4M20 9V5h-4" stroke-linecap="round"/><path d="M12 16V8m0 0-2.4 2.4M12 8l2.4 2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="nav-label">Mapping Upload</span>
+        <i class="nav-new">NEW</i>
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24"><rect x="4" y="4.5" width="16" height="15" rx="2"/><path d="M4 9.5h16M9.5 9.5V19.5" stroke-linecap="round"/></svg>
+        <span class="nav-label">MA</span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24"><rect x="3.5" y="6" width="17" height="12" rx="2"/><path d="M7 10h5M7 13.5h8" stroke-linecap="round"/></svg>
+        <span class="nav-label">More</span>
+      </a>
+    </nav>
+    <button class="collapse-btn" id="collapseBtn" title="收起侧栏">«</button>
+  </aside>
+
+  <!-- ===== Workspace ===== -->
+  <div class="workspace">
+
+    <!-- Row 1 -->
+    <header class="topbar">
+      <div class="doc-tabs">
+        <div class="doc-tab">Overview <button class="tab-x" data-close>×</button></div>
+        <div class="doc-tab">AMC Reports <button class="tab-x" data-close>×</button></div>
+        <div class="doc-tab active">Demo Report <button class="tab-x" data-close>×</button></div>
+      </div>
+      <div class="topbar-right">
+        <button class="sys-btn">AMC营销数据系统
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 4l3 3 3-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="lang-btn">简体中文
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 4l3 3 3-3" stroke="#91979F" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="user">
+          <span class="avatar">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="3.4"/><path d="M5.5 20c0-3.4 2.9-5.6 6.5-5.6s6.5 2.2 6.5 5.6"/></svg>
+          </span>
+          <span>3384401385...</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Row 2 -->
+    <div class="crumbbar">
+      <div class="crumb">
+        <svg viewBox="0 0 24 24"><path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4v-5.5h-6V20H5a1 1 0 0 1-1-1z" stroke-linejoin="round"/></svg>
+        <b>AMC报告</b>
+        <span class="sep">›</span>
+        <span>Demo Report</span>
+        <span class="tag-done">已完成</span>
+      </div>
+      <div class="crumbbar-right">
+        <div class="field is-disabled"><span></span>
+          <svg class="chev" viewBox="0 0 10 10"><path d="M2 4l3 3 3-3"/></svg>
+        </div>
+        <div class="field plain">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#7B828C" stroke-width="1.6"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M8 3.5v3M16 3.5v3" stroke-linecap="round"/></svg>
+          2024-04-21 <span style="color:#91979F">至</span> 2025-05-18
+        </div>
+        <button class="icon-square" title="刷新">
+          <svg viewBox="0 0 24 24"><path d="M19 12a7 7 0 1 1-2.3-5.2M19 4v4h-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="modeltabs">
+      <button class="mtab active" aria-current="page">广告触达路径分析</button>
+      <a class="mtab" href="./1019-人群标签洞察模型.html" data-prototype-link="audience" title="跳转到：人群标签洞察模型（原型）" aria-label="跳转到人群标签洞察模型原型">人群分析</a>
+      <button class="mtab" data-inert title="原型暂未覆盖">精选推荐</button>
+      <a class="mtab" href="./1019-广告频次分析.html" data-prototype-link="frequency" title="跳转到：广告频次分析（原型）" aria-label="跳转到广告频次分析原型">媒介触点分析</a>
+      <button class="mtab" data-inert title="原型暂未覆盖">营销洞察</button>
+      <div class="modeltabs-right">
+        <div class="field plain">US demosbence
+          <svg class="chev" viewBox="0 0 10 10"><path d="M2 4l3 3 3-3"/></svg>
+        </div>
+        <div class="field plain">GMT-04
+          <svg class="chev" viewBox="0 0 10 10"><path d="M2 4l3 3 3-3"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row 4 -->
+    <div class="subtab-strip" id="subtabStrip">
+      <a class="subtab" data-model="path" href="./1019-广告回溯路径模型.html" data-prototype-link="path" title="跳转到：广告回溯路径模型（原型）" aria-label="跳转到广告回溯路径模型原型">
+        <svg viewBox="0 0 24 24"><path d="M7 4.5h7.5L19 9v10.5H7z" stroke-linejoin="round"/><path d="M14 4.5V9h4.5M9.5 12.5h6M9.5 15.5h4" stroke-linecap="round"/></svg>
+        广告归因路径模型 <span class="dot"></span>
+      </a>
+      <button class="subtab active" data-model="first">
+        <svg viewBox="0 0 24 24"><path d="M7 4.5h7.5L19 9v10.5H7z" stroke-linejoin="round"/><path d="M14 4.5V9h4.5M9.5 12.5h6M9.5 15.5h4" stroke-linecap="round"/></svg>
+        首次触点转化归因模型 <span class="dot"></span>
+      </button>
+      <a class="subtab" data-model="overlap" href="./1019-广告曝光重叠分析模型.html" data-prototype-link="overlap" title="跳转到：广告曝光重叠分析模型（原型）" aria-label="跳转到广告曝光重叠分析模型原型">
+        <svg viewBox="0 0 24 24"><path d="M7 4.5h7.5L19 9v10.5H7z" stroke-linejoin="round"/><path d="M14 4.5V9h4.5M9.5 12.5h6M9.5 15.5h4" stroke-linecap="round"/></svg>
+        广告曝光重叠分析模型 <span class="dot"></span>
+      </a>
+      <a class="subtab" data-model="newuser" href="./1019-广告新客路径追踪模型.html" data-prototype-link="newuser" title="跳转到：广告新客路径追踪模型（原型）" aria-label="跳转到广告新客路径追踪模型原型">
+        <svg viewBox="0 0 24 24"><path d="M7 4.5h7.5L19 9v10.5H7z" stroke-linejoin="round"/><path d="M14 4.5V9h4.5M9.5 12.5h6M9.5 15.5h4" stroke-linecap="round"/></svg>
+        广告新客路径追踪模型 <span class="dot"></span>
+      </a>
+    </div>
+
+    <!-- Content -->
+    <div class="content" id="content">
+
+      <section class="card model-overview" aria-labelledby="modelTitle">
+        <div class="report-head">
+          <div>
+            <h1 id="modelTitle">首次触点转化归因模型</h1>
+            <p id="modelDesc">分析消费者在首次接触不同广告后，最终购买归因在何种广告上，体现消费者在首次接触广告后的自转化或转化引导的价值。</p>
+            <p class="meta" id="modelMeta">数据聚合方式：按DSP整体输出　回溯周期：28天</p>
+          </div>
+          <button class="btn" id="downloadBtn">
+            <svg viewBox="0 0 24 24"><path d="M12 4v10m0 0 3.6-3.6M12 14l-3.6-3.6M5 17.5V19a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            下载
+          </button>
+        </div>
+      </section>
+
+      <section class="card first-touch-chart-card" aria-labelledby="cpTitle">
+        <div class="chart-panel" id="chartPanel">
+          <div class="cp-head">
+            <span class="cp-title" id="cpTitle">首次曝光广告</span>
+            <div class="segmented" id="segSwitch">
+              <button class="seg active" data-view="sankey">桑基图</button>
+              <button class="seg" data-view="stack">堆积图</button>
+            </div>
+          </div>
+          <div class="chart-wrap" id="chartWrap">
+            <svg id="chartSvg"></svg>
+            <div class="chart-tip" id="chartTip"></div>
+            <div class="axis-note" id="axisNote">归因购买广告</div>
+          </div>
+        </div>
+
+        <div class="module-empty" id="moduleEmpty" hidden>
+          <svg viewBox="0 0 24 24"><path d="M7 4.5h7.5L19 9v10.5H7z" stroke-linejoin="round"/><path d="M14 4.5V9h4.5" stroke-linecap="round"/><circle cx="12" cy="15" r="1" fill="#A9B8DA" stroke="none"/><circle cx="9" cy="15" r="1" fill="#A9B8DA" stroke="none"/><circle cx="15" cy="15" r="1" fill="#A9B8DA" stroke="none"/></svg>
+          <h3 id="emptyTitle">「广告归因路径模型」数据待接入</h3>
+          <p>当前原型仅演示「首次触点转化归因模型」的完整数据与交互</p>
+        </div>
+      </section>
+
+      <section class="card tablecard" id="tableCard">
+        <div class="table-scroll" id="tableScroll">
+          <table>
+            <thead>
+              <tr>
+                <th data-key="f" style="width:15%"><span class="th-inner">首次触点 <i class="info-i">i</i>
+                  <svg class="sort-ico" viewBox="0 0 8 13"><path class="up" d="M4 0 7.5 4.4H.5z"/><path class="down" d="M4 13 .5 8.6h7z"/></svg></span></th>
+                <th data-key="l" style="width:22%"><span class="th-inner">末次触点 <i class="info-i">i</i>
+                  <svg class="sort-ico" viewBox="0 0 8 13"><path class="up" d="M4 0 7.5 4.4H.5z"/><path class="down" d="M4 13 .5 8.6h7z"/></svg></span></th>
+                <th data-key="n" class="num sorted desc" style="width:22%"><span class="th-inner">购买人数 <i class="info-i">i</i>
+                  <svg class="sort-ico" viewBox="0 0 8 13"><path class="up" d="M4 0 7.5 4.4H.5z"/><path class="down" d="M4 13 .5 8.6h7z"/></svg></span></th>
+                <th data-key="p" class="num" style="width:18%"><span class="th-inner">购买人数占比 <i class="info-i">i</i>
+                  <svg class="sort-ico" viewBox="0 0 8 13"><path class="up" d="M4 0 7.5 4.4H.5z"/><path class="down" d="M4 13 .5 8.6h7z"/></svg></span></th>
+                <th data-key="s" class="num" style="width:23%"><span class="th-inner">总销售额 <i class="info-i">i</i>
+                  <svg class="sort-ico" viewBox="0 0 8 13"><path class="up" d="M4 0 7.5 4.4H.5z"/><path class="down" d="M4 13 .5 8.6h7z"/></svg></span></th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================= Data ================= */
+const FIRST = [
+  {k:'DSP', v:19184, p:'33.26%'},
+  {k:'SB',  v:4420,  p:'7.66%'},
+  {k:'SD',  v:2051,  p:'3.56%'},
+  {k:'SP',  v:32028, p:'55.52%'}
+];
+const LAST = [
+  {k:'DSP', v:12055, p:'20.90%'},
+  {k:'SB',  v:3619,  p:'6.27%'},
+  {k:'SD',  v:2132,  p:'3.70%'},
+  {k:'SP',  v:39877, p:'69.13%'}
+];
+const LINKS = [
+  {s:'DSP', t:'DSP', v:11985},
+  {s:'DSP', t:'SP',  v:6149},
+  {s:'DSP', t:'SB',  v:605},
+  {s:'DSP', t:'SD',  v:445},
+  {s:'SB',  t:'SB',  v:2971},
+  {s:'SB',  t:'SP',  v:1269},
+  {s:'SB',  t:'SD',  v:131},
+  {s:'SD',  t:'SD',  v:1566},
+  {s:'SD',  t:'SP',  v:431},
+  {s:'SP',  t:'SP',  v:32028}
+];
+const ROWS = [
+  {f:'SP',  l:'SP', n:32028, p:55.52, s:4267014.36},
+  {f:'DSP', l:'DSP',n:11985, p:20.78, s:1428607.54},
+  {f:'DSP', l:'SP', n:6149,  p:10.66, s:812956.65},
+  {f:'SB',  l:'SB', n:2971,  p:5.15,  s:393554.06},
+  {f:'SD',  l:'SD', n:1566,  p:2.71,  s:194443.27},
+  {f:'SB',  l:'SP', n:1269,  p:2.20,  s:171840.53},
+  {f:'DSP', l:'SB', n:605,   p:1.05,  s:80868.07},
+  {f:'DSP', l:'SD', n:445,   p:0.77,  s:53932.57},
+  {f:'SD',  l:'SP', n:431,   p:0.75,  s:57652.91},
+  {f:'SB',  l:'SD', n:131,   p:0.31,  s:16485.35}
+];
+const COLORS = {DSP:'#628AFC', SB:'#2ED3B7', SD:'#DFAE6A', SP:'#36BFFA'};
+const RIBBON = {DSP:'rgba(98,138,252,.44)', SB:'rgba(46,211,183,.34)', SD:'rgba(223,174,106,.38)', SP:'rgba(54,191,250,.30)'};
+const BAR_COLORS = {DSP:['#A6BAFE','#7C9BFD'], SB:['#84E4D2','#4FD6BC'], SD:['#EFC896','#E3B478'], SP:['#82D8FC','#45C5FA']};
+
+const MODELS = {
+  path:    {title:'广告归因路径模型',
+            desc:'还原消费者从首次接触到最终购买之间的完整广告触点路径，展示各触点组合对转化的贡献分布。',
+            meta:'数据聚合方式：按DSP整体输出　回溯周期：28天'},
+  first:   {title:'首次触点转化归因模型',
+            desc:'分析消费者在首次接触不同广告后，最终购买归因在何种广告上，体现消费者在首次接触广告后的自转化或转化引导的价值。',
+            meta:'数据聚合方式：按DSP整体输出　回溯周期：28天'},
+  overlap: {title:'广告曝光重叠分析模型',
+            desc:'分析同一人群被多个广告类型重复触达的比例，评估媒体之间的曝光重叠与冗余投放，辅助预算分配。',
+            meta:'数据聚合方式：按DSP整体输出　回溯周期：28天'},
+  newuser: {title:'广告新客路径追踪模型',
+            desc:'追踪新客从首次曝光到首单成交的触点序列，识别高效拉新路径与关键转化节点。',
+            meta:'数据聚合方式：按DSP整体输出　回溯周期：28天'}
+};
+
+const fmt = n => n.toLocaleString('en-US');
+const fmtMoney = n => '$ ' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+/* ================= Chart state ================= */
+let view = 'sankey';
+const svg = document.getElementById('chartSvg');
+const wrap = document.getElementById('chartWrap');
+const tip = document.getElementById('chartTip');
+const axisNote = document.getElementById('axisNote');
+
+/* ---------- Sankey ---------- */
+function renderSankey(){
+  const W = Math.max(wrap.clientWidth, 720);
+  const H = 300;
+  const padT = 24, padB = 26, gap = 20;
+  const flowH = H - padT - padB;
+  const nodeW = 10;
+  const leftX = 150, rightX = W - 160;
+
+  const total = FIRST.reduce((a,b)=>a+b.v,0);
+  const scale = (flowH - gap*(FIRST.length-1)) / total;
+
+  const leftY = {}, rightY = {};
+  let cur = padT;
+  FIRST.forEach(n=>{ leftY[n.k] = cur; n.h = n.v*scale; cur += n.h + gap; });
+  cur = padT;
+  LAST.forEach(n=>{ rightY[n.k] = cur; n.h = n.v*scale; cur += n.h + gap; });
+
+  /* link offsets */
+  const si = k => FIRST.findIndex(n=>n.k===k);
+  const ti = k => LAST.findIndex(n=>n.k===k);
+  const outOff = {}, inOff = {};
+  FIRST.forEach(n=>outOff[n.k]=0); LAST.forEach(n=>inOff[n.k]=0);
+
+  [...LINKS].sort((a,b)=> si(a.s)-si(b.s) || ti(a.t)-ti(b.t))
+    .forEach(l=>{ l.lo = outOff[l.s]; outOff[l.s] += l.v*scale; });
+  [...LINKS].sort((a,b)=> ti(a.t)-ti(b.t) || si(a.s)-si(b.s))
+    .forEach(l=>{ l.ro = inOff[l.t]; inOff[l.t] += l.v*scale; });
+
+  let s = '';
+  /* links */
+  s += '<g class="links">';
+  LINKS.forEach(l=>{
+    const x0 = leftX + nodeW, x1 = rightX;
+    const y0t = leftY[l.s] + l.lo, y0b = y0t + l.v*scale;
+    const y1t = rightY[l.t] + l.ro, y1b = y1t + l.v*scale;
+    const dx = (x1-x0)*0.45;
+    const d = `M${x0},${y0t} C${x0+dx},${y0t} ${x1-dx},${y1t} ${x1},${y1t} L${x1},${y1b} C${x1-dx},${y1b} ${x0+dx},${y0b} ${x0},${y0b} Z`;
+    s += `<path class="sankey-link" data-s="${l.s}" data-t="${l.t}" data-v="${l.v}" d="${d}" fill="${RIBBON[l.s]}"/>`;
+  });
+  s += '</g>';
+
+  /* nodes */
+  s += '<g class="nodes">';
+  FIRST.forEach(n=>{
+    s += `<rect class="sankey-node" data-side="first" data-k="${n.k}" data-v="${n.v}" data-p="${n.p}" x="${leftX}" y="${leftY[n.k]}" width="${nodeW}" height="${Math.max(n.h,2)}" rx="2.5" fill="${COLORS[n.k]}"/>`;
+  });
+  LAST.forEach(n=>{
+    s += `<rect class="sankey-node" data-side="last" data-k="${n.k}" data-v="${n.v}" data-p="${n.p}" x="${rightX}" y="${rightY[n.k]}" width="${nodeW}" height="${Math.max(n.h,2)}" rx="2.5" fill="${COLORS[n.k]}"/>`;
+  });
+  s += '</g>';
+
+  /* labels with collision avoidance */
+  const leftLabels = FIRST.map(n=>({k:n.k, cy:leftY[n.k]+Math.max(n.h,2)/2, v:n.v, p:n.p}));
+  const rightLabels = LAST.map(n=>({k:n.k, cy:rightY[n.k]+Math.max(n.h,2)/2, v:n.v, p:n.p}));
+  const spread = (arr,min)=>{
+    arr.sort((a,b)=>a.cy-b.cy);
+    for(let i=1;i<arr.length;i++){
+      if(arr[i].cy - arr[i-1].cy < min) arr[i].cy = arr[i-1].cy + min;
+    }
+    return arr;
+  };
+  spread(leftLabels,19); spread(rightLabels,19);
+
+  s += '<g class="labels">';
+  leftLabels.forEach(l=>{
+    s += `<g transform="translate(0,${l.cy})">
+      <rect class="label-tick" x="0" y="-5" width="2" height="10" rx="1" fill="${COLORS[l.k]}"/>
+      <text class="sankey-label" x="9" y="0">
+        <tspan fill="${COLORS[l.k]}" font-weight="500">${l.k}</tspan>
+        <tspan fill="#7B828C" dx="5">${fmt(l.v)} (${l.p})</tspan>
+      </text></g>`;
+  });
+  rightLabels.forEach(l=>{
+    s += `<g transform="translate(${rightX + nodeW + 8},${l.cy})">
+      <rect class="label-tick" x="0" y="-5" width="2" height="10" rx="1" fill="${COLORS[l.k]}"/>
+      <text class="sankey-label" x="9" y="0">
+        <tspan fill="${COLORS[l.k]}" font-weight="500">${l.k}</tspan>
+        <tspan fill="#7B828C" dx="5">${fmt(l.v)} (${l.p})</tspan>
+      </text></g>`;
+  });
+  s += '</g>';
+
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.setAttribute('height', H);
+  svg.innerHTML = s;
+  bindSankeyEvents();
+}
+
+function bindSankeyEvents(){
+  const allLinks = [...svg.querySelectorAll('.sankey-link')];
+  svg.querySelectorAll('.sankey-node').forEach(node=>{
+    node.addEventListener('mouseenter', ()=>{
+      const k = node.dataset.k;
+      svg.classList.add('dim');
+      allLinks.forEach(l=>{
+        const on = l.dataset.s===k || l.dataset.t===k;
+        l.style.opacity = on ? '1' : '0.05';
+      });
+      showTip(node, `购买人数 ${fmt(+node.dataset.v)} (${node.dataset.p})`,
+        node.dataset.side==='first' ? '首次曝光广告' : '归因购买广告', k);
+    });
+    node.addEventListener('mousemove', e=>moveTip(e));
+    node.addEventListener('mouseleave', clearTip);
+  });
+  allLinks.forEach(l=>{
+    l.addEventListener('mouseenter', ()=>{
+      svg.classList.add('dim');
+      allLinks.forEach(o=>{ o.style.opacity = o===l ? '1' : '0.05'; });
+      showTip(null, `${fmt(+l.dataset.v)} 人`, `${l.dataset.s} → ${l.dataset.t}`, l.dataset.s);
+    });
+    l.addEventListener('mousemove', e=>moveTip(e));
+    l.addEventListener('mouseleave', clearTip);
+  });
+}
+
+/* ---------- Stacked bar ---------- */
+function renderStack(){
+  const W = Math.max(wrap.clientWidth, 720);
+  const H = 300;
+  const padL = 56, padR = 26, padT = 26, padB = 62;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const yMax = 32028;
+
+  const seriesOrder = ['SP','SD','SB','DSP']; /* bottom -> top */
+  const y = v => padT + plotH - (v/yMax)*plotH;
+  const catW = plotW / FIRST.length;
+  const barW = Math.min(38, catW*0.32);
+
+  let s = '';
+  /* axis baseline */
+  s += `<line x1="${padL}" y1="${y(0)}" x2="${padL+plotW}" y2="${y(0)}" stroke="#D8DDE8" stroke-width="1"/>`;
+  /* gridlines + y labels */
+  const ticks = [0,5000,10000,15000,20000,25000,30000];
+  s += '<g class="grid">';
+  ticks.forEach(t=>{
+    const yy = y(t);
+    s += `<line x1="${padL}" y1="${yy}" x2="${padL+plotW}" y2="${yy}" stroke="#E3E7EF" stroke-dasharray="3 4" stroke-width="1"/>`;
+    s += `<text x="${padL-10}" y="${yy+4}" text-anchor="end" font-size="11.5" fill="#91979F">${t===0?'0':(t/1000).toFixed(2)+'k'}</text>`;
+  });
+  s += `<line x1="${padL}" y1="${y(yMax)}" x2="${padL+plotW}" y2="${y(yMax)}" stroke="#E3E7EF" stroke-dasharray="3 4" stroke-width="1"/>`;
+  s += `<text x="${padL-10}" y="${y(yMax)+4}" text-anchor="end" font-size="11.5" fill="#91979F">32.03k</text>`;
+  s += '</g>';
+
+  /* bars */
+  FIRST.forEach((n,ci)=>{
+    const cx = padL + catW*ci + catW/2;
+    const x = cx - barW/2;
+    let acc = 0;
+    const seg = seriesOrder
+      .map(k=>({k, v: LINKS.filter(l=>l.s===n.k && l.t===k).reduce((a,b)=>a+b.v,0)}))
+      .filter(d=>d.v>0);
+    seg.forEach((d,i)=>{
+      const h = (d.v/yMax)*plotH;
+      const yTop = y(acc + d.v);
+      const isTop = i === seg.length-1;
+      const c = BAR_COLORS[d.k];
+      s += `<rect class="bar-seg" data-cat="${n.k}" x="${x}" y="${yTop}" width="${barW}" height="${Math.max(h,1)}"
+              fill="url(#g-${d.k})" ${isTop?'rx="2"':''} data-k="${d.k}" data-v="${d.v}"/>`;
+      acc += d.v;
+    });
+    /* category label */
+    s += `<text x="${cx}" y="${padT+plotH+20}" text-anchor="middle" font-size="12" fill="#525A69">${n.k}</text>`;
+  });
+
+  /* defs */
+  let defs = '<defs>';
+  Object.keys(BAR_COLORS).forEach(k=>{
+    defs += `<linearGradient id="g-${k}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${BAR_COLORS[k][0]}"/>
+      <stop offset="100%" stop-color="${BAR_COLORS[k][1]}"/></linearGradient>`;
+  });
+  defs += '</defs>';
+
+  /* legend */
+  let lx = padL;
+  const ly = H - 14;
+  s += '<g class="legend">';
+  ['DSP','SB','SD','SP'].forEach(k=>{
+    s += `<rect x="${lx}" y="${ly-8}" width="8" height="8" rx="2" fill="${BAR_COLORS[k][1]}"/>`;
+    s += `<text x="${lx+13}" y="${ly}" font-size="11.5" fill="#7B828C">${k}</text>`;
+    lx += 13 + k.length*7 + 14;
+  });
+  s += '</g>';
+
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.setAttribute('height', H);
+  svg.innerHTML = defs + s;
+  bindBarEvents();
+}
+
+function bindBarEvents(){
+  svg.querySelectorAll('.bar-seg').forEach(r=>{
+    r.addEventListener('mouseenter', ()=>{
+      const cat = r.dataset.cat;
+      const keys = ['DSP','SB','SD','SP'];
+      const lines = keys.map(k=>{
+        const v = LINKS.filter(l=>l.s===cat && l.t===k).reduce((a,b)=>a+b.v,0);
+        return v>0 ? `<div class="tv"><span class="sw" style="background:${COLORS[k]}"></span>${k}　${fmt(v)}</div>` : '';
+      }).join('');
+      const tot = FIRST.find(n=>n.k===cat).v;
+      tip.innerHTML = `<div class="tt">首次曝光广告 · ${cat}</div>${lines}<div class="tv" style="margin-top:3px;color:#232F3F">合计 ${fmt(tot)}</div>`;
+      tip.classList.add('show');
+      moveTip({clientX: 0, clientY: 0, _anchor: r});
+    });
+    r.addEventListener('mouseleave', clearTip);
+  });
+}
+
+/* ---------- Tooltip helpers ---------- */
+function showTip(node, value, title, key){
+  tip.innerHTML = `<div class="tt"><span class="sw" style="background:${COLORS[key]||'#3C6EFC'}"></span>${title} · ${key}</div><div class="tv">${value}</div>`;
+  tip.classList.add('show');
+}
+function moveTip(e){
+  const rect = wrap.getBoundingClientRect();
+  let x, yy;
+  if(e._anchor){
+    const b = e._anchor.getBoundingClientRect();
+    x = b.left + b.width/2 - rect.left;
+    yy = b.top - rect.top - 6;
+  }else{
+    x = e.clientX - rect.left;
+    yy = e.clientY - rect.top - 8;
+  }
+  tip.style.left = Math.max(60, Math.min(x, rect.width-60)) + 'px';
+  tip.style.top = yy + 'px';
+}
+function clearTip(){
+  svg.classList.remove('dim');
+  svg.querySelectorAll('.sankey-link').forEach(l=>l.style.opacity='');
+  tip.classList.remove('show');
+}
+
+/* ---------- Render dispatcher ---------- */
+function renderChart(){
+  if(view === 'sankey'){
+    axisNote.textContent = '归因购买广告';
+    document.getElementById('cpTitle').textContent = '首次曝光广告';
+    renderSankey();
+  }else{
+    axisNote.textContent = '首次曝光广告';
+    document.getElementById('cpTitle').textContent = '归因购买广告';
+    renderStack();
+  }
+}
+
+/* ================= Table ================= */
+let sortKey = 'n', sortDir = 'desc';
+function renderTable(){
+  const data = [...ROWS].sort((a,b)=>{
+    let va = a[sortKey], vb = b[sortKey];
+    if(sortKey==='f'||sortKey==='l'){ va = va.localeCompare(vb); }
+    if(va < vb) return sortDir==='asc' ? -1 : 1;
+    if(va > vb) return sortDir==='asc' ? 1 : -1;
+    return 0;
+  });
+  document.getElementById('tableBody').innerHTML = data.map(r=>`
+    <tr>
+      <td><span class="cell-type">${r.f}</span></td>
+      <td>${r.l}</td>
+      <td class="num">${fmt(r.n)}</td>
+      <td class="num">${r.p.toFixed(2)}%</td>
+      <td class="num">${fmtMoney(r.s)}</td>
+    </tr>`).join('');
+
+  document.querySelectorAll('thead th').forEach(th=>{
+    const on = th.dataset.key === sortKey;
+    th.classList.toggle('sorted', on);
+    th.classList.toggle('desc', on && sortDir==='desc');
+    th.classList.toggle('asc', on && sortDir==='asc');
+  });
+}
+
+document.querySelectorAll('thead th').forEach(th=>{
+  th.addEventListener('click', ()=>{
+    const k = th.dataset.key;
+    if(sortKey === k){ sortDir = sortDir==='desc' ? 'asc' : 'desc'; }
+    else{ sortKey = k; sortDir = (k==='f'||k==='l') ? 'asc' : 'desc'; }
+    renderTable();
+  });
+});
+
+/* ================= Interactions ================= */
+/* segmented switch */
+document.getElementById('segSwitch').addEventListener('click', e=>{
+  const b = e.target.closest('.seg');
+  if(!b) return;
+  document.querySelectorAll('#segSwitch .seg').forEach(x=>x.classList.toggle('active', x===b));
+  view = b.dataset.view;
+  renderChart();
+});
+
+/* subtab switching */
+function applyModel(key){
+  const tab = [...document.querySelectorAll('.subtab')].find(t=>t.dataset.model===key);
+  if(!tab) return;
+  if(tab.tagName === 'A'){ location.href = tab.getAttribute('href'); return; }
+  document.querySelectorAll('.subtab').forEach(x=>x.classList.toggle('active', x===tab));
+  tab.scrollIntoView({block:'nearest',inline:'nearest'});
+  const m = MODELS[key];
+  document.getElementById('modelTitle').textContent = m.title;
+  document.getElementById('modelDesc').textContent = m.desc;
+  document.getElementById('modelMeta').textContent = m.meta;
+  const isFirst = key === 'first';
+  document.getElementById('chartPanel').hidden = !isFirst;
+  document.getElementById('tableCard').hidden = !isFirst;
+  document.getElementById('moduleEmpty').hidden = isFirst;
+  document.getElementById('downloadBtn').style.display = isFirst ? '' : 'none';
+  document.getElementById('emptyTitle').textContent = `「${m.title}」数据待接入`;
+  if(isFirst) requestAnimationFrame(renderChart);
+}
+document.getElementById('subtabStrip').addEventListener('click', e=>{
+  const b = e.target.closest('.subtab');
+  if(!b || b.tagName === 'A') return;
+  applyModel(b.dataset.model);
+});
+
+/* main tabs */
+document.querySelectorAll('.mtab').forEach(t=>{
+  if(t.tagName === 'A' || t.hasAttribute('data-inert')) return;
+  t.addEventListener('click', ()=>{
+    document.querySelectorAll('.mtab').forEach(o=>o.classList.toggle('active', o===t));
+  });
+});
+
+/* close doc tab */
+document.querySelectorAll('[data-close]').forEach(x=>{
+  x.addEventListener('click', e=>{
+    e.stopPropagation();
+    const tab = x.closest('.doc-tab');
+    const wasActive = tab.classList.contains('active');
+    tab.remove();
+    if(wasActive){
+      const next = document.querySelector('.doc-tab');
+      if(next) next.classList.add('active');
+    }
+  });
+});
+
+/* sidebar collapse */
+document.getElementById('collapseBtn').addEventListener('click', ()=>{
+  const sb = document.getElementById('sidebar');
+  sb.classList.toggle('collapsed');
+  document.getElementById('collapseBtn').textContent = sb.classList.contains('collapsed') ? '»' : '«';
+  setTimeout(renderChart, 200);
+});
+
+/* download csv */
+document.getElementById('downloadBtn').addEventListener('click', ()=>{
+  const head = ['首次触点','末次触点','购买人数','购买人数占比','总销售额'];
+  const lines = [head.join(',')].concat(
+    ROWS.map(r=>[r.f, r.l, r.n, r.p.toFixed(2)+'%', r.s.toFixed(2)].join(','))
+  );
+  const blob = new Blob(['\uFEFF'+lines.join('\n')], {type:'text/csv;charset=utf-8;'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '首次触点转化归因模型.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+/* resize */
+let rt;
+window.addEventListener('resize', ()=>{
+  clearTimeout(rt);
+  rt = setTimeout(()=>{ if(!document.getElementById('chartPanel').hidden) renderChart(); }, 160);
+});
+
+/* init */
+(function initFromUrl(){
+  const sp = new URLSearchParams(location.search);
+  const q = sp.get('view');
+  if(q === 'stack'){
+    view = 'stack';
+    document.querySelectorAll('#segSwitch .seg').forEach(b=>b.classList.toggle('active', b.dataset.view==='stack'));
+  }
+  renderChart();
+  renderTable();
+  const m = sp.get('model');
+  if(m && m !== 'first') applyModel(m);
+})();
+</script>
+
+
+<script src="docs/design/client-shell/client-shell.js"></script>
+<script src="docs/design/first-touch-assistant.js"></script>
+<script src="docs/design/marvy-report-views.js"></script>
+<script src="docs/design/marvy-workspace.js"></script>
+
+
+<script src="docs/design/first-touch-plan-two.js"></script>
+<script src="docs/design/first-touch-plan-four.js"></script>
+<script src="docs/design/first-touch-button-variants.js"></script>
+<script src="docs/design/marvy-final-workbench.js"></script>
+</body>
+</html>
